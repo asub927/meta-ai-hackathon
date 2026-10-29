@@ -1,0 +1,6 @@
+PASS  repo root (PLAN.md) — /Users/aaranvi/dev/meta-ai-hackathon
+FAIL  apps/web/package.json — missing — app not built yet (PLAN.md: nothing built until Anantha says go)
+PASS  node — v26.8.1
+PASS  pnpm — 12.5.1
+FAIL  @playwright/test resolvable — not installed (expected until M1 scaffolding lands)
+FAIL  WebKit browser — n/a until Playwright installed
