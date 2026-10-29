@@ -2,6 +2,7 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type BeatScript, type Event, type StepPhase } from "@kids-math/core";
 import { playBeat, type BeatHandle } from "./player";
+import { createAudioSession } from "./audio/audio";
 import { countTogetherSteps, stagingFor } from "./story/react";
 import { CountWidget } from "./interact/CountWidget";
 import { DragTray } from "./interact/DragTray";
@@ -31,11 +32,18 @@ function App() {
   const [readAloud, setReadAloud] = useState(false);
   const [hasLocalVoice, setHasLocalVoice] = useState(true);
   const [log, setLog] = useState<string[]>(loadLog);
-  const audioRef = useRef<AudioContext | null>(null);
+  const sessionRef = useRef(createAudioSession(() => new AudioContext()));
   const stageRef = useRef<HTMLDivElement | null>(null);
   const pipRef = useRef<HTMLParagraphElement | null>(null);
   const beatRef = useRef<{ script: BeatScript; handle: BeatHandle } | null>(null);
 
+  useEffect(() => {
+    (window as any).audioState = () => sessionRef.current.state();
+    (window as any).__cueLog = () => sessionRef.current.cues();
+    const onVis = () => { void sessionRef.current.onVisibility(!document.hidden); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
   useEffect(() => { (window as any).__render = { seek: (t: number) => {
     const b = beatRef.current;
     if (!b) { document.body.dataset.frame = String(Math.round(t * 30)); return; }
@@ -84,6 +92,7 @@ function App() {
         ? choreograph({ reducedMotion }, story.solved, { kind: "beat", question: story.questions[ns.qIndex]! })
         : choreograph({ reducedMotion }, story.solved, { kind: "reaction", reaction: ns.reaction, shown: ns.shown });
       beatRef.current?.handle.cancel();
+      for (const c of script.cues) sessionRef.current.logCue(c.kind, c.atMs);
       beatRef.current = { script, handle: playBeat(script, { root: stageRef.current, pip: pipRef.current }) };
     }
     dispatchCore(e);
@@ -103,7 +112,7 @@ function App() {
 
   if (!started) return (
     <main><h1>Kids Math — Socratic Stories</h1><p className="bubble" aria-live="polite">{pip}</p>
-      <button onClick={() => { audioRef.current ??= new AudioContext(); void audioRef.current.resume(); setStarted(true); }}>Start</button></main>
+      <button onClick={() => { void sessionRef.current.unlock().then(() => setStarted(true)); }}>Start</button></main>
   );
   if (!playing) return (
     <main><h1>Pick a lesson</h1>
