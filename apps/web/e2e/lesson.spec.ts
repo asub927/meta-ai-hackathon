@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 async function startLesson(page: import("@playwright/test").Page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Start" }).click();
-  await page.getByRole("button", { name: /Lesson 1/ }).click();
+  await page.getByRole("button", { name: /Stickers/ }).click();
 }
 async function answerCount(page: import("@playwright/test").Page, v: number) {
   await page.getByTestId("count-input").fill(String(v));
@@ -72,7 +72,7 @@ test("speech: only local voices are used", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Start" }).click();
   await page.getByLabel("Read-aloud").check();
-  await page.getByRole("button", { name: /Lesson 1/ }).click();
+  await page.getByRole("button", { name: /Stickers/ }).click();
   const spoken = await page.evaluate(() => (window as any).__spoken ?? []);
   expect(spoken.length).toBeGreaterThan(0);
   expect(spoken).not.toContain("Remote");

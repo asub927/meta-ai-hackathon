@@ -10,7 +10,7 @@ import { expect, test, type Page } from "@playwright/test";
 async function startLesson(page: Page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Start" }).click();
-  await page.getByRole("button", { name: /Lesson 1/ }).click();
+  await page.getByRole("button", { name: /Stickers/ }).click();
 }
 
 async function reachFirstCount(page: Page) {

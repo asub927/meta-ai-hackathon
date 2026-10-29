@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 async function startLesson(page: import("@playwright/test").Page) {
   await page.goto("/");
   await page.getByRole("button", { name: "Start" }).click();
-  await page.getByRole("button", { name: /Lesson 1/ }).click();
+  await page.getByRole("button", { name: /Stickers/ }).click();
 }
 
 async function answerCount(page: import("@playwright/test").Page, v: number) {

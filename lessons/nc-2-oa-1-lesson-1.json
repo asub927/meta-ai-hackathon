@@ -1,0 +1,462 @@
+{
+  "id": "nc-2-oa-1-lesson-1",
+  "standard": "NC.2.OA.1",
+  "stories": [
+    {
+      "solved": {
+        "problem": {
+          "id": "momo-shells-start-unknown",
+          "standard": "NC.2.OA.1",
+          "hero": "Momo",
+          "friend": "Kiwi",
+          "item": "shell",
+          "start": 0,
+          "unknown": "start",
+          "result": 15,
+          "steps": [
+            {
+              "kind": "give",
+              "n": 9,
+              "to": "Kiwi"
+            }
+          ]
+        },
+        "totals": [
+          24,
+          15
+        ],
+        "answer": 24
+      },
+      "questions": [
+        {
+          "id": "s1-q0-predict",
+          "step": 0,
+          "ask": "{hero} gives some away. More or fewer now?",
+          "interaction": "predict",
+          "hints": [
+            "When you give some away, do you keep them?",
+            "Watch the ones that go.",
+            {
+              "exampleSay": "7 balloons, 2 pop. Fewer!",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "Giving away makes fewer",
+            "I guessed"
+          ]
+        },
+        {
+          "id": "s1-q1-count",
+          "step": "final",
+          "ask": "How many did {hero} start with?",
+          "interaction": "count",
+          "hints": [
+            "How many are left at the end?",
+            "Start from the end and add back.",
+            {
+              "exampleSay": "Ended with 10, gave 4, started 14.",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "I added back",
+            "I counted back",
+            "I guessed"
+          ]
+        }
+      ],
+      "reactions": [
+        {
+          "misconception": "wrong-operation",
+          "pip": "If {hero} had {shown}, where did they come from?"
+        },
+        {
+          "misconception": "echoed-a-given",
+          "pip": "{shown} is how many went away. How many stayed?"
+        },
+        {
+          "misconception": "smaller-from-larger",
+          "pip": "{shown} is more than the start. Did any go away?"
+        },
+        {
+          "misconception": "direction-flip",
+          "pip": "Did {hero} get more, or give some away?"
+        },
+        {
+          "misconception": "off-by-one",
+          "pip": "So close. Let's count together."
+        },
+        {
+          "misconception": "unknown",
+          "pip": "Let's count together, slowly."
+        }
+      ],
+      "source": {
+        "url": "PLAN.md U12",
+        "licence": "CC BY-SA 4.0",
+        "changes": "Original story written for this app."
+      }
+    },
+    {
+      "solved": {
+        "problem": {
+          "id": "kiwi-marbles-start-unknown",
+          "standard": "NC.2.OA.1",
+          "hero": "Kiwi",
+          "friend": "Momo",
+          "item": "marble",
+          "start": 0,
+          "unknown": "start",
+          "result": 31,
+          "steps": [
+            {
+              "kind": "receive",
+              "n": 6,
+              "from": "Momo"
+            }
+          ]
+        },
+        "totals": [
+          25,
+          31
+        ],
+        "answer": 25
+      },
+      "questions": [
+        {
+          "id": "s2-q0-predict",
+          "step": 0,
+          "ask": "{hero} gets some more. More or fewer now?",
+          "interaction": "predict",
+          "hints": [
+            "When you get more, do you have fewer?",
+            "Watch the ones that come in.",
+            {
+              "exampleSay": "5 ducks, 3 join. More!",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "Getting more makes more",
+            "I guessed"
+          ]
+        },
+        {
+          "id": "s2-q1-count",
+          "step": "final",
+          "ask": "How many did {hero} start with?",
+          "interaction": "count",
+          "hints": [
+            "How many are there at the end?",
+            "Start from the end and take back.",
+            {
+              "exampleSay": "Ended with 12, got 2, started 10.",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "I took back",
+            "I counted back",
+            "I guessed"
+          ]
+        }
+      ],
+      "reactions": [
+        {
+          "misconception": "wrong-operation",
+          "pip": "If {hero} had {shown}, where did they come from?"
+        },
+        {
+          "misconception": "echoed-a-given",
+          "pip": "{shown} came in. How many were there first?"
+        },
+        {
+          "misconception": "smaller-from-larger",
+          "pip": "{shown} is less. What else came in?"
+        },
+        {
+          "misconception": "direction-flip",
+          "pip": "Did {hero} get more, or give some away?"
+        },
+        {
+          "misconception": "off-by-one",
+          "pip": "So close. Let's count together."
+        },
+        {
+          "misconception": "unknown",
+          "pip": "Let's count together, slowly."
+        }
+      ],
+      "source": {
+        "url": "PLAN.md U12",
+        "licence": "CC BY-SA 4.0",
+        "changes": "Original story written for this app."
+      }
+    },
+    {
+      "solved": {
+        "problem": {
+          "id": "momo-books-bigger-18-7",
+          "standard": "NC.2.OA.1",
+          "hero": "Momo",
+          "friend": "Kiwi",
+          "item": "book",
+          "start": 0,
+          "steps": [],
+          "compare": {
+            "relation": "bigger",
+            "reference": 18,
+            "difference": 7
+          }
+        },
+        "totals": [
+          25
+        ],
+        "answer": 25
+      },
+      "questions": [
+        {
+          "id": "s3-q0-count",
+          "step": "final",
+          "ask": "How many books does {hero} have?",
+          "interaction": "count",
+          "hints": [
+            "Who has the pile we compare with?",
+            "Start there, then add the extra.",
+            {
+              "exampleSay": "Pile is 10, extra 3, makes 13.",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "I counted on",
+            "I guessed"
+          ]
+        }
+      ],
+      "reactions": [
+        {
+          "misconception": "wrong-operation",
+          "pip": "If {hero} had {shown}, where did they come from?"
+        },
+        {
+          "misconception": "echoed-a-given",
+          "pip": "{shown} is the other pile. Add the extra."
+        },
+        {
+          "misconception": "smaller-from-larger",
+          "pip": "{shown} is less. Did {hero} add the extra?"
+        },
+        {
+          "misconception": "direction-flip",
+          "pip": "Who has more, {hero} or the other pile?"
+        },
+        {
+          "misconception": "off-by-one",
+          "pip": "So close. Let's count together."
+        },
+        {
+          "misconception": "unknown",
+          "pip": "Let's count together, slowly."
+        }
+      ],
+      "source": {
+        "url": "PLAN.md U12",
+        "licence": "CC BY-SA 4.0",
+        "changes": "Original story written for this app."
+      }
+    },
+    {
+      "solved": {
+        "problem": {
+          "id": "kiwi-crayons-smaller-32-8",
+          "standard": "NC.2.OA.1",
+          "hero": "Kiwi",
+          "friend": "Momo",
+          "item": "crayon",
+          "start": 0,
+          "steps": [],
+          "compare": {
+            "relation": "smaller",
+            "reference": 32,
+            "difference": 8
+          }
+        },
+        "totals": [
+          24
+        ],
+        "answer": 24
+      },
+      "questions": [
+        {
+          "id": "s4-q0-count",
+          "step": "final",
+          "ask": "How many crayons does {hero} have?",
+          "interaction": "count",
+          "hints": [
+            "Who has the pile we compare with?",
+            "Start there, then take some away.",
+            {
+              "exampleSay": "Pile is 11, short 4, makes 7.",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "I counted back",
+            "I guessed"
+          ]
+        }
+      ],
+      "reactions": [
+        {
+          "misconception": "wrong-operation",
+          "pip": "If {hero} had {shown}, where did they come from?"
+        },
+        {
+          "misconception": "echoed-a-given",
+          "pip": "{shown} is the other pile. Take some away."
+        },
+        {
+          "misconception": "smaller-from-larger",
+          "pip": "{shown} is more. Did {hero} take some away?"
+        },
+        {
+          "misconception": "direction-flip",
+          "pip": "Who has fewer, {hero} or the other pile?"
+        },
+        {
+          "misconception": "off-by-one",
+          "pip": "So close. Let's count together."
+        },
+        {
+          "misconception": "unknown",
+          "pip": "Let's count together, slowly."
+        }
+      ],
+      "source": {
+        "url": "PLAN.md U12",
+        "licence": "CC BY-SA 4.0",
+        "changes": "Original story written for this app."
+      }
+    },
+    {
+      "solved": {
+        "problem": {
+          "id": "momo-beads-7-5-4",
+          "standard": "NC.2.OA.1",
+          "hero": "Momo",
+          "friend": "Kiwi",
+          "item": "bead",
+          "start": 7,
+          "steps": [
+            {
+              "kind": "find",
+              "n": 5,
+              "place": "bed"
+            },
+            {
+              "kind": "give",
+              "n": 4,
+              "to": "Kiwi"
+            }
+          ]
+        },
+        "totals": [
+          7,
+          12,
+          8
+        ],
+        "answer": 8
+      },
+      "questions": [
+        {
+          "id": "s5-q0-predict",
+          "step": 0,
+          "ask": "{hero} finds some more. More or fewer now?",
+          "interaction": "predict",
+          "hints": [
+            "When you find more, do you have fewer?",
+            "Watch the ones that show up.",
+            {
+              "exampleSay": "6 kites, 3 join. More!",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "Finding more makes more",
+            "I guessed"
+          ]
+        },
+        {
+          "id": "s5-q1-predict",
+          "step": 1,
+          "ask": "{hero} gives some away. More or fewer now?",
+          "interaction": "predict",
+          "hints": [
+            "When you give some away, do you keep them?",
+            "Watch the ones that go.",
+            {
+              "exampleSay": "9 cubs, 2 leave. Fewer!",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "Giving away makes fewer",
+            "I guessed"
+          ]
+        },
+        {
+          "id": "s5-q2-count",
+          "step": "final",
+          "ask": "Then {hero} gives some away. How many in all?",
+          "interaction": "count",
+          "hints": [
+            "How many after finding more?",
+            "Count on, then take some away.",
+            {
+              "exampleSay": "Had 10, found 3, lost 2, now 11.",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "I counted on",
+            "I counted back",
+            "I guessed"
+          ]
+        }
+      ],
+      "reactions": [
+        {
+          "misconception": "wrong-operation",
+          "pip": "If {hero} had {shown}, where did they come from?"
+        },
+        {
+          "misconception": "echoed-a-given",
+          "pip": "{shown} is how many went away. How many stayed?"
+        },
+        {
+          "misconception": "smaller-from-larger",
+          "pip": "{shown} is more than the start. Did any go away?"
+        },
+        {
+          "misconception": "direction-flip",
+          "pip": "Did {hero} get more, or give some away?"
+        },
+        {
+          "misconception": "off-by-one",
+          "pip": "So close. Let's count together."
+        },
+        {
+          "misconception": "unknown",
+          "pip": "Let's count together, slowly."
+        }
+      ],
+      "source": {
+        "url": "PLAN.md U12",
+        "licence": "CC BY-SA 4.0",
+        "changes": "Original story written for this app."
+      }
+    }
+  ]
+}

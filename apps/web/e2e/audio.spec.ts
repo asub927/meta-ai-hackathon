@@ -26,7 +26,7 @@ test("audio: Start unlocks to running and survives visibility toggle", async ({ 
 test("audio: playing a beat records cues", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Start" }).click();
-  await page.getByRole("button", { name: /Lesson 1/ }).click();
+  await page.getByRole("button", { name: /Stickers/ }).click();
   // Answer through the first beat: predict + explain.
   await page.getByRole("button", { name: "fewer" }).click();
   await page.getByRole("button", { name: /counted|Giving|tens/i }).first().click();

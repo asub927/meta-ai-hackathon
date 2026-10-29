@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type BeatScript, type Event, type StepPhase } from "@kids-math/core";
+import { buildLesson1, choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type BeatScript, type Event, type Question, type StepPhase, type StoryData } from "@kids-math/core";
 import { playBeat, type BeatHandle } from "./player";
 import { createAudioSession } from "./audio/audio";
 import { countTogetherSteps, stagingFor } from "./story/react";
@@ -54,10 +54,14 @@ function pipForRestored(p: StepPhase): string | null {
 function App() {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [stories, setStories] = useState<StoryData[]>([story]);
+  const [storyIndex, setStoryIndex] = useState(0);
+  const activeStory = stories[storyIndex]!;
+  const lessonMode = stories.length > 1;
   type Resettable = Event | { type: "__reset" };
   const [restored] = useState<StepPhase | null>(() => resumePhaseFrom(storageGet(PROGRESS_KEY)));
   const [phase, dispatchCore] = useReducer(
-    (s: StepPhase, e: Resettable) => (e.type === "__reset" ? initial : step(s, e, story)[0]),
+    (s: StepPhase, e: Resettable) => (e.type === "__reset" ? initial : step(s, e, activeStory)[0]),
     restored ?? initial,
   );
   const [pip, setPip] = useState(() => pipForRestored(restored ?? initial) ?? "Hi! I am Pip. Want a story?");
@@ -117,7 +121,7 @@ function App() {
   }, [phase]);
 
   const send = (e: Event) => {
-    const [ns, fx] = step(phase, e, story);
+    const [ns, fx] = step(phase, e, activeStory);
     for (const f of fx) {
       if (f.type === "say") setPip(f.line);
       if (f.type === "react") setShown(f.shown);
@@ -130,8 +134,8 @@ function App() {
     if ((ns.tag === "asking" || ns.tag === "reacting") && stageRef.current && pipRef.current) {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const script = ns.tag === "asking"
-        ? choreograph({ reducedMotion }, story.solved, { kind: "beat", question: story.questions[ns.qIndex]! })
-        : choreograph({ reducedMotion }, story.solved, { kind: "reaction", reaction: ns.reaction, shown: ns.shown });
+        ? choreograph({ reducedMotion }, activeStory.solved, { kind: "beat", question: activeStory.questions[ns.qIndex]! })
+        : choreograph({ reducedMotion }, activeStory.solved, { kind: "reaction", reaction: ns.reaction, shown: ns.shown });
       beatRef.current?.handle.cancel();
       if (soundOn) for (const c of script.cues) sessionRef.current.logCue(c.kind, c.atMs);
       beatRef.current = { script, handle: playBeat(script, { root: stageRef.current, pip: pipRef.current }) };
@@ -159,16 +163,18 @@ function App() {
   useEffect(() => { if (playing && phase.tag === "telling") send({ type: "beat-ended" }); }, [playing, phase]);
   const answer = (a: Answer) => send({ type: "answered", a });
   const q = phase.tag === "asking" || phase.tag === "reacting" || phase.tag === "explaining"
-    ? story.questions[(phase as { qIndex: number }).qIndex]! : null;
+    ? activeStory.questions[(phase as { qIndex: number }).qIndex]! : null;
   const staging = phase.tag === "reacting" && q
-    ? stagingFor(phase.reaction.misconception, story.solved, q, phase.shown) : null;
-  const cue = phase.tag === "asking" && q ? hintCueFor(q, phase.rung, story.solved) : null;
+    ? stagingFor(phase.reaction.misconception, activeStory.solved, q, phase.shown) : null;
+  const cue = phase.tag === "asking" && q ? hintCueFor(q, phase.rung, activeStory.solved) : null;
+  const baseIndex = (qq: Question) =>
+    qq.step === "final" ? Math.max(0, activeStory.solved.totals.length - 2) : qq.step;
   const bookCount = staging ? staging.bookCount
-    : phase.tag === "done" ? story.solved.answer
-    : q ? story.solved.totals[q.step === "final" ? story.solved.totals.length - 2 : q.step]! : story.solved.problem.start;
-  const startCount = staging ? staging.startCount : story.solved.problem.start;
+    : phase.tag === "done" ? activeStory.solved.answer
+    : q ? activeStory.solved.totals[baseIndex(q)]! : activeStory.solved.problem.start;
+  const startCount = staging ? staging.startCount : activeStory.solved.problem.start;
   const countAlong = staging && q && staging.kind === "count-together"
-    ? countTogetherSteps(staging, story.solved, q) : [];
+    ? countTogetherSteps(staging, activeStory.solved, q) : [];
 
   if (!started) return (
     <main><h1>Kids Math — Socratic Stories</h1><p className="bubble" aria-live="polite">{pip}</p>
@@ -179,7 +185,8 @@ function App() {
   const currentQ = phase.tag === "asking" || phase.tag === "reacting" || phase.tag === "explaining" ? phase.qIndex : 0;
   if (!playing) return (
     <main><h1>Pick a lesson</h1>
-      <button onClick={startFresh}>Lesson 1: Stickers (NC.2.OA.1)</button>
+      <button onClick={() => { setStories([story]); setStoryIndex(0); startFresh(); }}>Lesson 1: Stickers (NC.2.OA.1)</button>
+      <button data-testid="lesson1-button" onClick={() => { setStories([...buildLesson1().stories]); setStoryIndex(0); startFresh(); }}>Lesson 1: Five stories (NC.2.OA.1)</button>
       {resumeSnap && <button data-testid="resume-lesson" onClick={() => setPlaying(true)}>Resume lesson</button>}
       {hasLocalVoice && <label><input type="checkbox" checked={readAloud} onChange={(e) => setReadAloud(e.target.checked)} /> Read-aloud</label>}
       <label><input type="checkbox" data-testid="sound-toggle" checked={soundOn} onChange={(e) => { const on = e.target.checked; setSoundOn(on); storageSet(SOUND_KEY, on ? "on" : "off"); }} /> Sound</label>
@@ -204,7 +211,7 @@ function App() {
       <div className="stage" data-testid="stage" data-staging={staging ? staging.kind : undefined} ref={stageRef}>
         <p className="bubble" aria-live="polite" data-testid="pip" ref={pipRef}>{pip}</p>
         <div data-testid="progress-dots" aria-label="Progress">
-          {progressDots(story.questions.length, Math.min(answeredClean, story.questions.length), currentQ).map((d, i) => (
+          {progressDots(activeStory.questions.length, Math.min(answeredClean, activeStory.questions.length), currentQ).map((d, i) => (
             <span key={i} data-testid="progress-dot" data-dot={d} />
           ))}
         </div>
@@ -226,7 +233,7 @@ function App() {
             <div data-testid="count-input-wrap"><label>How many? <input data-testid="count-input" type="number" value={count} onChange={(e) => setCount(e.target.value)} /></label>
               <button onClick={() => { if (count !== "") answer({ kind: "count", value: Number(count) }); }}>Answer</button></div>
             <CountWidget key={`count-${q.id}`} onAnswer={answer} />
-            <DragTray key={`drag-${q.id}`} total={story.solved.totals[q.step === "final" ? story.solved.totals.length - 2 : q.step]!} onAnswer={answer} />
+            <DragTray key={`drag-${q.id}`} total={activeStory.solved.totals[baseIndex(q)]!} onAnswer={answer} />
           </div>)}
         {phase.tag === "asking" && hintReady && <button className="secondary" onClick={() => send({ type: "hint" })}>Hint</button>}
         {phase.tag === "asking" && cue && (
@@ -254,7 +261,17 @@ function App() {
         {phase.tag === "reacting" && <button onClick={() => send({ type: "reaction-ended" })}>Keep going</button>}
         {phase.tag === "explaining" && q && <div><p>How did you know?</p>
           {q.explainChoices.map((c) => <button key={c} className="secondary" onClick={() => send({ type: "explained", choice: c })}>{c}</button>)}</div>}
-        {phase.tag === "done" && <p data-testid="done">Lesson finished! You worked it out!</p>}
+        {phase.tag === "done" && !lessonMode && <p data-testid="done">Lesson finished! You worked it out!</p>}
+        {phase.tag === "done" && lessonMode && storyIndex < stories.length - 1 && (
+          <button data-testid="next-story" onClick={() => {
+            const ns = stories[storyIndex + 1]!;
+            setStoryIndex(storyIndex + 1);
+            setCount("");
+            dispatchCore({ type: "__reset" });
+            setPip(fill(ns.questions[0]!.ask, ns.solved));
+          }}>Next story</button>)}
+        {phase.tag === "done" && lessonMode && storyIndex >= stories.length - 1 && (
+          <p data-testid="lesson1-done">Lesson finished! You worked out five stories!</p>)}
       </div>
     </main>
   );
