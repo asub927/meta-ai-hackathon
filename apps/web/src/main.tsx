@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type Event, type StepPhase } from "@kids-math/core";
+import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type BeatScript, type Event, type StepPhase } from "@kids-math/core";
+import { playBeat, type BeatHandle } from "./player";
 import "./index.css";
 
 const LOG_KEY = "kids-math-log";
@@ -27,8 +28,15 @@ function App() {
   const [hasLocalVoice, setHasLocalVoice] = useState(true);
   const [log, setLog] = useState<string[]>(loadLog);
   const audioRef = useRef<AudioContext | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const pipRef = useRef<HTMLParagraphElement | null>(null);
+  const beatRef = useRef<{ script: BeatScript; handle: BeatHandle } | null>(null);
 
-  useEffect(() => { (window as any).__render = { seek: (t: number) => { document.body.dataset.frame = String(Math.round(t * 30)); } }; }, []);
+  useEffect(() => { (window as any).__render = { seek: (t: number) => {
+    const b = beatRef.current;
+    if (!b) { document.body.dataset.frame = String(Math.round(t * 30)); return; }
+    document.body.dataset.frame = JSON.stringify(b.handle.seek(Math.round(t * 1000)));
+  } }; }, []);
   useEffect(() => {
     (window as any).__conformanceRun = (kind: string, input: any) => {
       if (kind === "step") {
@@ -62,6 +70,14 @@ function App() {
       if (f.type === "record") setLog((l) => { const nl = [...l, f.event]; localStorage.setItem(LOG_KEY, JSON.stringify(nl)); return nl; });
     }
     if (ns.tag === "reacting") setHintReady(true);
+    if ((ns.tag === "asking" || ns.tag === "reacting") && stageRef.current && pipRef.current) {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const script = ns.tag === "asking"
+        ? choreograph({ reducedMotion }, story.solved, { kind: "beat", question: story.questions[ns.qIndex]! })
+        : choreograph({ reducedMotion }, story.solved, { kind: "reaction", reaction: ns.reaction, shown: ns.shown });
+      beatRef.current?.handle.cancel();
+      beatRef.current = { script, handle: playBeat(script, { root: stageRef.current, pip: pipRef.current }) };
+    }
     dispatchCore(e);
   };
   const answer = (a: Answer) => send({ type: "answered", a });
@@ -89,8 +105,8 @@ function App() {
   );
   return (
     <main>
-      <div className="stage" data-testid="stage">
-        <p className="bubble" aria-live="polite" data-testid="pip">{pip}</p>
+      <div className="stage" data-testid="stage" ref={stageRef}>
+        <p className="bubble" aria-live="polite" data-testid="pip" ref={pipRef}>{pip}</p>
         <p data-expression={phase.tag === "reacting" ? "puzzled" : phase.tag === "done" ? "celebrate" : "curious"}>Pip the puffbun</p>
         <div className="counts">
           <span>Start: <b data-testid="start-count">{story.solved.problem.start}</b></span>

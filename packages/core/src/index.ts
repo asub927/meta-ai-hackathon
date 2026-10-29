@@ -5,3 +5,4 @@ export { stickerStory } from "./fixture.js";
 export { parseStoryData, storyDataSchema, type ParseResult } from "./schema.js";
 export { validateStory } from "./validate.js";
 export { choreograph } from "./choreograph.js";
+export { evaluateBeat, type BeatFrame } from "./evaluate.js";
