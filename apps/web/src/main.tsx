@@ -2,6 +2,8 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type BeatScript, type Event, type StepPhase } from "@kids-math/core";
 import { playBeat, type BeatHandle } from "./player";
+import { CountWidget } from "./interact/CountWidget";
+import { DragTray } from "./interact/DragTray";
 import "./index.css";
 
 const LOG_KEY = "kids-math-log";
@@ -114,10 +116,14 @@ function App() {
           {phase.tag === "reacting" && <span>Tray: <b data-testid="tray-count">9</b></span>}
         </div>
         {phase.tag === "asking" && q?.interaction === "predict" && (
-          <div>{(["more", "fewer", "same"] as const).map((v) => <button key={v} onClick={() => answer({ kind: "predict", value: v })}>{v}</button>)}</div>)}
+          <div>{(["more", "fewer", "same"] as const).map((v) => <button key={v} className="predict" onClick={() => answer({ kind: "predict", value: v })}>{v}</button>)}</div>)}
         {phase.tag === "asking" && q?.interaction === "count" && (
-          <div><label>How many? <input data-testid="count-input" type="number" value={count} onChange={(e) => setCount(e.target.value)} /></label>
-            <button onClick={() => { if (count !== "") answer({ kind: "count", value: Number(count) }); }}>Answer</button></div>)}
+          <div>
+            <div data-testid="count-input-wrap"><label>How many? <input data-testid="count-input" type="number" value={count} onChange={(e) => setCount(e.target.value)} /></label>
+              <button onClick={() => { if (count !== "") answer({ kind: "count", value: Number(count) }); }}>Answer</button></div>
+            <CountWidget key={`count-${q.id}`} onAnswer={answer} />
+            <DragTray key={`drag-${q.id}`} total={story.solved.totals[q.step === "final" ? story.solved.totals.length - 2 : q.step]!} onAnswer={answer} />
+          </div>)}
         {phase.tag === "asking" && hintReady && <button className="secondary" onClick={() => send({ type: "hint" })}>Hint</button>}
         {phase.tag === "reacting" && <button onClick={() => send({ type: "reaction-ended" })}>Keep going</button>}
         {phase.tag === "explaining" && q && <div><p>How did you know?</p>
