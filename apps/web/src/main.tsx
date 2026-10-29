@@ -5,6 +5,7 @@ import { playBeat, type BeatHandle } from "./player";
 import { countTogetherSteps, stagingFor } from "./story/react";
 import { CountWidget } from "./interact/CountWidget";
 import { DragTray } from "./interact/DragTray";
+import { hintCueFor } from "./story/hints";
 import "./index.css";
 
 const LOG_KEY = "kids-math-log";
@@ -73,6 +74,10 @@ function App() {
       if (f.type === "record") setLog((l) => { const nl = [...l, f.event]; localStorage.setItem(LOG_KEY, JSON.stringify(nl)); return nl; });
     }
     if (ns.tag === "reacting") setHintReady(true);
+    if (e.type === "explained") {
+      const entry = `strategy:${e.choice}`;
+      setLog((l) => { const nl = [...l, entry]; localStorage.setItem(LOG_KEY, JSON.stringify(nl)); return nl; });
+    }
     if ((ns.tag === "asking" || ns.tag === "reacting") && stageRef.current && pipRef.current) {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const script = ns.tag === "asking"
@@ -88,6 +93,7 @@ function App() {
     ? story.questions[(phase as { qIndex: number }).qIndex]! : null;
   const staging = phase.tag === "reacting" && q
     ? stagingFor(phase.reaction.misconception, story.solved, q, phase.shown) : null;
+  const cue = phase.tag === "asking" && q ? hintCueFor(q, phase.rung, story.solved) : null;
   const bookCount = staging ? staging.bookCount
     : phase.tag === "done" ? story.solved.answer
     : q ? story.solved.totals[q.step === "final" ? story.solved.totals.length - 2 : q.step]! : story.solved.problem.start;
@@ -136,6 +142,28 @@ function App() {
             <DragTray key={`drag-${q.id}`} total={story.solved.totals[q.step === "final" ? story.solved.totals.length - 2 : q.step]!} onAnswer={answer} />
           </div>)}
         {phase.tag === "asking" && hintReady && <button className="secondary" onClick={() => send({ type: "hint" })}>Hint</button>}
+        {phase.tag === "asking" && cue && (
+          <div className="hint-cue" data-testid="hint-cue" data-cue-kind={cue.kind}>
+            {cue.kind === "ten-frame" && cue.tenFrame && (
+              <div className="ten-frame" aria-label="Ten frame">
+                {Array.from({ length: cue.tenFrame.full }, (_, r) => (
+                  <div className="ten-frame-row" key={`full-${r}`}>
+                    {Array.from({ length: 10 }, (_, i) => <span className="ten-frame-dot" data-testid="ten-frame-dot" key={i} />)}
+                  </div>))}
+                {cue.tenFrame.partial > 0 && (
+                  <div className="ten-frame-row" key="partial">
+                    {Array.from({ length: cue.tenFrame.partial }, (_, i) => <span className="ten-frame-dot" data-testid="ten-frame-dot" key={i} />)}
+                  </div>)}
+              </div>)}
+            {cue.kind === "worked" && (
+              <div className="worked-example" data-testid="worked-example">
+                <div className="worked-chips">
+                  {cue.workedNumbers?.map((n, i) => <span className="worked-chip" data-testid="worked-chip" key={i}>{n}</span>)}
+                </div>
+                <p>{cue.say}</p>
+              </div>)}
+            {cue.kind !== "ten-frame" && cue.kind !== "worked" && <p>{cue.say}</p>}
+          </div>)}
         {phase.tag === "reacting" && <button onClick={() => send({ type: "reaction-ended" })}>Keep going</button>}
         {phase.tag === "explaining" && q && <div><p>How did you know?</p>
           {q.explainChoices.map((c) => <button key={c} className="secondary" onClick={() => send({ type: "explained", choice: c })}>{c}</button>)}</div>}

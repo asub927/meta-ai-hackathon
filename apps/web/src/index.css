@@ -41,3 +41,12 @@ button.predict { min-height: 64px; }
 @media (prefers-reduced-motion: reduce) {
   .stage *, .count-along span { animation: none !important; transition: none !important; }
 }
+
+/* U9 hint cues: ten-frame dots and worked-example mini-stage (amber/blue only) */
+.hint-cue { margin-top: 1rem; background: #fff; border-radius: 16px; padding: 1rem; }
+.ten-frame { display: flex; flex-direction: column; gap: 6px; }
+.ten-frame-row { display: flex; gap: 6px; }
+.ten-frame-dot { width: 18px; height: 18px; border-radius: 50%; background: #4d96ff; display: inline-block; }
+.worked-example { border: 3px dashed #b58900; border-radius: 16px; background: #fef9c3; padding: 1rem; margin-top: 0.5rem; }
+.worked-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.worked-chip { background: #fff; border: 2px solid #213547; border-radius: 12px; min-width: 48px; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; }
