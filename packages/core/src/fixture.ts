@@ -18,7 +18,7 @@ export const stickerStory: StoryData = {
     {
       id: "q0-count", step: 0, ask: "How many does {hero} have now?", interaction: "count",
       hints: ["How many were there at the start?", "Let's make tens. Take some away.",
-        { exampleSay: "13 balloons, 4 pop, leaves 9.", say: "Now you try." }],
+        { exampleSay: "12 balloons, 4 pop, leaves 8.", say: "Now you try." }],
       explainChoices: ["I counted back", "I used tens", "I guessed"],
     },
     {
@@ -29,11 +29,12 @@ export const stickerStory: StoryData = {
     },
   ],
   reactions: [
-    { misconception: "wrong-operation", pip: "If {hero} had {shown}, where did the extra come from?" },
+    { misconception: "wrong-operation", pip: "If {hero} had {shown}, where did they come from?" },
     { misconception: "echoed-a-given", pip: "{shown} is how many flew away. How many stayed?" },
     { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any fly away?" },
     { misconception: "direction-flip", pip: "Did {hero} get more, or give some away?" },
     { misconception: "off-by-one", pip: "So close. Let's count together." },
     { misconception: "unknown", pip: "Let's count together, slowly." },
   ],
+  source: { url: "PLAN.md §2 sticker example", licence: "CC BY-SA 4.0", changes: "Original story written for this app." },
 };

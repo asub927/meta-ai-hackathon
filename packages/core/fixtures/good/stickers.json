@@ -1,0 +1,16 @@
+{
+  "solved": {
+    "problem": { "id": "stickers-24-9-5", "standard": "NC.2.OA.1", "hero": "Momo", "friend": "Kiwi", "item": "sticker", "start": 24, "steps": [{ "kind": "give", "n": 9, "to": "Kiwi" }, { "kind": "find", "n": 5, "place": "bed" }] },
+    "totals": [24, 15, 20], "answer": 20
+  },
+  "questions": [
+    { "id": "q0-count", "step": 0, "ask": "How many does {hero} have now?", "interaction": "count",
+      "hints": ["How many were there at the start?", "Let's make tens. Take some away.", { "exampleSay": "12 balloons, 4 pop, leaves 8.", "say": "Now you try." }],
+      "explainChoices": ["I counted back", "I used tens", "I guessed"] }
+  ],
+  "reactions": [
+    { "misconception": "wrong-operation", "pip": "If {hero} had {shown}, where did they come from?" },
+    { "misconception": "unknown", "pip": "Let's count together, slowly." }
+  ],
+  "source": { "url": "PLAN.md §2 sticker example", "licence": "CC BY-SA 4.0", "changes": "Original story written for this app." }
+}

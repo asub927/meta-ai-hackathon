@@ -1,13 +1,66 @@
-import type { Answer, MisconceptionId, Problem, Question, Solved, Step } from "./types.js";
+import { CAPACITY, type Answer, type MisconceptionId, type Problem, type Question, type Solved, type Step } from "./types.js";
 
-/** Every number a child sees is derived here, never authored (PLAN.md §2). */
+const checkCount = (n: number): number => {
+  if (n < 0) throw new Error(`negative-count: ${n}`);
+  if (n > CAPACITY) throw new Error(`count-above-capacity: ${n} > ${CAPACITY}`);
+  return n;
+};
+
+/** Every number a child sees is derived here, never authored (PLAN.md §2).
+ *  `answer` is always the value the child must find: the final total for
+ *  result-unknown, the missing start/change for those unknown positions,
+ *  and reference ± difference (or |heroCount − reference|) for compare. */
 export function solve(problem: Problem): Solved {
+  if (problem.compare) {
+    if (problem.steps.length) throw new Error("compare-with-steps: compare problems have no steps");
+    const { relation, reference, difference, heroCount } = problem.compare;
+    checkCount(reference); checkCount(difference);
+    if (relation === "difference") {
+      if (heroCount === undefined) throw new Error("missing-hero-count: difference compare needs heroCount");
+      checkCount(heroCount);
+      const answer = checkCount(Math.abs(heroCount - reference));
+      return { problem, totals: [answer], answer };
+    }
+    const answer = checkCount(relation === "bigger" ? reference + difference : reference - difference);
+    return { problem, totals: [answer], answer };
+  }
+  const unknown = problem.unknown ?? "result";
+  if (unknown !== "result" && problem.result === undefined)
+    throw new Error(`missing-result: unknown="${unknown}" needs the known final total`);
+  if (unknown === "change" && problem.steps.length !== 1)
+    throw new Error("change-unknown-needs-one-step");
+  if (problem.result !== undefined) checkCount(problem.result);
+  for (const s of problem.steps) checkCount(s.n);
+
+  if (unknown === "start") {
+    // Work backwards from the known result, undoing each step.
+    let start = problem.result!;
+    for (let i = problem.steps.length - 1; i >= 0; i--) start -= delta(problem.steps[i]!);
+    checkCount(start);
+    const totals = [start];
+    for (const s of problem.steps) totals.push(checkCount(totals[totals.length - 1]! + delta(s)));
+    return { problem, totals, answer: start };
+  }
+  checkCount(problem.start);
+  if (unknown === "change") {
+    const step = problem.steps[0]!;
+    const isAdd = step.kind === "find" || step.kind === "receive";
+    const change = checkCount(isAdd ? problem.result! - problem.start : problem.start - problem.result!);
+    const totals = [problem.start, checkCount(problem.start + (isAdd ? change : -change))];
+    return { problem, totals, answer: change };
+  }
   const totals: number[] = [problem.start];
-  for (const s of problem.steps) totals.push(totals[totals.length - 1]! + delta(s));
+  for (const s of problem.steps) totals.push(checkCount(totals[totals.length - 1]! + delta(s)));
   return { problem, totals, answer: totals[totals.length - 1]! };
 }
 function delta(s: Step): number {
   return s.kind === "give" || s.kind === "pop" ? -s.n : s.n;
+}
+/** Step size with the change-unknown placeholder (n = 0) replaced by the derived change. */
+function stepDelta(solved: Solved, idx: number): number {
+  const s = solved.problem.steps[idx]!;
+  const n = solved.problem.unknown === "change" ? solved.answer : s.n;
+  return s.kind === "give" || s.kind === "pop" ? -n : n;
 }
 
 /** The total a question is really asking about: after its step, or the final answer. */
@@ -17,8 +70,11 @@ export function targetFor(solved: Solved, q: Question): number {
 
 export function isCorrect(solved: Solved, q: Question, a: Answer): boolean {
   if (q.interaction === "predict" && a.kind === "predict") {
-    const step = solved.problem.steps[q.step === "final" ? solved.problem.steps.length - 1 : q.step]!;
-    const want = delta(step) > 0 ? "more" : delta(step) < 0 ? "fewer" : "same";
+    const idx = q.step === "final" ? solved.problem.steps.length - 1 : q.step;
+    const step = solved.problem.steps[idx];
+    if (!step) return false;
+    const d = stepDelta(solved, idx);
+    const want = d > 0 ? "more" : d < 0 ? "fewer" : "same";
     return a.value === want;
   }
   if (q.interaction === "count" && a.kind === "count") return a.value === targetFor(solved, q);
@@ -30,13 +86,19 @@ export function detect(solved: Solved, q: Question, a: Answer): MisconceptionId 
   if (isCorrect(solved, q, a)) return null;
   if (a.kind === "predict") return "direction-flip";
   const target = targetFor(solved, q);
+  if (!solved.problem.steps.length) { // compare problem: no step to echo or flip
+    if (Math.abs(a.value - target) === 1) return "off-by-one";
+    if (solved.problem.compare && (a.value === solved.problem.compare.reference || a.value === solved.problem.compare.difference)) return "echoed-a-given";
+    return "unknown";
+  }
   const stepIdx = q.step === "final" ? solved.problem.steps.length - 1 : q.step;
-  const step = solved.problem.steps[stepIdx]!;
+  const d = stepDelta(solved, stepIdx);
+  const stepN = Math.abs(d);
   const before = solved.totals[stepIdx]!;
   if (Math.abs(a.value - target) === 1) return "off-by-one";
-  if (a.value === step.n) return "echoed-a-given";
-  if (a.value === before - delta(step)) return "wrong-operation"; // did the opposite operation
-  if (a.value > before && delta(step) < 0) return "smaller-from-larger";
+  if (a.value === stepN) return "echoed-a-given";
+  if (a.value === before - d) return "wrong-operation"; // did the opposite operation
+  if (a.value > before && d < 0) return "smaller-from-larger";
   return "unknown";
 }
 
@@ -44,7 +106,9 @@ export function detect(solved: Solved, q: Question, a: Answer): MisconceptionId 
 export function fill(template: string, solved: Solved, extra: Record<string, number | string> = {}): string {
   const vars: Record<string, string> = {
     hero: solved.problem.hero, item: solved.problem.item,
-    start: String(solved.problem.start), answer: String(solved.answer),
+    // `{start}` is the derived start (for start-unknown that is the answer, not the 0 placeholder).
+    start: String(solved.totals[0] ?? solved.problem.start), answer: String(solved.answer),
+    result: String(solved.problem.result ?? solved.answer), missing: String(solved.answer),
     ...Object.fromEntries(Object.entries(extra).map(([k, v]) => [k, String(v)])),
   };
   return template.replace(/\{(\w+)\}/g, (_, k: string) => {

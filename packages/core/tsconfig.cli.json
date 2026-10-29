@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "types": [], "outDir": ".validate-dist", "rootDir": "src" },
+  "include": ["src"],
+  "exclude": ["src/*.test.ts"]
+}

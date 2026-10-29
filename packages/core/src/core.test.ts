@@ -70,6 +70,62 @@ describe("step reducer (matches the formal model)", () => {
   });
 });
 
+describe("solve: NC.2.OA.1 unknown positions and compare (U4)", () => {
+  const base = { id: "x", standard: "NC.2.OA.1", hero: "Momo", friend: null, item: "sticker" };
+  it("start-unknown: derives the missing start from the known result", () => {
+    // □ − 9 = 15
+    const s = solve({ ...base, start: 0, unknown: "start", result: 15, steps: [{ kind: "give", n: 9, to: "Kiwi" }] });
+    expect(s.answer).toBe(24);
+    expect(s.totals).toEqual([24, 15]);
+  });
+  it("change-unknown: derives the missing change from start and result", () => {
+    // 24 − □ = 15 and 15 + □ = 20
+    expect(solve({ ...base, start: 24, unknown: "change", result: 15, steps: [{ kind: "give", n: 0, to: "Kiwi" }] }).answer).toBe(9);
+    expect(solve({ ...base, start: 15, unknown: "change", result: 20, steps: [{ kind: "find", n: 0, place: "bed" }] }).totals).toEqual([15, 20]);
+  });
+  it("compare: bigger, smaller and difference unknowns", () => {
+    expect(solve({ ...base, start: 0, steps: [], compare: { relation: "bigger", reference: 18, difference: 7 } }).answer).toBe(25);
+    expect(solve({ ...base, start: 0, steps: [], compare: { relation: "smaller", reference: 32, difference: 8 } }).answer).toBe(24);
+    expect(solve({ ...base, start: 0, steps: [], compare: { relation: "difference", reference: 18, difference: 0, heroCount: 25 } }).answer).toBe(7);
+  });
+  it("rejects impossible problems instead of deriving a bad count", () => {
+    expect(() => solve({ ...base, start: 5, steps: [{ kind: "pop", n: 9 }] })).toThrow(/negative-count/);
+    expect(() => solve({ ...base, start: 90, steps: [{ kind: "find", n: 20, place: "bed" }] })).toThrow(/count-above-capacity/);
+    expect(() => solve({ ...base, start: 0, unknown: "start", steps: [{ kind: "pop", n: 1 }] })).toThrow(/missing-result/);
+    expect(() => solve({ ...base, start: 0, steps: [], compare: { relation: "difference", reference: 18, difference: 0 } })).toThrow(/missing-hero-count/);
+  });
+});
+
+describe("solve oracle: 10,000 seeded random problems (U4)", () => {
+  it("agrees with independent arithmetic on every NC.2.OA.1 shape", () => {
+    let seed = 42;
+    const rand = (n: number) => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed % n; };
+    const base = { id: "x", standard: "NC.2.OA.1", hero: "h", friend: null, item: "i" };
+    for (let i = 0; i < 10000; i++) {
+      const shape = i % 5;
+      if (shape === 0) { // result-unknown, two steps
+        const start = 10 + rand(60), a = 1 + rand(9), b = 1 + rand(9);
+        const want = start - a + b;
+        if (want < 0 || want > 100) continue;
+        expect(solve({ ...base, start, steps: [{ kind: "give", n: a, to: "k" }, { kind: "find", n: b, place: "bed" }] }).answer).toBe(want);
+      } else if (shape === 1) { // start-unknown: □ − a = result
+        const result = 5 + rand(40), a = 1 + rand(9);
+        expect(solve({ ...base, start: 0, unknown: "start", result, steps: [{ kind: "pop", n: a }] }).answer).toBe(result + a);
+      } else if (shape === 2) { // change-unknown: start − □ = result
+        const start = 20 + rand(50), result = 5 + rand(start - 5);
+        expect(solve({ ...base, start, unknown: "change", result, steps: [{ kind: "pop", n: 0 }] }).answer).toBe(start - result);
+      } else if (shape === 3) { // compare bigger / smaller
+        const reference = 10 + rand(60), difference = 1 + rand(9);
+        expect(solve({ ...base, start: 0, steps: [], compare: { relation: "bigger", reference, difference } }).answer).toBe(reference + difference);
+        expect(solve({ ...base, start: 0, steps: [], compare: { relation: "smaller", reference, difference } }).answer).toBe(reference - difference);
+      } else { // compare difference
+        const reference = 10 + rand(60), heroCount = 10 + rand(60);
+        expect(solve({ ...base, start: 0, steps: [], compare: { relation: "difference", reference, difference: 0, heroCount } }).answer).toBe(Math.abs(heroCount - reference));
+      }
+    }
+  });
+});
+
 describe("mastery", () => {
   it("needs 3 clean across >=2 templates and never drops in a session", () => {
     const log = [{ type: "answered", clean: true, template: "a" }, { type: "answered", clean: true, template: "b" }, { type: "answered", clean: true, template: "a" }];
