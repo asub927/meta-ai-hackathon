@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { initial, step, stickerStory as story, type Answer, type Event, type StepPhase } from "@kids-math/core";
+import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type Event, type StepPhase } from "@kids-math/core";
 import "./index.css";
 
 const LOG_KEY = "kids-math-log";
@@ -29,6 +29,27 @@ function App() {
   const audioRef = useRef<AudioContext | null>(null);
 
   useEffect(() => { (window as any).__render = { seek: (t: number) => { document.body.dataset.frame = String(Math.round(t * 30)); } }; }, []);
+  useEffect(() => {
+    (window as any).__conformanceRun = (kind: string, input: any) => {
+      if (kind === "step") {
+        const [state, effects] = step(input.state, input.event, story);
+        return { state, effects };
+      }
+      if (kind === "detect") return detect(story.solved, story.questions[input.qIndex]!, input.answer);
+      if (kind === "fill") return fill(input.template, story.solved, input.extra ?? {});
+      if (kind === "choreograph") {
+        const resolved = input.beat.kind === "beat"
+          ? { kind: "beat" as const, question: story.questions[input.beat.qIndex]! }
+          : {
+            kind: "reaction" as const,
+            reaction: story.reactions.find((r) => r.misconception === input.beat.misconception)!,
+            shown: input.beat.shown,
+          };
+        return choreograph(input.scene, story.solved, resolved);
+      }
+      throw new Error(`unknown conformance kind: ${kind}`);
+    };
+  }, []);
   useEffect(() => { setHasLocalVoice((window.speechSynthesis?.getVoices() ?? []).some((v) => v.localService)); }, [started]);
   useEffect(() => { if (phase.tag === "asking") { setShown(null); const t = setTimeout(() => setHintReady(true), 8000); return () => clearTimeout(t); } }, [phase]);
   useEffect(() => { if (readAloud) speakLocal(pip); }, [pip, readAloud]);

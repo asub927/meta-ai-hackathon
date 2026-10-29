@@ -69,3 +69,15 @@ export type Effect =
   | { type: "record"; event: string };
 
 export const initial: StepPhase = { tag: "telling" };
+
+export type Expression = "curious" | "puzzled" | "celebrate";
+export interface SceneDescriptor { reducedMotion: boolean }
+export interface BeatCue { atMs: number; kind: "say" | "pop" | "sparkle" }
+export interface BeatScript {
+  id: string; durationMs: number; expression: Expression;
+  bookCount: number; startCount: number; say: string | null;
+  cues: readonly BeatCue[]; reducedMotion: boolean;
+}
+export type ChoreoInput =
+  | { kind: "beat"; question: Question }
+  | { kind: "reaction"; reaction: ReactionScript; shown: number };

@@ -6,6 +6,7 @@
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck",
     "validate": "pnpm --filter @kids-math/core run validate",
+    "vectors": "pnpm --filter @kids-math/conformance run vectors",
     "verify:doctor": "node .claude/skills/verify-kids-math-web/scripts/doctor.mjs"
   },
   "devDependencies": { "typescript": "^5.9.0" }

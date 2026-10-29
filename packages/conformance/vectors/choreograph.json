@@ -1,0 +1,570 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "bookCount": 24,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          }
+        ],
+        "durationMs": 1200,
+        "expression": "curious",
+        "id": "beat:q0-predict",
+        "reducedMotion": false,
+        "say": "Momo gives some away. More or fewer now?",
+        "startCount": 24
+      },
+      "id": "choreograph-beat-q0-full",
+      "input": {
+        "beat": {
+          "kind": "beat",
+          "qIndex": 0
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 24,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "curious",
+        "id": "beat:q0-predict",
+        "reducedMotion": true,
+        "say": "Momo gives some away. More or fewer now?",
+        "startCount": 24
+      },
+      "id": "choreograph-beat-q0-reduced",
+      "input": {
+        "beat": {
+          "kind": "beat",
+          "qIndex": 0
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 24,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          }
+        ],
+        "durationMs": 1200,
+        "expression": "curious",
+        "id": "beat:q0-count",
+        "reducedMotion": false,
+        "say": "How many does Momo have now?",
+        "startCount": 24
+      },
+      "id": "choreograph-beat-q1-full",
+      "input": {
+        "beat": {
+          "kind": "beat",
+          "qIndex": 1
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 24,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "curious",
+        "id": "beat:q0-count",
+        "reducedMotion": true,
+        "say": "How many does Momo have now?",
+        "startCount": 24
+      },
+      "id": "choreograph-beat-q1-reduced",
+      "input": {
+        "beat": {
+          "kind": "beat",
+          "qIndex": 1
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 15,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          }
+        ],
+        "durationMs": 1200,
+        "expression": "curious",
+        "id": "beat:q1-count",
+        "reducedMotion": false,
+        "say": "Then Momo finds more. How many in all?",
+        "startCount": 24
+      },
+      "id": "choreograph-beat-q2-full",
+      "input": {
+        "beat": {
+          "kind": "beat",
+          "qIndex": 2
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 15,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "curious",
+        "id": "beat:q1-count",
+        "reducedMotion": true,
+        "say": "Then Momo finds more. How many in all?",
+        "startCount": 24
+      },
+      "id": "choreograph-beat-q2-reduced",
+      "input": {
+        "beat": {
+          "kind": "beat",
+          "qIndex": 2
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 1800,
+        "expression": "puzzled",
+        "id": "reaction:wrong-operation",
+        "reducedMotion": false,
+        "say": "If Momo had 33, where did they come from?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-wrong-operation-full",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "wrong-operation",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "puzzled",
+        "id": "reaction:wrong-operation",
+        "reducedMotion": true,
+        "say": "If Momo had 33, where did they come from?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-wrong-operation-reduced",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "wrong-operation",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 1800,
+        "expression": "puzzled",
+        "id": "reaction:echoed-a-given",
+        "reducedMotion": false,
+        "say": "33 is how many flew away. How many stayed?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-echoed-a-given-full",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "echoed-a-given",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "puzzled",
+        "id": "reaction:echoed-a-given",
+        "reducedMotion": true,
+        "say": "33 is how many flew away. How many stayed?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-echoed-a-given-reduced",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "echoed-a-given",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 1800,
+        "expression": "puzzled",
+        "id": "reaction:smaller-from-larger",
+        "reducedMotion": false,
+        "say": "33 is more than the start. Did any fly away?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-smaller-from-larger-full",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "smaller-from-larger",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "puzzled",
+        "id": "reaction:smaller-from-larger",
+        "reducedMotion": true,
+        "say": "33 is more than the start. Did any fly away?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-smaller-from-larger-reduced",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "smaller-from-larger",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 1800,
+        "expression": "puzzled",
+        "id": "reaction:direction-flip",
+        "reducedMotion": false,
+        "say": "Did Momo get more, or give some away?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-direction-flip-full",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "direction-flip",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "puzzled",
+        "id": "reaction:direction-flip",
+        "reducedMotion": true,
+        "say": "Did Momo get more, or give some away?",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-direction-flip-reduced",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "direction-flip",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 1800,
+        "expression": "puzzled",
+        "id": "reaction:off-by-one",
+        "reducedMotion": false,
+        "say": "So close. Let's count together.",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-off-by-one-full",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "off-by-one",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "puzzled",
+        "id": "reaction:off-by-one",
+        "reducedMotion": true,
+        "say": "So close. Let's count together.",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-off-by-one-reduced",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "off-by-one",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 1800,
+        "expression": "puzzled",
+        "id": "reaction:unknown",
+        "reducedMotion": false,
+        "say": "Let's count together, slowly.",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-unknown-full",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "unknown",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": false
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "bookCount": 33,
+        "cues": [
+          {
+            "atMs": 0,
+            "kind": "say"
+          },
+          {
+            "atMs": 300,
+            "kind": "pop"
+          }
+        ],
+        "durationMs": 0,
+        "expression": "puzzled",
+        "id": "reaction:unknown",
+        "reducedMotion": true,
+        "say": "Let's count together, slowly.",
+        "startCount": 24
+      },
+      "id": "choreograph-reaction-unknown-reduced",
+      "input": {
+        "beat": {
+          "kind": "reaction",
+          "misconception": "unknown",
+          "shown": 33
+        },
+        "scene": {
+          "reducedMotion": true
+        },
+        "story": "stickers"
+      }
+    }
+  ],
+  "kind": "choreograph",
+  "version": 1
+}

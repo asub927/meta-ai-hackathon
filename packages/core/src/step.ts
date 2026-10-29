@@ -23,9 +23,9 @@ export function step(state: StepPhase, ev: Event, story: StoryData): [StepPhase,
         const rung = (state.rung + 1) as 0 | 1 | 2 | 3;
         if (rung === 3) {
           const worked = q.hints[2];
-          return [{ ...state, rung }, [say(`${worked.exampleSay} ${worked.say}`)]];
+          return [{ ...state, rung }, [say(`${worked.exampleSay} ${fill(worked.say, solved)}`)]];
         }
-        return [{ ...state, rung }, [say(state.rung === 1 ? q.hints[1] : q.hints[0])]];
+        return [{ ...state, rung }, [say(fill(state.rung === 1 ? q.hints[1] : q.hints[0], solved))]];
       }
       if (ev.type !== "answered") return [state, []];
       const miss = detect(solved, q, ev.a);

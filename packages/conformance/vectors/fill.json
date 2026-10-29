@@ -1,0 +1,192 @@
+{
+  "cases": [
+    {
+      "expected": "Momo gives some away. More or fewer now?",
+      "id": "fill-q0-ask",
+      "input": {
+        "story": "stickers",
+        "template": "{hero} gives some away. More or fewer now?"
+      }
+    },
+    {
+      "expected": "When you give some away, do you keep them?",
+      "id": "fill-q0-hint0",
+      "input": {
+        "story": "stickers",
+        "template": "When you give some away, do you keep them?"
+      }
+    },
+    {
+      "expected": "Watch the ones that fly.",
+      "id": "fill-q0-hint1",
+      "input": {
+        "story": "stickers",
+        "template": "Watch the ones that fly."
+      }
+    },
+    {
+      "expected": "7 balloons, 2 pop. Fewer!",
+      "id": "fill-q0-hint2-example",
+      "input": {
+        "story": "stickers",
+        "template": "7 balloons, 2 pop. Fewer!"
+      }
+    },
+    {
+      "expected": "Now you try.",
+      "id": "fill-q0-hint2-say",
+      "input": {
+        "story": "stickers",
+        "template": "Now you try."
+      }
+    },
+    {
+      "expected": "How many does Momo have now?",
+      "id": "fill-q1-ask",
+      "input": {
+        "story": "stickers",
+        "template": "How many does {hero} have now?"
+      }
+    },
+    {
+      "expected": "How many were there at the start?",
+      "id": "fill-q1-hint0",
+      "input": {
+        "story": "stickers",
+        "template": "How many were there at the start?"
+      }
+    },
+    {
+      "expected": "Let's make tens. Take some away.",
+      "id": "fill-q1-hint1",
+      "input": {
+        "story": "stickers",
+        "template": "Let's make tens. Take some away."
+      }
+    },
+    {
+      "expected": "12 balloons, 4 pop, leaves 8.",
+      "id": "fill-q1-hint2-example",
+      "input": {
+        "story": "stickers",
+        "template": "12 balloons, 4 pop, leaves 8."
+      }
+    },
+    {
+      "expected": "Now you try.",
+      "id": "fill-q1-hint2-say",
+      "input": {
+        "story": "stickers",
+        "template": "Now you try."
+      }
+    },
+    {
+      "expected": "Then Momo finds more. How many in all?",
+      "id": "fill-q2-ask",
+      "input": {
+        "story": "stickers",
+        "template": "Then {hero} finds more. How many in all?"
+      }
+    },
+    {
+      "expected": "How many after giving some away?",
+      "id": "fill-q2-hint0",
+      "input": {
+        "story": "stickers",
+        "template": "How many after giving some away?"
+      }
+    },
+    {
+      "expected": "Count on from there.",
+      "id": "fill-q2-hint1",
+      "input": {
+        "story": "stickers",
+        "template": "Count on from there."
+      }
+    },
+    {
+      "expected": "8 shells, find 3, makes 11.",
+      "id": "fill-q2-hint2-example",
+      "input": {
+        "story": "stickers",
+        "template": "8 shells, find 3, makes 11."
+      }
+    },
+    {
+      "expected": "Now you try.",
+      "id": "fill-q2-hint2-say",
+      "input": {
+        "story": "stickers",
+        "template": "Now you try."
+      }
+    },
+    {
+      "expected": "If Momo had 33, where did they come from?",
+      "id": "fill-reaction-wrong-operation",
+      "input": {
+        "extra": {
+          "shown": 33
+        },
+        "story": "stickers",
+        "template": "If {hero} had {shown}, where did they come from?"
+      }
+    },
+    {
+      "expected": "33 is how many flew away. How many stayed?",
+      "id": "fill-reaction-echoed-a-given",
+      "input": {
+        "extra": {
+          "shown": 33
+        },
+        "story": "stickers",
+        "template": "{shown} is how many flew away. How many stayed?"
+      }
+    },
+    {
+      "expected": "33 is more than the start. Did any fly away?",
+      "id": "fill-reaction-smaller-from-larger",
+      "input": {
+        "extra": {
+          "shown": 33
+        },
+        "story": "stickers",
+        "template": "{shown} is more than the start. Did any fly away?"
+      }
+    },
+    {
+      "expected": "Did Momo get more, or give some away?",
+      "id": "fill-reaction-direction-flip",
+      "input": {
+        "extra": {
+          "shown": 33
+        },
+        "story": "stickers",
+        "template": "Did {hero} get more, or give some away?"
+      }
+    },
+    {
+      "expected": "So close. Let's count together.",
+      "id": "fill-reaction-off-by-one",
+      "input": {
+        "extra": {
+          "shown": 33
+        },
+        "story": "stickers",
+        "template": "So close. Let's count together."
+      }
+    },
+    {
+      "expected": "Let's count together, slowly.",
+      "id": "fill-reaction-unknown",
+      "input": {
+        "extra": {
+          "shown": 33
+        },
+        "story": "stickers",
+        "template": "Let's count together, slowly."
+      }
+    }
+  ],
+  "kind": "fill",
+  "version": 1
+}

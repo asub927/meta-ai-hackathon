@@ -1,0 +1,865 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "Momo gives some away. More or fewer now?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 0,
+          "rung": 0,
+          "tag": "asking"
+        }
+      },
+      "id": "telling-beat-ended",
+      "input": {
+        "event": {
+          "type": "beat-ended"
+        },
+        "state": {
+          "tag": "telling"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [],
+        "state": {
+          "tag": "telling"
+        }
+      },
+      "id": "telling-hint-ignored",
+      "input": {
+        "event": {
+          "type": "hint"
+        },
+        "state": {
+          "tag": "telling"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "event": "answered-clean",
+            "type": "record"
+          },
+          {
+            "line": "How did you know?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 0,
+          "tag": "explaining"
+        }
+      },
+      "id": "ask-q0-correct",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "predict",
+            "value": "fewer"
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 0,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "How many does Momo have now?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        }
+      },
+      "id": "explain-q0-next",
+      "input": {
+        "event": {
+          "choice": "Giving away makes fewer",
+          "type": "explained"
+        },
+        "state": {
+          "qIndex": 0,
+          "tag": "explaining"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "event": "answered-clean",
+            "type": "record"
+          },
+          {
+            "line": "How did you know?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "tag": "explaining"
+        }
+      },
+      "id": "ask-q1-correct",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 15
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "Then Momo finds more. How many in all?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        }
+      },
+      "id": "explain-q1-next",
+      "input": {
+        "event": {
+          "choice": "I counted back",
+          "type": "explained"
+        },
+        "state": {
+          "qIndex": 1,
+          "tag": "explaining"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "event": "answered-clean",
+            "type": "record"
+          },
+          {
+            "line": "How did you know?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "tag": "explaining"
+        }
+      },
+      "id": "ask-q2-correct",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 20
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "event": "lesson-done",
+            "type": "record"
+          },
+          {
+            "line": "You worked it out!",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "tag": "done"
+        }
+      },
+      "id": "explain-q2-done",
+      "input": {
+        "event": {
+          "choice": "I counted on",
+          "type": "explained"
+        },
+        "state": {
+          "qIndex": 2,
+          "tag": "explaining"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 15,
+            "type": "react"
+          },
+          {
+            "line": "Did Momo get more, or give some away?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 0,
+          "reaction": {
+            "misconception": "direction-flip",
+            "pip": "Did {hero} get more, or give some away?"
+          },
+          "shown": 15,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q0-direction-flip",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "predict",
+            "value": "more"
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 0,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 33,
+            "type": "react"
+          },
+          {
+            "line": "If Momo had 33, where did they come from?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "wrong-operation",
+            "pip": "If {hero} had {shown}, where did they come from?"
+          },
+          "shown": 33,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q1-wrong-33",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 33
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 9,
+            "type": "react"
+          },
+          {
+            "line": "9 is how many flew away. How many stayed?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "echoed-a-given",
+            "pip": "{shown} is how many flew away. How many stayed?"
+          },
+          "shown": 9,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q1-wrong-9",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 9
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 16,
+            "type": "react"
+          },
+          {
+            "line": "So close. Let's count together.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "off-by-one",
+            "pip": "So close. Let's count together."
+          },
+          "shown": 16,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q1-wrong-16",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 16
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 25,
+            "type": "react"
+          },
+          {
+            "line": "25 is more than the start. Did any fly away?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "smaller-from-larger",
+            "pip": "{shown} is more than the start. Did any fly away?"
+          },
+          "shown": 25,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q1-wrong-25",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 25
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 0,
+            "type": "react"
+          },
+          {
+            "line": "Let's count together, slowly.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "unknown",
+            "pip": "Let's count together, slowly."
+          },
+          "shown": 0,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q1-wrong-0",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 0
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 10,
+            "type": "react"
+          },
+          {
+            "line": "If Momo had 10, where did they come from?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "reaction": {
+            "misconception": "wrong-operation",
+            "pip": "If {hero} had {shown}, where did they come from?"
+          },
+          "shown": 10,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q2-wrong-10",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 10
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 5,
+            "type": "react"
+          },
+          {
+            "line": "5 is how many flew away. How many stayed?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "reaction": {
+            "misconception": "echoed-a-given",
+            "pip": "{shown} is how many flew away. How many stayed?"
+          },
+          "shown": 5,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q2-wrong-5",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 5
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 19,
+            "type": "react"
+          },
+          {
+            "line": "So close. Let's count together.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "reaction": {
+            "misconception": "off-by-one",
+            "pip": "So close. Let's count together."
+          },
+          "shown": 19,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q2-wrong-19",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 19
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 21,
+            "type": "react"
+          },
+          {
+            "line": "So close. Let's count together.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "reaction": {
+            "misconception": "off-by-one",
+            "pip": "So close. Let's count together."
+          },
+          "shown": 21,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q2-wrong-21",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 21
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 0,
+            "type": "react"
+          },
+          {
+            "line": "Let's count together, slowly.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 2,
+          "reaction": {
+            "misconception": "unknown",
+            "pip": "Let's count together, slowly."
+          },
+          "shown": 0,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q2-wrong-0",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 0
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 2,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "How many were there at the start?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "rung": 1,
+          "tag": "asking"
+        }
+      },
+      "id": "hint-q1-rung0",
+      "input": {
+        "event": {
+          "type": "hint"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "Let's make tens. Take some away.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "rung": 2,
+          "tag": "asking"
+        }
+      },
+      "id": "hint-q1-rung1",
+      "input": {
+        "event": {
+          "type": "hint"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 1,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "12 balloons, 4 pop, leaves 8. Now you try.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "rung": 3,
+          "tag": "asking"
+        }
+      },
+      "id": "hint-q1-rung2",
+      "input": {
+        "event": {
+          "type": "hint"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 2,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "How many does Momo have now?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        }
+      },
+      "id": "hint-q1-rung3-reask",
+      "input": {
+        "event": {
+          "type": "hint"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 3,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [],
+        "state": {
+          "qIndex": 1,
+          "tag": "explaining"
+        }
+      },
+      "id": "explaining-double-tap-ignored",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 15
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "tag": "explaining"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "line": "How many does Momo have now?",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        }
+      },
+      "id": "reaction-ended-to-asking",
+      "input": {
+        "event": {
+          "type": "reaction-ended"
+        },
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "wrong-operation",
+            "pip": "If {hero} had {shown}, where did they come from?"
+          },
+          "shown": 33,
+          "tag": "reacting"
+        },
+        "story": "stickers"
+      }
+    },
+    {
+      "expected": {
+        "effects": [
+          {
+            "shown": 0,
+            "type": "react"
+          },
+          {
+            "line": "Let's count together, slowly.",
+            "type": "say"
+          }
+        ],
+        "state": {
+          "qIndex": 1,
+          "reaction": {
+            "misconception": "unknown",
+            "pip": "Let's count together, slowly."
+          },
+          "shown": 0,
+          "tag": "reacting"
+        }
+      },
+      "id": "ask-q1-unknown",
+      "input": {
+        "event": {
+          "a": {
+            "kind": "count",
+            "value": 0
+          },
+          "type": "answered"
+        },
+        "state": {
+          "qIndex": 1,
+          "rung": 0,
+          "tag": "asking"
+        },
+        "story": "stickers"
+      }
+    }
+  ],
+  "kind": "step",
+  "version": 1
+}
