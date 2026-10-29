@@ -1,0 +1,11 @@
+{
+  "name": "kids-math-socratic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "verify:doctor": "node .claude/skills/verify-kids-math-web/scripts/doctor.mjs"
+  },
+  "devDependencies": { "typescript": "^5.9.0" }
+}
