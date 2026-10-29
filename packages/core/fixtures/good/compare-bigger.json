@@ -1,0 +1,16 @@
+{
+  "solved": {
+    "problem": { "id": "books-compare-bigger", "standard": "NC.2.OA.1", "hero": "Momo", "friend": "Kiwi", "item": "book", "start": 0, "steps": [], "compare": { "relation": "bigger", "reference": 18, "difference": 7 } },
+    "totals": [25], "answer": 25
+  },
+  "questions": [
+    { "id": "q0-count", "step": "final", "ask": "How many books does {hero} have?", "interaction": "count",
+      "hints": ["Who has the pile we compare with?", "Start there, then add the extra.", { "exampleSay": "Pile is 10, extra 3, makes 13.", "say": "Now you try." }],
+      "explainChoices": ["I counted on", "I guessed"] }
+  ],
+  "reactions": [
+    { "misconception": "echoed-a-given", "pip": "{shown} is the other pile. Add the extra." },
+    { "misconception": "unknown", "pip": "Let's count together, slowly." }
+  ],
+  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+}

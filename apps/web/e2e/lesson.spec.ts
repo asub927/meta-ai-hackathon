@@ -56,7 +56,7 @@ test("hints: ladder climbs, worked example does not state this answer", async ({
   await page.getByRole("button", { name: "Hint" }).click();
   await page.getByRole("button", { name: "Hint" }).click();
   await page.getByRole("button", { name: "Hint" }).click();
-  await expect(page.getByTestId("pip")).toContainText("13 balloons");
+  await expect(page.getByTestId("pip")).toContainText("12 balloons");
   await expect(page.getByTestId("pip")).not.toContainText("15");
 });
 

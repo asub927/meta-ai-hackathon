@@ -8,9 +8,23 @@ export type Step =
   | { kind: "find"; n: number; place: "bed" | "gift" }
   | { kind: "receive"; n: number; from: string };
 
+export const CAPACITY = 100;
+
+export type UnknownPosition = "start" | "change" | "result";
+export type CompareRelation = "bigger" | "smaller" | "difference";
+export interface CompareShape { relation: CompareRelation; reference: number; difference: number; heroCount?: number }
+
 export interface Problem {
   id: string; standard: string; hero: string; friend: string | null; item: string;
   start: number; steps: readonly Step[];
+  /** NC.2.OA.1 extensions (U4). Default "result". For "start", `start` is a 0 placeholder and
+   *  the solver derives it from `result`; for "change", exactly one step carries a 0 `n`
+   *  placeholder and the solver derives its size from `result`. */
+  unknown?: UnknownPosition;
+  /** Known final total, required when `unknown` is "start" or "change". */
+  result?: number;
+  /** Compare problem (no steps): answer derives from reference ± difference, or |heroCount − reference| for "difference". */
+  compare?: CompareShape;
 }
 export interface Solved { problem: Problem; totals: readonly number[]; answer: number }
 
@@ -29,7 +43,15 @@ export interface Question {
 }
 
 export interface ReactionScript { misconception: MisconceptionId; pip: string; }
-export interface StoryData { solved: Solved; questions: readonly Question[]; reactions: readonly ReactionScript[] }
+export interface LessonSource { url: string; licence: string; changes: string }
+export interface StoryData {
+  solved: Solved; questions: readonly Question[]; reactions: readonly ReactionScript[];
+  /** Content provenance (U4): every lesson carries where it came from. */
+  source?: LessonSource;
+}
+
+/** A validation finding. Callers branch on `code`, never on `message` (PLAN.md U4). */
+export interface Issue { code: string; path: string; message: string }
 
 export type StepPhase =
   | { tag: "telling" }

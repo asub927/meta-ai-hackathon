@@ -1,0 +1,16 @@
+{
+  "solved": {
+    "problem": { "id": "balloons-17-5", "standard": "NC.2.OA.1", "hero": "Momo", "friend": null, "item": "balloon", "start": 17, "steps": [{ "kind": "pop", "n": 5 }] },
+    "totals": [17, 12], "answer": 12
+  },
+  "questions": [
+    { "id": "q0-count", "step": 0, "ask": "How many does {hero} have now?", "interaction": "count",
+      "hints": ["How many were there at the start?", "Watch the ones that fly away.", { "exampleSay": "14 shells, 3 lost, leaves 11.", "say": "Now you try." }],
+      "explainChoices": ["I counted back", "I guessed"] }
+  ],
+  "reactions": [
+    { "misconception": "off-by-one", "pip": "So close. Let's count together." },
+    { "misconception": "unknown", "pip": "Let's count together, slowly." }
+  ],
+  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+}

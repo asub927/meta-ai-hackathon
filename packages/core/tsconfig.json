@@ -1,1 +1,1 @@
-{ "extends": "../../tsconfig.base.json", "compilerOptions": { "types": ["vitest/globals"] }, "include": ["src"] }
+{ "extends": "../../tsconfig.base.json", "compilerOptions": { "types": ["vitest/globals"], "resolveJsonModule": true }, "include": ["src"], "exclude": ["src/cli.ts"] }

@@ -3,7 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
-  "scripts": { "test": "vitest run", "typecheck": "tsc --noEmit -p tsconfig.json" },
-  "devDependencies": { "typescript": "^5.9.0", "vitest": "^3.2.0" }
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "validate": "tsc -p tsconfig.cli.json && node .validate-dist/cli.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
 }
