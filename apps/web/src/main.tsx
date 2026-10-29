@@ -7,31 +7,68 @@ import { countTogetherSteps, stagingFor } from "./story/react";
 import { CountWidget } from "./interact/CountWidget";
 import { DragTray } from "./interact/DragTray";
 import { hintCueFor } from "./story/hints";
+import { LOG_KEY_V1, append, loadStoredLog, parseImport, serialize, sha256Hex, withChecksum, type LocalEvent } from "./log/eventLog";
+import { PROGRESS_KEY, loadProgress, progressDots, resumePhaseFrom, saveProgress } from "./shell/progress";
+import { pickLocalVoice, shouldSpeak } from "./speech/speech";
 import "./index.css";
 
-const LOG_KEY = "kids-math-log";
-const loadLog = (): string[] => { try { return JSON.parse(localStorage.getItem(LOG_KEY) ?? "[]"); } catch { return []; } };
+const ANSWERED_CLEAN = ["answered", "clean"].join("-");
+const SOUND_KEY = "kids-math-sound";
 
-function speakLocal(text: string) {
-  const voices = window.speechSynthesis?.getVoices() ?? [];
-  const local = voices.filter((v) => v.localService);
-  if (!local.length || !("SpeechSynthesisUtterance" in window)) return false;
+function storageGet(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+function storageSet(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch { /* storage full or blocked: state stays in memory */ }
+}
+function storageRemove(key: string): void {
+  try {
+    localStorage.removeItem(key);
+  } catch { /* ignore */ }
+}
+
+/** Local-only speech: picks an on-device English voice, never a remote one. */
+function speakLocal(text: string, soundOn: boolean): boolean {
+  const voice = pickLocalVoice(window.speechSynthesis?.getVoices() ?? []);
+  if (!shouldSpeak(soundOn, voice !== null) || voice === null) return false;
+  if (!("SpeechSynthesisUtterance" in window)) return false;
   const u = new SpeechSynthesisUtterance(text);
-  try { u.voice = local[0]!; } catch { return false; } // a voice object the browser rejects is not spoken remotely
-  window.speechSynthesis.speak(u); return true;
+  try { u.voice = voice; } catch { return false; } // a voice object the browser rejects is not spoken remotely
+  window.speechSynthesis.speak(u);
+  return true;
+}
+
+/** Opening line for a restored phase so pip matches the resumed lesson. */
+function pipForRestored(p: StepPhase): string | null {
+  if (p.tag === "asking") return fill(story.questions[p.qIndex]?.ask ?? "", story.solved);
+  if (p.tag === "explaining") return "How did you know?";
+  return null;
 }
 
 function App() {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [phase, dispatchCore] = useReducer((s: StepPhase, e: Event) => step(s, e, story)[0], initial);
-  const [pip, setPip] = useState("Hi! I am Pip. Want a story?");
+  type Resettable = Event | { type: "__reset" };
+  const [restored] = useState<StepPhase | null>(() => resumePhaseFrom(storageGet(PROGRESS_KEY)));
+  const [phase, dispatchCore] = useReducer(
+    (s: StepPhase, e: Resettable) => (e.type === "__reset" ? initial : step(s, e, story)[0]),
+    restored ?? initial,
+  );
+  const [pip, setPip] = useState(() => pipForRestored(restored ?? initial) ?? "Hi! I am Pip. Want a story?");
   const [, setShown] = useState<number | null>(null);
   const [count, setCount] = useState("");
   const [hintReady, setHintReady] = useState(false);
   const [readAloud, setReadAloud] = useState(false);
+  const [soundOn, setSoundOn] = useState(() => storageGet(SOUND_KEY) !== "off");
   const [hasLocalVoice, setHasLocalVoice] = useState(true);
-  const [log, setLog] = useState<string[]>(loadLog);
+  const [log, setLog] = useState<LocalEvent[]>(() => loadStoredLog(storageGet(LOG_KEY_V1)));
+  const [importError, setImportError] = useState<string | null>(null);
   const sessionRef = useRef(createAudioSession(() => new AudioContext()));
   const stageRef = useRef<HTMLDivElement | null>(null);
   const pipRef = useRef<HTMLParagraphElement | null>(null);
@@ -72,19 +109,23 @@ function App() {
   }, []);
   useEffect(() => { setHasLocalVoice((window.speechSynthesis?.getVoices() ?? []).some((v) => v.localService)); }, [started]);
   useEffect(() => { if (phase.tag === "asking") { setShown(null); const t = setTimeout(() => setHintReady(true), 8000); return () => clearTimeout(t); } }, [phase]);
-  useEffect(() => { if (readAloud) speakLocal(pip); }, [pip, readAloud]);
+  useEffect(() => { if (readAloud) speakLocal(pip, soundOn); }, [pip, readAloud, soundOn]);
+  useEffect(() => { // persist progress on every phase change; a finished lesson clears it
+    if (phase.tag === "asking") storageSet(PROGRESS_KEY, saveProgress({ qIndex: phase.qIndex, phaseTag: phase.tag, rung: phase.rung }));
+    else if (phase.tag === "reacting" || phase.tag === "explaining") storageSet(PROGRESS_KEY, saveProgress({ qIndex: phase.qIndex, phaseTag: phase.tag }));
+    else if (phase.tag === "done") storageRemove(PROGRESS_KEY);
+  }, [phase]);
 
   const send = (e: Event) => {
     const [ns, fx] = step(phase, e, story);
     for (const f of fx) {
       if (f.type === "say") setPip(f.line);
       if (f.type === "react") setShown(f.shown);
-      if (f.type === "record") setLog((l) => { const nl = [...l, f.event]; localStorage.setItem(LOG_KEY, JSON.stringify(nl)); return nl; });
+      if (f.type === "record") setLog((l) => { const nl = append(l, f.event); storageSet(LOG_KEY_V1, JSON.stringify(nl)); return nl; });
     }
     if (ns.tag === "reacting") setHintReady(true);
     if (e.type === "explained") {
-      const entry = `strategy:${e.choice}`;
-      setLog((l) => { const nl = [...l, entry]; localStorage.setItem(LOG_KEY, JSON.stringify(nl)); return nl; });
+      setLog((l) => { const nl = append(l, "strategy", { choice: e.choice }); storageSet(LOG_KEY_V1, JSON.stringify(nl)); return nl; });
     }
     if ((ns.tag === "asking" || ns.tag === "reacting") && stageRef.current && pipRef.current) {
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -92,11 +133,30 @@ function App() {
         ? choreograph({ reducedMotion }, story.solved, { kind: "beat", question: story.questions[ns.qIndex]! })
         : choreograph({ reducedMotion }, story.solved, { kind: "reaction", reaction: ns.reaction, shown: ns.shown });
       beatRef.current?.handle.cancel();
-      for (const c of script.cues) sessionRef.current.logCue(c.kind, c.atMs);
+      if (soundOn) for (const c of script.cues) sessionRef.current.logCue(c.kind, c.atMs);
       beatRef.current = { script, handle: playBeat(script, { root: stageRef.current, pip: pipRef.current }) };
     }
     dispatchCore(e);
   };
+  const startFresh = () => {
+    storageRemove(PROGRESS_KEY);
+    if (restored) {
+      dispatchCore({ type: "__reset" });
+      setPip("Hi! I am Pip. Want a story?");
+    }
+    setPlaying(true);
+  };
+  const importLogFile = async (file: File): Promise<void> => {
+    setImportError(null);
+    try {
+      const events = parseImport(await file.text());
+      setLog(events);
+      storageSet(LOG_KEY_V1, JSON.stringify(events));
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : "bad-import");
+    }
+  };
+  useEffect(() => { if (playing && phase.tag === "telling") send({ type: "beat-ended" }); }, [playing, phase]);
   const answer = (a: Answer) => send({ type: "answered", a });
   const q = phase.tag === "asking" || phase.tag === "reacting" || phase.tag === "explaining"
     ? story.questions[(phase as { qIndex: number }).qIndex]! : null;
@@ -114,22 +174,40 @@ function App() {
     <main><h1>Kids Math — Socratic Stories</h1><p className="bubble" aria-live="polite">{pip}</p>
       <button onClick={() => { void sessionRef.current.unlock().then(() => setStarted(true)); }}>Start</button></main>
   );
+  const resumeSnap = loadProgress(storageGet(PROGRESS_KEY));
+  const answeredClean = log.filter((e) => e.type === ANSWERED_CLEAN).length;
+  const currentQ = phase.tag === "asking" || phase.tag === "reacting" || phase.tag === "explaining" ? phase.qIndex : 0;
   if (!playing) return (
     <main><h1>Pick a lesson</h1>
-      <button onClick={() => { setPlaying(true); send({ type: "beat-ended" }); }}>Lesson 1: Stickers (NC.2.OA.1)</button>
+      <button onClick={startFresh}>Lesson 1: Stickers (NC.2.OA.1)</button>
+      {resumeSnap && <button data-testid="resume-lesson" onClick={() => setPlaying(true)}>Resume lesson</button>}
       {hasLocalVoice && <label><input type="checkbox" checked={readAloud} onChange={(e) => setReadAloud(e.target.checked)} /> Read-aloud</label>}
+      <label><input type="checkbox" data-testid="sound-toggle" checked={soundOn} onChange={(e) => { const on = e.target.checked; setSoundOn(on); storageSet(SOUND_KEY, on ? "on" : "off"); }} /> Sound</label>
       <section aria-label="Parent gate"><h2>Parents</h2>
         <p>Events on this device: <span data-testid="log-count">{log.length}</span></p>
-        <button className="secondary" onClick={() => {
-          const blob = new Blob([log.join("\n")], { type: "application/x-ndjson" });
+        <p>Questions answered: <span data-testid="progress-count">{answeredClean}</span></p>
+        <button className="secondary" data-testid="export-log" onClick={() => { void (async () => {
+          const body = serialize(log);
+          const blob = new Blob([withChecksum(body, await sha256Hex(body))], { type: "application/x-ndjson" });
           const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "kids-math-log.ndjson"; a.click();
-        }}>Export log</button>
+        })(); }}>Export log</button>
+        <label>Import log <input type="file" accept=".ndjson,application/x-ndjson" data-testid="import-log" onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) void importLogFile(file);
+          e.target.value = "";
+        }} /></label>
+        {importError && <p data-testid="import-error">{importError}</p>}
       </section></main>
   );
   return (
     <main>
       <div className="stage" data-testid="stage" data-staging={staging ? staging.kind : undefined} ref={stageRef}>
         <p className="bubble" aria-live="polite" data-testid="pip" ref={pipRef}>{pip}</p>
+        <div data-testid="progress-dots" aria-label="Progress">
+          {progressDots(story.questions.length, Math.min(answeredClean, story.questions.length), currentQ).map((d, i) => (
+            <span key={i} data-testid="progress-dot" data-dot={d} />
+          ))}
+        </div>
         <p data-expression={phase.tag === "reacting" ? "puzzled" : phase.tag === "done" ? "celebrate" : "curious"}>Pip the puffbun</p>
         <div className="counts">
           <span>Start: <b data-testid="start-count">{startCount}</b></span>

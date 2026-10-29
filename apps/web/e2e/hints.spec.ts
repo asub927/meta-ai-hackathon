@@ -41,6 +41,6 @@ test("hints climb in order; worked example uses its own numbers; strategy record
 
   await answerCount(page, 15);
   await page.getByRole("button", { name: /counted|tens/i }).first().click();
-  const log = await page.evaluate(() => JSON.parse(localStorage.getItem("kids-math-log") ?? "[]"));
-  expect(log.some((e: string) => e.startsWith("strategy:"))).toBe(true);
+  const log = await page.evaluate(() => JSON.parse(localStorage.getItem("kids-math-log-v1") ?? "[]"));
+  expect(log.some((e: { type: string }) => e.type === "strategy")).toBe(true);
 });
