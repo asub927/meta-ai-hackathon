@@ -1,11 +1,11 @@
 ---
 name: verify-kids-math-web
-description: "Drive the planned Socratic kids' math web app (React 19 + Vite, Playwright WebKit iPad) the way a child does: launch, doctor, play a lesson, capture evidence. Use when verifying any web-app change in this repo. STATUS: DRAFT/UNPROVEN — the app is not built yet (PLAN.md: 'nothing built until Anantha says go'); the doctor correctly fails until apps/web exists."
+description: "Drive the Socratic kids' math web app (React 19 + Vite, Playwright WebKit iPad) the way a child does: launch, doctor, play a lesson, capture evidence. Use when verifying any web-app change in this repo. PROVEN at e8590dc for the scaffold sticker story (lesson right-path, reaction, hints, speech, log — 12/12 WebKit iPad + Chromium); the full 5-story NC.2.OA.1 lesson and offline/resume/export round-trip remain unproven."
 ---
 
 # Verify kids-math web (DRAFT — unproven)
 
-> **Status: DRAFT, never yet run end-to-end.** Repo at `ed9421f` contains only planning docs. Every command below is grounded in `PLAN.md` (U0, U3–U12) and `docs/STACK.md` §2/§6, but no app exists to launch. First agent who runs this after M1 scaffolding lands must prove §4 of the generator contract (launch → doctor → drive one feature → evidence survives cleanup), fix what fails, and remove this banner. Do not report any feature below as verified until that run exists.
+> **Status: PROVEN (partial) at `e8590dc`.** Doctor exits 0 (`evidence/U0/doctor.txt`); Playwright WebKit iPad + Chromium pass 12/12 over the scaffold sticker story (1 story, 3 questions: predict → count 15 → count 20) — lesson right-path, reaction play-out (33/9/24), hint ladder, local-only speech, on-device log — with screenshots in `evidence/U0/` surviving cleanup. **Not yet proven:** a full 5-story approved NC.2.OA.1 lesson (U12), offline reload/resume, export→import round-trip, reduced-motion parity, real-iPad gates. Do not report those as verified.
 
 Target once built: pnpm monorepo, `apps/web` (React 19, TypeScript, Vite 8, react-router declarative; routes: lessons, play, settings), fixed 1280×720 logical stage, WAAPI `BeatScript` player, IndexedDB (`idb`) append-only `LocalEvent` log, vite-plugin-pwa offline.
 

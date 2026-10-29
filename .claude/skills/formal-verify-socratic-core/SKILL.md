@@ -5,7 +5,7 @@ description: "Formally verify the Socratic core invariants (tutor never states t
 
 # Formal verification: Socratic core (design model)
 
-> **Scope honesty:** at sync commit `ed9421f` there is no code — this verifies the *design model* transcribed from `PLAN.md` §2 (`StepPhase`, `Event`, `step`, lines 211–222) and the hard tutor rules (PLAN.md lines 28–32, 55–61), exactly as `docs/STACK.md` §2 prescribes ("the pstack `statechart` skill can model-check the flow in TLA+… every path reaches `done`, no `say` contains the answer"). When `packages/core` lands, re-point the model at `socratic/step.ts`, re-run, and only then move the sync commit below forward.
+> **Scope:** the model is transcribed from `PLAN.md` §2 (`StepPhase`, `Event`, `step`) and is now implemented by `packages/core/src/step.ts` (with `solve`/`detect`/`fill`/`mastery` in `packages/core/src/core.ts`), exactly as `docs/STACK.md` §2 prescribes ("the pstack `statechart` skill can model-check the flow in TLA+… every path reaches `done`, no `say` contains the answer"). The Python checker verifies the model; `packages/core` unit tests (incl. 200-sequence random replay to `done`) tie the code to it. When reducer semantics change, update PLAN.md, the model, and the checker together, re-run, and only then move the sync commit below forward.
 
 ## The properties (plain words)
 
@@ -29,8 +29,8 @@ Canonical spec: `model/SocraticReducer.tla` (same transitions, for TLC). No Java
 
 ## Coverage record
 
-- **Covered:** `PLAN.md` §2 reducer types + U5 acceptance (lines 211–222, 405–418), tutor rules (28–53), mastery/review (55–61); `docs/STACK.md` §1–2 derived-view claims.
-- **Last confirmed against:** commit `ed9421f` (2026-10-29, design docs only).
+- **Covered:** `packages/core/src/step.ts` (`step`), `core.ts` (`detect`, `mastery`), fixture `stickerStory`; design source `PLAN.md` §2 + U5 and `docs/STACK.md` §1–2.
+- **Last confirmed against:** commit `e8590dc` (M0 scaffold; checker PASS, core tests 11/11, 2026-10-29).
 - **Abstracted (state this when reporting):** one `Question` (a 5-story lesson is repetition of this flow); the smaller follow-up question after a reaction is modeled as a fresh ladder (`rung` reset); misconception *detectors* are collapsed to wrong-detected vs wrong-unknown (both react); `Count`/numbers are not modeled (that is `solve`/`validate`'s exhaustive detector sweep, STACK.md §1, a different check); mastery is the 3-clean-in-a-row rule with session monotonicity only — review intervals (1/3/7/21 days), templates, and cross-session behavior are **not** verified here.
 - **Not covered:** content validation, numbers/branding, BeatScript timing, UI, storage, iOS parity.
 
