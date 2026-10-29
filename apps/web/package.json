@@ -1,0 +1,25 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5173 --host 127.0.0.1",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "preview": "vite preview --port 5173 --host 127.0.0.1",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --passWithNoTests",
+    "verify:doctor": "node ../../.claude/skills/verify-kids-math-web/scripts/doctor.mjs",
+    "verify:beats": "playwright test e2e/lesson.spec.ts -g beats",
+    "verify:lesson": "playwright test e2e/lesson.spec.ts -g lesson",
+    "verify:react": "playwright test e2e/lesson.spec.ts -g reaction",
+    "verify:hints": "playwright test e2e/lesson.spec.ts -g hints",
+    "verify:speech": "playwright test e2e/lesson.spec.ts -g speech",
+    "verify:log": "playwright test e2e/lesson.spec.ts -g log"
+  },
+  "dependencies": { "@kids-math/core": "workspace:*", "react": "^19.1.0", "react-dom": "^19.1.0" },
+  "devDependencies": {
+    "@playwright/test": "^1.54.0", "@types/react": "^19.1.0", "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.6.0", "typescript": "^5.9.0", "vite": "^7.0.0", "vitest": "^3.2.0"
+  }
+}

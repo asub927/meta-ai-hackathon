@@ -1,0 +1,8 @@
+:root { font-family: "Nunito", system-ui, sans-serif; color: #213547; background: #fff8ec; }
+button { min-height: 64px; min-width: 64px; font-size: 1.25rem; border-radius: 16px; border: 2px solid #213547; background: #ffd166; cursor: pointer; padding: 0.5rem 1.25rem; }
+button.secondary { background: #fff; }
+input[type="number"] { font-size: 2rem; width: 7rem; min-height: 64px; text-align: center; border-radius: 16px; }
+.stage { background: #bde0fe; border-radius: 24px; padding: 1.5rem; max-width: 900px; margin: 1rem auto; }
+.bubble { background: #fff; border-radius: 16px; padding: 1rem; font-size: 1.5rem; }
+.counts { display: flex; gap: 1rem; font-size: 1.4rem; flex-wrap: wrap; }
+main { max-width: 960px; margin: 0 auto; padding: 1rem; }

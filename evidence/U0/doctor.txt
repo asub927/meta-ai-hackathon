@@ -1,6 +1,13 @@
 PASS  repo root (PLAN.md) — /Users/aaranvi/dev/meta-ai-hackathon
-FAIL  apps/web/package.json — missing — app not built yet (PLAN.md: nothing built until Anantha says go)
+PASS  apps/web/package.json — /Users/aaranvi/dev/meta-ai-hackathon/apps/web/package.json
+PASS  script verify:doctor — node ../../.claude/skills/verify-kids-math-web/scripts/doctor.mjs
+PASS  script verify:beats — playwright test e2e/lesson.spec.ts -g beats
+PASS  script verify:lesson — playwright test e2e/lesson.spec.ts -g lesson
+PASS  script verify:react — playwright test e2e/lesson.spec.ts -g reaction
+PASS  script verify:hints — playwright test e2e/lesson.spec.ts -g hints
+PASS  script verify:speech — playwright test e2e/lesson.spec.ts -g speech
+PASS  script verify:log — playwright test e2e/lesson.spec.ts -g log
 PASS  node — v26.8.1
 PASS  pnpm — 12.5.1
-FAIL  @playwright/test resolvable — not installed (expected until M1 scaffolding lands)
-FAIL  WebKit browser — n/a until Playwright installed
+PASS  @playwright/test resolvable — ok (apps/web)
+PASS  WebKit browser — installed (ms-playwright cache)

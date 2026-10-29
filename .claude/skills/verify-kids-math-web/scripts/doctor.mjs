@@ -31,9 +31,11 @@ for (const tool of ["node", "pnpm"]) {
 }
 
 let playwright = false;
-try { execSync("node -e \"require.resolve('@playwright/test')\"", { cwd: root, stdio: "pipe" }); playwright = true; } catch {}
-check("@playwright/test resolvable", playwright, playwright ? "ok" : "not installed (expected until M1 scaffolding lands)");
-check("WebKit browser", existsSync(join(root, "node_modules", ".bin", "playwright")) && playwright, playwright ? "confirm via: pnpm exec playwright install webkit" : "n/a until Playwright installed");
+try { execSync("node -e \"require.resolve('@playwright/test')\"", { cwd: join(root, "apps", "web"), stdio: "pipe" }); playwright = true; } catch {}
+check("@playwright/test resolvable", playwright, playwright ? "ok (apps/web)" : "not installed in apps/web");
+let webkit = false;
+try { const out = execSync("ls ~/Library/Caches/ms-playwright 2>/dev/null || ls ~/.cache/ms-playwright 2>/dev/null", { encoding: "utf8", shell: "/bin/sh" }); webkit = /webkit/.test(out); } catch {}
+check("WebKit browser", webkit, webkit ? "installed (ms-playwright cache)" : "not installed: pnpm --filter web exec playwright install webkit");
 
 const ok = checks.every((c) => c.ok);
 if (json) console.log(JSON.stringify({ ok, checks }, null, 2));
