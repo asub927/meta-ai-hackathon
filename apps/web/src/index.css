@@ -31,3 +31,13 @@ button.predict { min-height: 64px; }
   .counts { order: 1; }
   .counter-grid { grid-template-columns: repeat(5, minmax(64px, 1fr)); }
 }
+
+/* U8 reaction play-out: staged pile highlight + count-along row (amber/blue only) */
+.stage[data-staging="conservation"] .counts { outline: 3px solid #ffd166; border-radius: 12px; padding: 0.25rem 0.5rem; }
+.stage[data-staging="direction"] .counts { outline: 3px solid #4d96ff; border-radius: 12px; padding: 0.25rem 0.5rem; }
+.stage[data-staging="count-together"] .counts { outline: 3px solid #ffd166; border-radius: 12px; padding: 0.25rem 0.5rem; }
+.count-along { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+.count-along span { background: #fff; border: 2px solid #213547; border-radius: 12px; min-width: 48px; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+@media (prefers-reduced-motion: reduce) {
+  .stage *, .count-along span { animation: none !important; transition: none !important; }
+}

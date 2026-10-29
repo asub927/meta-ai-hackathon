@@ -2,6 +2,7 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { choreograph, detect, fill, initial, step, stickerStory as story, type Answer, type BeatScript, type Event, type StepPhase } from "@kids-math/core";
 import { playBeat, type BeatHandle } from "./player";
+import { countTogetherSteps, stagingFor } from "./story/react";
 import { CountWidget } from "./interact/CountWidget";
 import { DragTray } from "./interact/DragTray";
 import "./index.css";
@@ -23,7 +24,7 @@ function App() {
   const [playing, setPlaying] = useState(false);
   const [phase, dispatchCore] = useReducer((s: StepPhase, e: Event) => step(s, e, story)[0], initial);
   const [pip, setPip] = useState("Hi! I am Pip. Want a story?");
-  const [shown, setShown] = useState<number | null>(null);
+  const [, setShown] = useState<number | null>(null);
   const [count, setCount] = useState("");
   const [hintReady, setHintReady] = useState(false);
   const [readAloud, setReadAloud] = useState(false);
@@ -85,9 +86,14 @@ function App() {
   const answer = (a: Answer) => send({ type: "answered", a });
   const q = phase.tag === "asking" || phase.tag === "reacting" || phase.tag === "explaining"
     ? story.questions[(phase as { qIndex: number }).qIndex]! : null;
-  const bookCount = phase.tag === "reacting" ? shown ?? 0
+  const staging = phase.tag === "reacting" && q
+    ? stagingFor(phase.reaction.misconception, story.solved, q, phase.shown) : null;
+  const bookCount = staging ? staging.bookCount
     : phase.tag === "done" ? story.solved.answer
     : q ? story.solved.totals[q.step === "final" ? story.solved.totals.length - 2 : q.step]! : story.solved.problem.start;
+  const startCount = staging ? staging.startCount : story.solved.problem.start;
+  const countAlong = staging && q && staging.kind === "count-together"
+    ? countTogetherSteps(staging, story.solved, q) : [];
 
   if (!started) return (
     <main><h1>Kids Math — Socratic Stories</h1><p className="bubble" aria-live="polite">{pip}</p>
@@ -107,14 +113,19 @@ function App() {
   );
   return (
     <main>
-      <div className="stage" data-testid="stage" ref={stageRef}>
+      <div className="stage" data-testid="stage" data-staging={staging ? staging.kind : undefined} ref={stageRef}>
         <p className="bubble" aria-live="polite" data-testid="pip" ref={pipRef}>{pip}</p>
         <p data-expression={phase.tag === "reacting" ? "puzzled" : phase.tag === "done" ? "celebrate" : "curious"}>Pip the puffbun</p>
         <div className="counts">
-          <span>Start: <b data-testid="start-count">{story.solved.problem.start}</b></span>
+          <span>Start: <b data-testid="start-count">{startCount}</b></span>
           <span>Book: <b data-testid="book-count">{bookCount}</b> stickers</span>
-          {phase.tag === "reacting" && <span>Tray: <b data-testid="tray-count">9</b></span>}
+          {staging && <span>Tray: <b data-testid="tray-count">{staging.trayCount}</b></span>}
         </div>
+        {staging && <span data-testid="staging-kind">{staging.kind}</span>}
+        {staging?.kind === "count-together" && (
+          <div className="count-along" aria-label="Count along">
+            {countAlong.map((n) => <span key={n} data-testid="count-along">{n}</span>)}
+          </div>)}
         {phase.tag === "asking" && q?.interaction === "predict" && (
           <div>{(["more", "fewer", "same"] as const).map((v) => <button key={v} className="predict" onClick={() => answer({ kind: "predict", value: v })}>{v}</button>)}</div>)}
         {phase.tag === "asking" && q?.interaction === "count" && (

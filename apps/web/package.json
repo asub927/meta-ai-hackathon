@@ -9,6 +9,7 @@
     "preview": "vite preview --port 5173 --host 127.0.0.1",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run --passWithNoTests",
+    "lint:never-wrong": "node scripts/lint-never-wrong.mjs",
     "verify:doctor": "node ../../.claude/skills/verify-kids-math-web/scripts/doctor.mjs",
     "verify:beats": "playwright test e2e/lesson.spec.ts -g beats",
     "verify:lesson": "playwright test e2e/lesson.spec.ts -g lesson",
