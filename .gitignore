@@ -4,4 +4,5 @@ dist/
 test-results/
 .validate-dist/
 render/out/
+gen/out/
 .DS_Store

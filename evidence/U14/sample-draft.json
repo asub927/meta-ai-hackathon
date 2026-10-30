@@ -1,0 +1,94 @@
+{
+  "solved": {
+    "problem": {
+      "id": "gen-stickers-31-12",
+      "standard": "NC.2.OA.1",
+      "hero": "Momo",
+      "friend": "Kiwi",
+      "item": "sticker",
+      "start": 31,
+      "steps": [
+        {
+          "kind": "give",
+          "n": 12,
+          "to": "Kiwi"
+        }
+      ]
+    },
+    "totals": [
+      31,
+      19
+    ],
+    "answer": 19
+  },
+  "questions": [
+    {
+      "id": "gen-stickers-31-12-q0-predict",
+      "step": 0,
+      "ask": "{hero} gives some away. More or fewer now?",
+      "interaction": "predict",
+      "hints": [
+        "When you give some away, do you keep them?",
+        "Watch the ones that go.",
+        {
+          "exampleSay": "6 kites, 2 leave. Fewer!",
+          "say": "Now you try."
+        }
+      ],
+      "explainChoices": [
+        "Giving away makes fewer",
+        "I guessed"
+      ]
+    },
+    {
+      "id": "gen-stickers-31-12-qfinal-count",
+      "step": "final",
+      "ask": "How many are left now?",
+      "interaction": "count",
+      "hints": [
+        "How many were there at the start?",
+        "Make tens. Take some away.",
+        {
+          "exampleSay": "Had 10, lost 3, left 7.",
+          "say": "Now you try."
+        }
+      ],
+      "explainChoices": [
+        "I counted back",
+        "I used tens",
+        "I guessed"
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "misconception": "wrong-operation",
+      "pip": "If {hero} had {shown}, where did the rest go?"
+    },
+    {
+      "misconception": "echoed-a-given",
+      "pip": "{shown} went away. How many stayed?"
+    },
+    {
+      "misconception": "smaller-from-larger",
+      "pip": "{shown} is more than before. Look again."
+    },
+    {
+      "misconception": "direction-flip",
+      "pip": "Did {hero} get more, or give some away?"
+    },
+    {
+      "misconception": "off-by-one",
+      "pip": "So close. Count them again."
+    },
+    {
+      "misconception": "unknown",
+      "pip": "Let us count together, slowly."
+    }
+  ],
+  "source": {
+    "url": "https://example.org/generator-sample",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator sample spec."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "key": "gen-stickers-31-12.attempt1",
+  "recorded": "hand-authored fixture standing in for a gateway response; replace with a live recording by deleting this file and running the CLI with GEN_GATEWAY_URL and GEN_GATEWAY_KEY set",
+  "request": {
+    "model": "config default",
+    "note": "replay ignores the request; the live system/user prompts come from gen/draft.mjs"
+  },
+  "content": "{\"lines\":{\"gen-stickers-31-12-q0-predict\":{\"ask\":\"{hero} gives some away. More or fewer now?\",\"hints\":[\"When you give some away, do you keep them?\",\"Watch the ones that go.\",{\"exampleSay\":\"6 kites, 2 leave. Fewer!\",\"say\":\"Now you try.\"}],\"explainChoices\":[\"Giving away makes fewer\",\"I guessed\"]},\"gen-stickers-31-12-qfinal-count\":{\"ask\":\"How many are left now?\",\"hints\":[\"How many were there at the start?\",\"Make tens. Take some away.\",{\"exampleSay\":\"Had 10, lost 3, left 7.\",\"say\":\"Now you try.\"}],\"explainChoices\":[\"I counted back\",\"I used tens\",\"I guessed\"]}},\"reactions\":{\"wrong-operation\":\"If {hero} had {shown}, where did the rest go?\",\"echoed-a-given\":\"{shown} went away. How many stayed?\",\"smaller-from-larger\":\"{shown} is more than before. Look again.\",\"direction-flip\":\"Did {hero} get more, or give some away?\",\"off-by-one\":\"So close. Count them again.\",\"unknown\":\"Let us count together, slowly.\"}}"
+}

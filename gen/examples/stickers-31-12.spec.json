@@ -1,0 +1,16 @@
+{
+  "id": "gen-stickers-31-12",
+  "standard": "NC.2.OA.1",
+  "hero": "Momo",
+  "friend": "Kiwi",
+  "item": "sticker",
+  "source": {
+    "url": "https://example.org/generator-sample",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator sample spec."
+  },
+  "problem": {
+    "start": 31,
+    "steps": [{ "kind": "give", "n": 12, "to": "Kiwi" }]
+  }
+}
