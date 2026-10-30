@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-add-change",
+        "standard": "NC.2.NBT.5",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "crayon",
+        "start": 45,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 0,
+            "from": "Kiwi"
+          }
+        ],
+        "unknown": "change",
+        "result": 78
+      },
+      "totals": [
+        45,
+        78
+      ],
+      "answer": 33
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-add-change-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "{hero} got extra {item}?",
+          "Point to each {item}.",
+          {
+            "exampleSay": "See beads: 4 plus 2 is 6.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Getting extra means growth.",
+          "Losing would mean shrink."
+        ]
+      },
+      {
+        "id": "eval-nbt-add-change-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} for {hero}?",
+        "interaction": "count",
+        "hints": [
+          "What did {hero} get?",
+          "Make tens with {item}.",
+          {
+            "exampleSay": "Pebbles: 5 plus 3 is 8.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Add to {start} to grow.",
+          "Take from {start} to shrink."
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Close, {shown} helps them."
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Nice, {shown} shows growth."
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Almost, {shown} points ahead."
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Warm, {shown} moves forward."
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "So near, {shown} guides them."
+      },
+      {
+        "misconception": "unknown",
+        "pip": "With them, {shown} helps."
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-add-change",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

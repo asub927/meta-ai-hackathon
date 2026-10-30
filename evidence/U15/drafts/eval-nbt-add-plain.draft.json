@@ -1,0 +1,98 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-add-plain",
+        "standard": "NC.2.NBT.5",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "shell",
+        "start": 34,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 25,
+            "from": "Kiwi"
+          }
+        ]
+      },
+      "totals": [
+        34,
+        59
+      ],
+      "answer": 59
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-add-plain-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Does getting add {item}?",
+          "Can you point at {item}?",
+          {
+            "exampleSay": "They had 6 beads got 7, more?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Why more for {hero}?",
+          "Why fewer for {hero}?"
+        ]
+      },
+      {
+        "id": "eval-nbt-add-plain-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} for {hero}?",
+        "interaction": "count",
+        "hints": [
+          "What is {result} now?",
+          "Can you watch {hero} count?",
+          {
+            "exampleSay": "They had 8 beads got 6 total?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "How did you get {result}?",
+          "What shows {result}?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Love care, see {shown} join?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Nice look what joins {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Kind heart, add {shown} next?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Warm hug, does {shown} grow?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Kind work, recount {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Glad you shared, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-add-plain",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}
