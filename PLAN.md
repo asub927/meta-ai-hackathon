@@ -124,7 +124,7 @@ Built with pstack. `poteto-mode` set the bar. `architect` shaped the types and t
 - No voice input. "How did you know?" uses tap choices. Recording a child's voice brings in COPPA consent and storage problems.
 - No accounts, logins, server or sync. The parent view (M4) runs on the device behind an adult gate.
 - M1 covers NC.2.OA.1 only (add and subtract word problems within 100). Later NC grade 2 sections come in NCDPI order in M4. No science or ELA before M5.
-- Two mascots and one narrator (art CC0). No new species until science.
+- **Pip** (barn owl) narrator plus **Momo** and **Kiwi** as story cast for M1 (real species, `role` field; art CC0 once human-redrawn). Six more story animals at **M4** (see [DESIGN-PLAN.md](docs/DESIGN-PLAN.md)). Pip never acts as a countable object in the problem.
 - English only.
 - No App Store release before M5. TestFlight first, and it waits for Anantha's Apple Developer account.
 
@@ -142,8 +142,11 @@ type LessonId = Brand<string, "LessonId">;
 type StandardCode = Brand<string, "StandardCode">; // NCDPI ID, e.g. "NC.2.OA.1" (plus our own paraphrase elsewhere)
 type LineTemplate = Brand<string, "LineTemplate">; // placeholders only, no digits (validator)
 
-type Mascot = { id: MascotId; name: string; species: "puffbun" | "leafcat";
+type MascotRole = "narrator" | "story";
+type MascotSpecies = "barn-owl" | "lop-eared-rabbit" | "kiwi-bird" | "toucan" | "fox" | "elephant" | "turtle" | "hedgehog" | "macaw";
+type Mascot = { id: MascotId; name: string; species: MascotSpecies; role: MascotRole;
   pronouns: { they: string; them: string; their: string } | null; colors: Palette };
+// M1 cast: pip (narrator), momo, kiwi (story). Remaining story species ship in M4 (U24).
 
 // A story step. One variant per verb, never op + how strings.
 type Step =
@@ -596,7 +599,7 @@ Throughput checkpoint (Feature playbook step 3):
 ## 8. What to cut
 
 - Voice answers, a runtime LLM, accounts, any server or sync (backend deferred until after the hackathon), teacher class rosters and aggregates.
-- New mascots or species before science, and per-problem custom reaction animations. Use the 3 generic stagings.
+- Story cast beyond Pip, Momo, and Kiwi before M4 (full eight story animals at M4 per DESIGN-PLAN), and per-problem custom reaction animations. Use the 3 generic stagings.
 - The duplicate `index-problem2.html`, the `build.sh` concatenation, and the 2.8 MB base64 audio (cut in U3). GSAP (cut in U6).
 - Real-time screencast previews (replaced by U13).
 - Any NC grade 2 section out of NCDPI order, and science or ELA before M5. Any language other than English.
