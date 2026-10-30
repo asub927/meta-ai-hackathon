@@ -15,6 +15,13 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 10. Human languages: English only. Spanish deferred, no timeline, no reviewer (Anantha has no Spanish expertise).
 11. Process: pstack throughout, no exceptions. All project communication goes through Delivery Lead. Scribe records decisions and discussion, including calls.
 
+## Oct 30, 2026 — Interaction design and cast (Anantha, approved)
+
+12. **Interaction design:** [DESIGN-PLAN.md](DESIGN-PLAN.md) is the approved child-facing flow (predict → drag/count → number pad → check; hint ladder; six-lesson strip with x/6 ticks, no points on screen). Light theme only. Calm mode swaps animals for plain objects. Motion: transform/opacity only, `cubic-bezier(0.23, 1, 0.32, 1)`; while input waits, only Pip’s slow blink moves.
+13. **Cast model:** **Pip** (barn owl) is the fixed **narrator** (`role: "narrator"`). **Momo** (lop-eared rabbit) and **Kiwi** (kiwi bird) are real **story** species (`role: "story"`) for M1. Six more story animals (toucan, fox, elephant, turtle, hedgehog, macaw) join at **M4** with cast lint. Random hero/friend pairing happens **between problems only**, not mid-problem. Story animals never speak hints or answers and are never countable. *No study supports random character rotation; see [research/mascots.md](research/mascots.md).*
+14. **Art before release:** AI concept sketches are reference only. A person redraws each character as original layered SVG, then CC0. Thaler v. Perlmutter and US Copyright Office AI Part 2 (Jan 2025) noted in DESIGN-PLAN and mascot research.
+15. **Pedagogy research on file:** [research/brilliant-pedagogy.md](research/brilliant-pedagogy.md) — borrow try-first and fading scaffolds; avoid leagues and streak pressure for young children. *No independent Brilliant efficacy study exists.*
+
 ## Discussed, not decided
 - Progress storage options: PROGRESS-STORAGE.md (recommended default: IndexedDB with export file, teacher dashboard page from exports, SwiftData on iPad).
 - Competitor research: COMPETITOR-SYNTHESIS.md, COMPETITOR-LANDSCAPE.md. Vision: VISION.md.
