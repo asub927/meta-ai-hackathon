@@ -1,0 +1,24 @@
+{
+  "id": "eval-oa-add-change",
+  "standard": "NC.2.OA.1",
+  "hero": "Momo",
+  "friend": "Kiwi",
+  "item": "kite",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-add-change",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 14,
+    "unknown": "change",
+    "result": 23,
+    "steps": [
+      {
+        "kind": "receive",
+        "n": 0,
+        "from": "Kiwi"
+      }
+    ]
+  }
+}

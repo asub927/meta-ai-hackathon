@@ -1,0 +1,22 @@
+{
+  "id": "eval-oa-add-result",
+  "standard": "NC.2.OA.1",
+  "hero": "Momo",
+  "friend": "Kiwi",
+  "item": "book",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-add-result",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 25,
+    "steps": [
+      {
+        "kind": "receive",
+        "n": 6,
+        "from": "Kiwi"
+      }
+    ]
+  }
+}

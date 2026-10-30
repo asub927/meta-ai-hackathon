@@ -34,24 +34,15 @@ async function main() {
   const core = await import("../packages/core/.validate-dist/index.js");
   const { loadSpec } = await import("./spec.mjs");
   const { generateDraft } = await import("./draft.mjs");
-  const { cacheMode, completeWithCache, gatewayComplete } = await import("./llm.mjs");
+  const { buildClient, cacheMode } = await import("./llm.mjs");
   const { config } = await import("./config.mjs");
 
   const specJson = JSON.parse(readFileSync(path.resolve(args.spec), "utf8"));
   const spec = loadSpec(specJson);
   const model = process.env.GEN_MODEL ?? config.model;
-  const mode = cacheMode();
-  log(`spec ${spec.id}, model ${model}, cache ${mode}`);
+  log(`spec ${spec.id}, model ${model}, cache ${cacheMode()}`);
 
-  const client = async ({ system, user, key }) =>
-    (await completeWithCache({
-      key, mode,
-      request: { model, system, user },
-      live: (req) => gatewayComplete({
-        model, system: req.system, user: req.user,
-        maxTokens: config.maxTokens, temperature: config.temperature,
-      }),
-    })).text;
+  const client = buildClient({ model, maxTokens: config.maxTokens, temperature: config.temperature });
 
   const result = await generateDraft(core, spec, client);
   const out = args.out

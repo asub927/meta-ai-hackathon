@@ -1,0 +1,22 @@
+{
+  "id": "eval-nbt-sub-regroup",
+  "standard": "NC.2.NBT.5",
+  "hero": "Kiwi",
+  "friend": "Momo",
+  "item": "bead",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-nbt-sub-regroup",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 52,
+    "steps": [
+      {
+        "kind": "give",
+        "n": 27,
+        "to": "Momo"
+      }
+    ]
+  }
+}

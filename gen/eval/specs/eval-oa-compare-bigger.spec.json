@@ -1,0 +1,19 @@
+{
+  "id": "eval-oa-compare-bigger",
+  "standard": "NC.2.OA.1",
+  "hero": "Momo",
+  "friend": "Kiwi",
+  "item": "crayon",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-compare-bigger",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "compare": {
+      "relation": "bigger",
+      "reference": 21,
+      "difference": 9
+    }
+  }
+}

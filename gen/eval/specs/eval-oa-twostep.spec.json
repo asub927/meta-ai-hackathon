@@ -1,0 +1,27 @@
+{
+  "id": "eval-oa-twostep",
+  "standard": "NC.2.OA.1",
+  "hero": "Kiwi",
+  "friend": "Momo",
+  "item": "sticker",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-twostep",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 6,
+    "steps": [
+      {
+        "kind": "find",
+        "n": 4,
+        "place": "bed"
+      },
+      {
+        "kind": "give",
+        "n": 3,
+        "to": "Momo"
+      }
+    ]
+  }
+}

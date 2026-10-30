@@ -1,0 +1,27 @@
+{
+  "id": "eval-nbt-twostep-b",
+  "standard": "NC.2.NBT.5",
+  "hero": "Kiwi",
+  "friend": "Momo",
+  "item": "sticker",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-nbt-twostep-b",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 84,
+    "steps": [
+      {
+        "kind": "give",
+        "n": 29,
+        "to": "Momo"
+      },
+      {
+        "kind": "receive",
+        "n": 13,
+        "from": "Momo"
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "eval-oa-take-result",
+  "standard": "NC.2.OA.1",
+  "hero": "Momo",
+  "friend": "Kiwi",
+  "item": "shell",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-take-result",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 26,
+    "steps": [
+      {
+        "kind": "give",
+        "n": 8,
+        "to": "Kiwi"
+      }
+    ]
+  }
+}

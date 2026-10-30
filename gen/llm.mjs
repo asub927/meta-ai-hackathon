@@ -66,3 +66,15 @@ export async function completeWithCache({ key, mode = "auto", request, live }) {
 export function cacheMode() {
   return process.env.GEN_CACHE ?? "auto";
 }
+
+/** Shared client builder for the CLI and the eval: cache-backed gateway. */
+export function buildClient({ model, maxTokens, temperature }) {
+  return async ({ system, user, key }) =>
+    (await completeWithCache({
+      key, mode: cacheMode(),
+      request: { model, system, user },
+      live: (req) => gatewayComplete({
+        model, system: req.system, user: req.user, maxTokens, temperature,
+      }),
+    })).text;
+}

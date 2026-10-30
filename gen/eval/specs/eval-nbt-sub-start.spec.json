@@ -1,0 +1,23 @@
+{
+  "id": "eval-nbt-sub-start",
+  "standard": "NC.2.NBT.5",
+  "hero": "Kiwi",
+  "friend": "Momo",
+  "item": "duck",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-nbt-sub-start",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "unknown": "start",
+    "result": 24,
+    "steps": [
+      {
+        "kind": "give",
+        "n": 38,
+        "to": "Momo"
+      }
+    ]
+  }
+}

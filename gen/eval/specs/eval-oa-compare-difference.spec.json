@@ -1,0 +1,20 @@
+{
+  "id": "eval-oa-compare-difference",
+  "standard": "NC.2.OA.1",
+  "hero": "Momo",
+  "friend": null,
+  "item": "balloon",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-compare-difference",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "compare": {
+      "relation": "difference",
+      "reference": 19,
+      "difference": 8,
+      "heroCount": 27
+    }
+  }
+}

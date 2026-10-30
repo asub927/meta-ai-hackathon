@@ -9,6 +9,7 @@
     "vectors": "pnpm --filter @kids-math/conformance run vectors",
     "render": "node render/render.mjs",
     "gen": "node gen/gen.mjs",
+    "eval:gen": "node gen/eval.mjs",
     "verify:doctor": "node .claude/skills/verify-kids-math-web/scripts/doctor.mjs"
   },
   "devDependencies": { "typescript": "^5.9.0" }

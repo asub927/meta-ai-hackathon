@@ -1,0 +1,22 @@
+{
+  "id": "eval-nbt-add-regroup",
+  "standard": "NC.2.NBT.5",
+  "hero": "Kiwi",
+  "friend": "Momo",
+  "item": "marble",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-nbt-add-regroup",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "start": 47,
+    "steps": [
+      {
+        "kind": "receive",
+        "n": 28,
+        "from": "Momo"
+      }
+    ]
+  }
+}

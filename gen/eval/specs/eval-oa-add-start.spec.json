@@ -1,0 +1,23 @@
+{
+  "id": "eval-oa-add-start",
+  "standard": "NC.2.OA.1",
+  "hero": "Kiwi",
+  "friend": "Momo",
+  "item": "bead",
+  "source": {
+    "url": "https://example.org/generator-eval/eval-oa-add-start",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Original story written for the generator eval."
+  },
+  "problem": {
+    "unknown": "start",
+    "result": 27,
+    "steps": [
+      {
+        "kind": "receive",
+        "n": 8,
+        "from": "Momo"
+      }
+    ]
+  }
+}
