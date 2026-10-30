@@ -31,8 +31,12 @@ export function stagingFor(
 ): Staging {
   const kind = KIND_BY_MISCONCEPTION[misconception];
   const startCount = solved.totals[0]!;
-  const trayCount =
-    q.step === "final"
+  // The tray stages the size of the step the question is about. A compare
+  // problem has no steps and a single total, so totals indexing yields NaN;
+  // its step size is the difference the question asks about.
+  const trayCount = solved.problem.compare
+    ? solved.problem.compare.difference
+    : q.step === "final"
       ? Math.abs(solved.totals[solved.totals.length - 1]! - solved.totals[solved.totals.length - 2]!)
       : Math.abs(solved.totals[q.step + 1]! - solved.totals[q.step]!);
   return { kind, bookCount: shown, trayCount, startCount, expression: "puzzled" };

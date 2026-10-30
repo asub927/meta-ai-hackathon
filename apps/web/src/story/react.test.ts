@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detect, stickerStory, targetFor, type Answer } from "@kids-math/core";
+import { detect, stickerStory, targetFor, type Answer, type Question, type Solved } from "@kids-math/core";
 import { countTogetherSteps, stagingFor } from "./react";
 
 const story = stickerStory;
@@ -81,5 +81,26 @@ describe("stagingFor", () => {
   it("caps the count-along at 30", () => {
     const { staging } = stageCount(q2, 42);
     expect(countTogetherSteps(staging, story.solved, q2)).toHaveLength(30);
+  });
+
+  it("stages a compare count-together with the difference as tray", () => {
+    const solved: Solved = {
+      problem: {
+        id: "momo-books-bigger-18-7", standard: "NC.2.OA.1", hero: "Momo",
+        friend: null, item: "books", start: 0, steps: [],
+        compare: { relation: "bigger", reference: 18, difference: 7 },
+      },
+      totals: [25], answer: 25,
+    };
+    const q: Question = {
+      id: "s3-q0-count", step: "final", ask: "How many books does Momo have?",
+      interaction: "count", hints: ["a", "b", { exampleSay: "e", say: "s" }],
+      explainChoices: ["x"],
+    };
+    const staging = stagingFor("unknown", solved, q, 40);
+    expect(staging.kind).toBe("count-together");
+    expect(staging.bookCount).toBe(40);
+    expect(staging.startCount).toBe(25);
+    expect(staging.trayCount).toBe(7);
   });
 });

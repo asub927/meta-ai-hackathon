@@ -3,4 +3,5 @@ node_modules/
 dist/
 test-results/
 .validate-dist/
+render/out/
 .DS_Store

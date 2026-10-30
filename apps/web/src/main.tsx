@@ -186,7 +186,7 @@ function App() {
   if (!playing) return (
     <main><h1>Pick a lesson</h1>
       <button onClick={() => { setStories([story]); setStoryIndex(0); startFresh(); }}>Lesson 1: Stickers (NC.2.OA.1)</button>
-      <button data-testid="lesson1-button" onClick={() => { setStories([...buildLesson1().stories]); setStoryIndex(0); startFresh(); }}>Lesson 1: Five stories (NC.2.OA.1)</button>
+      <button data-testid="lesson1-button" onClick={() => { setStories([...((window as any).__lessonOverride as StoryData[] | undefined ?? buildLesson1().stories)]); setStoryIndex(0); startFresh(); }}>Lesson 1: Five stories (NC.2.OA.1)</button>
       {resumeSnap && <button data-testid="resume-lesson" onClick={() => setPlaying(true)}>Resume lesson</button>}
       {hasLocalVoice && <label><input type="checkbox" checked={readAloud} onChange={(e) => setReadAloud(e.target.checked)} /> Read-aloud</label>}
       <label><input type="checkbox" data-testid="sound-toggle" checked={soundOn} onChange={(e) => { const on = e.target.checked; setSoundOn(on); storageSet(SOUND_KEY, on ? "on" : "off"); }} /> Sound</label>
