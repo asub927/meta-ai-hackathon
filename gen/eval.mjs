@@ -1,7 +1,9 @@
 // U15 generator eval: 20 specs across NC.2.OA.1 and NC.2.NBT.5 through
 // the gateway. Reports first-pass rate, after-retry rate, human slots and
 // a reading-level distribution. Writes evidence/U15/eval.md.
-// Live run needs GEN_GATEWAY_URL + GEN_GATEWAY_KEY (see gen/config.mjs).
+// Live run needs a gateway: GEN_GATEWAY_URL + GEN_GATEWAY_KEY (project
+// gateway), or GEN_GATEWAY_PROTOCOL=anthropic with ANTHROPIC_BASE_URL +
+// ANTHROPIC_AUTH_TOKEN (harness gateway), plus GEN_MAX_TOKENS headroom.
 
 import { execSync } from "node:child_process";
 import { promises as fs, mkdirSync, readFileSync } from "node:fs";
@@ -101,7 +103,9 @@ async function main() {
       "",
       `Status: live run blocked (${gatewayBlocked}).`,
       `Specs ready: ${files.length} across NC.2.OA.1 and NC.2.NBT.5 (see gen/eval/specs/).`,
-      "Set GEN_GATEWAY_URL and GEN_GATEWAY_KEY, then re-run `npm run eval:gen`.",
+      "Set GEN_GATEWAY_URL and GEN_GATEWAY_KEY (project gateway), or",
+      "GEN_GATEWAY_PROTOCOL=anthropic with ANTHROPIC_BASE_URL and",
+      "ANTHROPIC_AUTH_TOKEN (harness gateway), then re-run `npm run eval:gen`.",
       "Review rubric: gen/eval/rubric.md.",
       "",
     ].join("\n"));

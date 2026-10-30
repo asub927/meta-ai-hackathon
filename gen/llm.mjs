@@ -63,18 +63,56 @@ export async function completeWithCache({ key, mode = "auto", request, live }) {
   return { text, fromCache: false };
 }
 
+/** Live Anthropic Messages call (the harness gateway protocol).
+ *  URL falls back to ANTHROPIC_BASE_URL, key to ANTHROPIC_AUTH_TOKEN.
+ *  The harness model thinks on every call and rejects thinking-off, so
+ *  this reserves the minimum thinking budget (1024) and reads the text
+ *  block that follows the redacted thinking block. The model can spend
+ *  ~15k thinking tokens on a draft, so live runs need maxTokens far above
+ *  the budget (the eval uses GEN_MAX_TOKENS=16000). */
+export async function anthropicComplete({ model, system, user, maxTokens, temperature, fetchImpl = fetch }) {
+  const base = process.env.GEN_GATEWAY_URL ?? process.env.ANTHROPIC_BASE_URL;
+  if (!base) throw new Error("missing-gateway: set GEN_GATEWAY_URL or ANTHROPIC_BASE_URL");
+  const url = base.endsWith("/v1/messages") ? base : base.replace(/\/$/, "") + "/v1/messages";
+  const key = process.env.GEN_GATEWAY_KEY ?? process.env.ANTHROPIC_AUTH_TOKEN ?? "";
+  const res = await fetchImpl(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "anthropic-version": "2023-06-01",
+      ...(key ? { "x-api-key": key } : {}),
+    },
+    body: JSON.stringify({
+      model, max_tokens: maxTokens, temperature,
+      thinking: { type: "enabled", budget_tokens: 1024 },
+      system, messages: [{ role: "user", content: user }],
+    }),
+  });
+  if (!res.ok) throw new Error(`gateway-error: HTTP ${res.status}`);
+  const body = await res.json();
+  const block = body?.content?.find((b) => b.type === "text");
+  if (!block || typeof block.text !== "string" || !block.text)
+    throw new Error("gateway-error: empty content");
+  return block.text;
+}
+
+export function gatewayProtocol() {
+  return process.env.GEN_GATEWAY_PROTOCOL ?? "openai";
+}
+
 export function cacheMode() {
   return process.env.GEN_CACHE ?? "auto";
 }
 
 /** Shared client builder for the CLI and the eval: cache-backed gateway. */
 export function buildClient({ model, maxTokens, temperature }) {
+  const protocol = gatewayProtocol();
   return async ({ system, user, key }) =>
     (await completeWithCache({
       key, mode: cacheMode(),
-      request: { model, system, user },
-      live: (req) => gatewayComplete({
-        model, system: req.system, user: req.user, maxTokens, temperature,
-      }),
+      request: { model, protocol, system, user },
+      live: (req) => (protocol === "anthropic"
+        ? anthropicComplete({ model, system: req.system, user: req.user, maxTokens, temperature })
+        : gatewayComplete({ model, system: req.system, user: req.user, maxTokens, temperature })),
     })).text;
 }

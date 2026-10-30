@@ -8,4 +8,7 @@ the network or the key.
 `gen-stickers-31-12.attempt1.json` is a hand-authored fixture in recorded
 shape, standing in for a gateway response. Delete it and run the CLI with
 `GEN_GATEWAY_URL` and `GEN_GATEWAY_KEY` set to replace it with a live
-recording. Never commit keys here: responses only.
+recording. The harness gateway works too: `GEN_GATEWAY_PROTOCOL=anthropic`
+with `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`, plus `GEN_MAX_TOKENS`
+headroom (the harness model thinks long; the eval uses 16000).
+Never commit keys here: responses only.
