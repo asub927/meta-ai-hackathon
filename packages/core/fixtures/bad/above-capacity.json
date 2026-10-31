@@ -1,6 +1,80 @@
 {
-  "solved": { "problem": { "id": "bad-capacity", "standard": "NC.2.OA.1", "hero": "Momo", "friend": null, "item": "sticker", "start": 90, "steps": [{ "kind": "find", "n": 20, "place": "bed" }] }, "totals": [90, 110], "answer": 110 },
-  "questions": [{ "id": "q0", "step": 0, "ask": "How many does {hero} have now?", "interaction": "count", "hints": ["How many were there at the start?", "Count on from there.", { "exampleSay": "14 shells, 3 found, makes 17.", "say": "Now you try." }], "explainChoices": ["I counted on", "I guessed"] }],
-  "reactions": [{ "misconception": "unknown", "pip": "Let's count together, slowly." }],
-  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+  "solved": {
+    "problem": {
+      "id": "bad-capacity",
+      "standard": "NC.2.OA.1",
+      "hero": "Momo",
+      "friend": null,
+      "item": "sticker",
+      "start": 90,
+      "steps": [
+        {
+          "kind": "find",
+          "n": 20,
+          "place": "bed"
+        }
+      ]
+    },
+    "totals": [
+      90,
+      110
+    ],
+    "answer": 110
+  },
+  "questions": [
+    {
+      "id": "q0",
+      "step": 0,
+      "ask": "How many does {hero} have now?",
+      "interaction": "count",
+      "hints": [
+        "How many were there at the start?",
+        "Count on from there.",
+        {
+          "type": "take-away",
+          "params": {
+            "minuend": 90,
+            "subtrahend": 20
+          },
+          "steps": [
+            {
+              "id": "question",
+              "text": "90 take away 20. What is left?"
+            },
+            {
+              "id": "show-total",
+              "text": "Here are 90."
+            },
+            {
+              "id": "remove",
+              "text": "Take away 20. 20 go away."
+            },
+            {
+              "id": "count-remainder",
+              "text": "Count what is left: 70."
+            },
+            {
+              "id": "summary",
+              "text": "90 take away 20 leaves 70."
+            }
+          ]
+        }
+      ],
+      "explainChoices": [
+        "I counted on",
+        "I guessed"
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "misconception": "unknown",
+      "pip": "Let's count together, slowly."
+    }
+  ],
+  "source": {
+    "url": "Original content for this app",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Written for this app."
+  }
 }

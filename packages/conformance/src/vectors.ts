@@ -154,8 +154,8 @@ export function buildFillVectors(): VectorFile {
     cases.push(fillCase(`fill-q${qi}-ask`, q.ask));
     cases.push(fillCase(`fill-q${qi}-hint0`, q.hints[0]));
     cases.push(fillCase(`fill-q${qi}-hint1`, q.hints[1]));
-    cases.push(fillCase(`fill-q${qi}-hint2-example`, q.hints[2].exampleSay));
-    cases.push(fillCase(`fill-q${qi}-hint2-say`, q.hints[2].say));
+    // No hint2 fill cases: rung 3 is a same-question derivation (WorkedExplainer),
+    // not a fillable line template. Its steps are covered by explainer.test.ts.
   });
   for (const r of stickerStory.reactions)
     cases.push(fillCase(`fill-reaction-${r.misconception}`, r.pip, { shown: 33 }));

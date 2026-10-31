@@ -22,10 +22,32 @@ const problemSchema = z.strictObject({
   }).optional(),
 });
 
+const explainerStepSchema = z.strictObject({ id: z.string(), text: z.string() });
+
+/** Rung 3 is a same-question derivation (PR4). Param shapes are exact per
+ *  template so a misspelled param fails at the boundary, not in the UI. */
+const explainerSchema = z.discriminatedUnion("type", [
+  z.strictObject({
+    type: z.literal("take-away"),
+    params: z.strictObject({ minuend: z.number(), subtrahend: z.number() }),
+    steps: z.array(explainerStepSchema).min(1),
+  }),
+  z.strictObject({
+    type: z.literal("make-10"),
+    params: z.strictObject({ have: z.number() }),
+    steps: z.array(explainerStepSchema).min(1),
+  }),
+  z.strictObject({
+    type: z.literal("compare-more"),
+    params: z.strictObject({ bigger: z.number(), smaller: z.number() }),
+    steps: z.array(explainerStepSchema).min(1),
+  }),
+]);
+
 const questionSchema = z.strictObject({
   id: z.string(), step: z.union([z.number(), z.literal("final")]), ask: z.string(),
   interaction: z.enum(["predict", "count"]),
-  hints: z.tuple([z.string(), z.string(), z.strictObject({ exampleSay: z.string(), say: z.string() })]),
+  hints: z.tuple([z.string(), z.string(), explainerSchema]),
   explainChoices: z.array(z.string()),
 });
 

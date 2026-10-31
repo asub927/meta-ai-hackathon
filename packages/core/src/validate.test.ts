@@ -54,13 +54,13 @@ describe("validateStory (rule contract, codes not messages)", () => {
   });
   it("a worked explainer with an empty step text fails", () => {
     const s = clone();
-    const steps = s.questions[0]!.hints[2].steps as { text: string }[];
+    const steps = s.questions[0]!.hints[2].steps as unknown as { text: string }[];
     steps[2]!.text = "";
     expect(codes(s)).toContain("explainer-empty-step");
   });
   it("a worked explainer whose final step disagrees with solve fails", () => {
     const s = clone();
-    const steps = s.questions[0]!.hints[2].steps as { text: string }[];
+    const steps = s.questions[0]!.hints[2].steps as unknown as { text: string }[];
     steps[steps.length - 1]!.text = "24 take away 9 leaves 7.";
     expect(codes(s)).toContain("explainer-answer-mismatch");
   });

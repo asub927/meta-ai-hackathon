@@ -1,16 +1,86 @@
 {
   "solved": {
-    "problem": { "id": "shells-start-unknown", "standard": "NC.2.OA.1", "hero": "Momo", "friend": "Kiwi", "item": "shell", "start": 0, "unknown": "start", "result": 15, "steps": [{ "kind": "give", "n": 9, "to": "Kiwi" }] },
-    "totals": [24, 15], "answer": 24
+    "problem": {
+      "id": "shells-start-unknown",
+      "standard": "NC.2.OA.1",
+      "hero": "Momo",
+      "friend": "Kiwi",
+      "item": "shell",
+      "start": 0,
+      "unknown": "start",
+      "result": 15,
+      "steps": [
+        {
+          "kind": "give",
+          "n": 9,
+          "to": "Kiwi"
+        }
+      ]
+    },
+    "totals": [
+      24,
+      15
+    ],
+    "answer": 24
   },
   "questions": [
-    { "id": "q0-count", "step": "final", "ask": "How many did {hero} start with?", "interaction": "count",
-      "hints": ["How many are left at the end?", "Start from the end and add back.", { "exampleSay": "Ended with 10, gave 4, started 14.", "say": "Now you try." }],
-      "explainChoices": ["I added back", "I guessed"] }
+    {
+      "id": "q0-count",
+      "step": "final",
+      "ask": "How many did {hero} start with?",
+      "interaction": "count",
+      "hints": [
+        "How many are left at the end?",
+        "Start from the end and add back.",
+        {
+          "type": "take-away",
+          "params": {
+            "minuend": 24,
+            "subtrahend": 9
+          },
+          "steps": [
+            {
+              "id": "question",
+              "text": "24 take away 9. What is left?"
+            },
+            {
+              "id": "show-total",
+              "text": "Here are 24."
+            },
+            {
+              "id": "remove",
+              "text": "Take away 9. 9 go away."
+            },
+            {
+              "id": "count-remainder",
+              "text": "Count what is left: 15."
+            },
+            {
+              "id": "summary",
+              "text": "24 take away 9 leaves 15."
+            }
+          ]
+        }
+      ],
+      "explainChoices": [
+        "I added back",
+        "I guessed"
+      ]
+    }
   ],
   "reactions": [
-    { "misconception": "echoed-a-given", "pip": "{shown} is how many flew away. How many stayed?" },
-    { "misconception": "unknown", "pip": "Let's count together, slowly." }
+    {
+      "misconception": "echoed-a-given",
+      "pip": "{shown} is how many flew away. How many stayed?"
+    },
+    {
+      "misconception": "unknown",
+      "pip": "Let's count together, slowly."
+    }
   ],
-  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+  "source": {
+    "url": "Original content for this app",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Written for this app."
+  }
 }

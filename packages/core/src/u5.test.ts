@@ -79,7 +79,9 @@ describe("U5 acceptance: hint ladder and double-tap", () => {
     };
     ([...askFor(1), { type: "hint" }, { type: "hint" }, { type: "hint" }] as Event[]).forEach(send);
     expect(s).toMatchObject({ tag: "asking", qIndex: 1, rung: 3 });
-    expect(said.join(" ")).toContain("balloons");
+    // Rung 3 opens the explainer panel; the main story flow only re-states
+    // the question, so the target never appears in a `say`.
+    expect(said.join(" ")).toContain("How many does Momo have now?");
     expect(said.join(" ")).not.toContain("15");
     send({ type: "hint" });
     expect(s).toMatchObject({ tag: "asking", qIndex: 1, rung: 0 });
@@ -132,9 +134,9 @@ describe("U5 property: 1000 seeded sequences reach done, tutor never leaks the t
         const [ns, fx] = step(s, e, story);
         // Leak invariant: every `say` emitted while answering question q, before
         // q's correct answer, must not contain q's target as an integer token.
-        // - Worked-example lines are EXEMPT: they tell a *different* story
-        //   (balloons/shells, e.g. "12 balloons, 4 pop, leaves 8") whose numbers
-        //   are validator-guaranteed disjoint from this lesson's counts.
+        // - Rung 3 opens the explainer PANEL; its steps never travel in a `say`.
+        //   The rung-3 `say` only re-states the question (a template, so no
+        //   digits after fill), which is why no worked-example exemption exists.
         // - Reaction lines may echo the child's own `shown` value (filtered out
         //   below) but must still never state the target.
         // - Ask/hint lines are checked strictly: no exemptions.
@@ -144,7 +146,6 @@ describe("U5 property: 1000 seeded sequences reach done, tutor never leaks the t
           const target = targetFor(story.solved, q);
           for (const f of fx) {
             if (f.type !== "say") continue;
-            if (f.line.includes(q.hints[2].exampleSay)) continue; // worked-example exemption
             let tokens = (f.line.match(/\d+/g) ?? []).map(Number);
             if (ns.tag === "reacting") tokens = tokens.filter((t) => t !== ns.shown); // child-echo exemption
             expect(tokens, `seq ${seq}: say line leaks target ${target} for q${postQ}: ${JSON.stringify(f.line)}`).not.toContain(target);
