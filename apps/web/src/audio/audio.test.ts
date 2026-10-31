@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import { createAudioSession, mapState, type AudioLike } from "./audio";
+import { createAudioSession, createMusicDuck, DUCKED_GAIN, FULL_GAIN, mapState, type AudioLike } from "./audio";
 
 function fake(overrides: Partial<AudioLike> = {}): AudioLike & { resume: ReturnType<typeof vi.fn> } {
   const f = {
@@ -99,5 +99,39 @@ describe("createAudioSession", () => {
     const session = createAudioSession(() => fake(), () => 42);
     session.logCue("say");
     expect(session.cues()).toEqual([{ name: "say", atMs: 42 }]);
+  });
+});
+
+describe("createMusicDuck", () => {
+  test("starts full and applies nothing", () => {
+    const apply = vi.fn();
+    const duck = createMusicDuck(apply);
+    expect(duck.state()).toBe("full");
+    expect(duck.level()).toBe(FULL_GAIN);
+    expect(apply).not.toHaveBeenCalled();
+  });
+
+  test("duck lowers the level, unduck restores it", () => {
+    const apply = vi.fn();
+    const duck = createMusicDuck(apply);
+    duck.duck();
+    expect(duck.state()).toBe("ducked");
+    expect(duck.level()).toBe(DUCKED_GAIN);
+    expect(apply).toHaveBeenLastCalledWith(DUCKED_GAIN);
+    duck.unduck();
+    expect(duck.state()).toBe("full");
+    expect(duck.level()).toBe(FULL_GAIN);
+    expect(apply).toHaveBeenLastCalledWith(FULL_GAIN);
+  });
+
+  test("repeated duck or unduck applies once", () => {
+    const apply = vi.fn();
+    const duck = createMusicDuck(apply);
+    duck.duck();
+    duck.duck();
+    expect(apply).toHaveBeenCalledTimes(1);
+    duck.unduck();
+    duck.unduck();
+    expect(apply).toHaveBeenCalledTimes(2);
   });
 });

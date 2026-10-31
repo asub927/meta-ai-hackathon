@@ -34,6 +34,35 @@ export interface AudioSession {
   cues(): CueEntry[];
 }
 
+export type DuckState = "full" | "ducked";
+
+export const FULL_GAIN = 1;
+export const DUCKED_GAIN = 0.2;
+
+export interface MusicDuck {
+  state(): DuckState;
+  level(): number;
+  duck(): void;
+  unduck(): void;
+}
+
+export function createMusicDuck(apply: (level: number) => void = () => {}): MusicDuck {
+  let state: DuckState = "full";
+  return {
+    state: () => state,
+    level: () => (state === "ducked" ? DUCKED_GAIN : FULL_GAIN),
+    duck: () => {
+      if (state === "ducked") return;
+      state = "ducked";
+      apply(DUCKED_GAIN);
+    },
+    unduck: () => {
+      if (state === "full") return;
+      state = "full";
+      apply(FULL_GAIN);
+    },
+  };
+}
 /** Framework-free AudioContext lifecycle wrapper.
  *  No DOM globals inside; the context factory is injected so unit
  *  tests can pass plain fakes. Cue timing defaults to Date.now. */

@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-sub-change",
+        "standard": "NC.2.NBT.5",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "cub",
+        "start": 73,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 0,
+            "to": "Momo"
+          }
+        ],
+        "unknown": "change",
+        "result": 46
+      },
+      "totals": [
+        73,
+        46
+      ],
+      "answer": 27
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-sub-change-q0-predict",
+        "step": 0,
+        "ask": "{hero} gives: more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Does {hero} have fewer?",
+          "Can they point at {item}?",
+          {
+            "exampleSay": "Had 8 dots, lost 5?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Why more for {hero}?",
+          "Why fewer for {hero}?"
+        ]
+      },
+      {
+        "id": "eval-nbt-sub-change-qfinal-count",
+        "step": "final",
+        "ask": "What is {result} for {hero}?",
+        "interaction": "count",
+        "hints": [
+          "What is left for {hero}?",
+          "Can they watch {item}?",
+          {
+            "exampleSay": "Had 9 beads, lost 1?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "What shows {result}?",
+          "What hides {missing}?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Still safe, see {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Close, look at {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Soft spot, see {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Warm hug, see {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Near it, see {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "With {hero}, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-sub-change",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

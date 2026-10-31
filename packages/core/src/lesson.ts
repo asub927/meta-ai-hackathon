@@ -1,6 +1,7 @@
 import { solve } from "./core.js";
 import { parseStoryData } from "./schema.js";
 import { validateStory } from "./validate.js";
+import { smallerTemplate } from "./types.js";
 import type { Issue, ReactionScript, StoryData } from "./types.js";
 
 export interface LessonFile { id: string; standard: string; stories: StoryData[] }
@@ -40,13 +41,13 @@ export function loadLesson(json: unknown): LoadLessonResult {
 const SOURCE = { url: "PLAN.md U12", licence: "CC BY-SA 4.0", changes: "Original story written for this app." };
 const STANDARD = "NC.2.OA.1";
 
-const OFF_BY_ONE: ReactionScript = { misconception: "off-by-one", pip: "So close. Let's count together." };
-const UNKNOWN: ReactionScript = { misconception: "unknown", pip: "Let's count together, slowly." };
+const OFF_BY_ONE: ReactionScript = { misconception: "off-by-one", pip: "So close. Let's count together.", smaller: smallerTemplate("off-by-one") };
+const UNKNOWN: ReactionScript = { misconception: "unknown", pip: "Let's count together, slowly.", smaller: smallerTemplate("unknown") };
 const WRONG_OP: ReactionScript = {
-  misconception: "wrong-operation", pip: "If {hero} had {shown}, where did they come from?",
+  misconception: "wrong-operation", pip: "If {hero} had {shown}, where did they come from?", smaller: smallerTemplate("wrong-operation"),
 };
 const DIRECTION_FLIP: ReactionScript = {
-  misconception: "direction-flip", pip: "Did {hero} get more, or give some away?",
+  misconception: "direction-flip", pip: "Did {hero} get more, or give some away?", smaller: smallerTemplate("direction-flip"),
 };
 
 /** Lesson 1 (PLAN.md U12): five reviewed NC.2.OA.1 stories. Every total is
@@ -74,8 +75,8 @@ export function buildLesson1(): LessonFile {
     ],
     reactions: [
       WRONG_OP,
-      { misconception: "echoed-a-given", pip: "{shown} is how many went away. How many stayed?" },
-      { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any go away?" },
+      { misconception: "echoed-a-given", pip: "{shown} is how many went away. How many stayed?", smaller: smallerTemplate("echoed-a-given") },
+      { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any go away?", smaller: smallerTemplate("smaller-from-larger") },
       DIRECTION_FLIP, OFF_BY_ONE, UNKNOWN,
     ],
     source: { ...SOURCE },
@@ -103,8 +104,8 @@ export function buildLesson1(): LessonFile {
     ],
     reactions: [
       WRONG_OP,
-      { misconception: "echoed-a-given", pip: "{shown} came in. How many were there first?" },
-      { misconception: "smaller-from-larger", pip: "{shown} is less. What else came in?" },
+      { misconception: "echoed-a-given", pip: "{shown} came in. How many were there first?", smaller: smallerTemplate("echoed-a-given") },
+      { misconception: "smaller-from-larger", pip: "{shown} is less. What else came in?", smaller: smallerTemplate("smaller-from-larger") },
       DIRECTION_FLIP, OFF_BY_ONE, UNKNOWN,
     ],
     source: { ...SOURCE },
@@ -126,9 +127,9 @@ export function buildLesson1(): LessonFile {
     ],
     reactions: [
       WRONG_OP,
-      { misconception: "echoed-a-given", pip: "{shown} is the other pile. Add the extra." },
-      { misconception: "smaller-from-larger", pip: "{shown} is less. Did {hero} add the extra?" },
-      { misconception: "direction-flip", pip: "Who has more, {hero} or the other pile?" },
+      { misconception: "echoed-a-given", pip: "{shown} is the other pile. Add the extra.", smaller: smallerTemplate("echoed-a-given") },
+      { misconception: "smaller-from-larger", pip: "{shown} is less. Did {hero} add the extra?", smaller: smallerTemplate("smaller-from-larger") },
+      { misconception: "direction-flip", pip: "Who has more, {hero} or the other pile?", smaller: smallerTemplate("direction-flip") },
       OFF_BY_ONE, UNKNOWN,
     ],
     source: { ...SOURCE },
@@ -150,9 +151,9 @@ export function buildLesson1(): LessonFile {
     ],
     reactions: [
       WRONG_OP,
-      { misconception: "echoed-a-given", pip: "{shown} is the other pile. Take some away." },
-      { misconception: "smaller-from-larger", pip: "{shown} is more. Did {hero} take some away?" },
-      { misconception: "direction-flip", pip: "Who has fewer, {hero} or the other pile?" },
+      { misconception: "echoed-a-given", pip: "{shown} is the other pile. Take some away.", smaller: smallerTemplate("echoed-a-given") },
+      { misconception: "smaller-from-larger", pip: "{shown} is more. Did {hero} take some away?", smaller: smallerTemplate("smaller-from-larger") },
+      { misconception: "direction-flip", pip: "Who has fewer, {hero} or the other pile?", smaller: smallerTemplate("direction-flip") },
       OFF_BY_ONE, UNKNOWN,
     ],
     source: { ...SOURCE },
@@ -186,8 +187,8 @@ export function buildLesson1(): LessonFile {
     ],
     reactions: [
       WRONG_OP,
-      { misconception: "echoed-a-given", pip: "{shown} is how many went away. How many stayed?" },
-      { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any go away?" },
+      { misconception: "echoed-a-given", pip: "{shown} is how many went away. How many stayed?", smaller: smallerTemplate("echoed-a-given") },
+      { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any go away?", smaller: smallerTemplate("smaller-from-larger") },
       DIRECTION_FLIP, OFF_BY_ONE, UNKNOWN,
     ],
     source: { ...SOURCE },

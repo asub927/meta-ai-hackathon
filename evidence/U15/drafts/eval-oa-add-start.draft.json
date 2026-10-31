@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-add-start",
+        "standard": "NC.2.OA.1",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "bead",
+        "start": 0,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 8,
+            "from": "Momo"
+          }
+        ],
+        "unknown": "start",
+        "result": 27
+      },
+      "totals": [
+        19,
+        27
+      ],
+      "answer": 19
+    },
+    "questions": [
+      {
+        "id": "eval-oa-add-start-q0-predict",
+        "step": 0,
+        "ask": "Will {hero} have more?",
+        "interaction": "predict",
+        "hints": [
+          "Did {hero} get {item}?",
+          "Watch {hero} hold {item}?",
+          {
+            "exampleSay": "3 stars plus 3 are 6?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "They got extra {item}?",
+          "They have less {item}?"
+        ]
+      },
+      {
+        "id": "eval-oa-add-start-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "What did {hero} see?",
+          "Point at each {item}?",
+          {
+            "exampleSay": "4 moons plus 0 are 4?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "They count each {item}?",
+          "Last group holds all?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Love that, view {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Good eye, view {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "So close, see {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Warm hug, see {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Almost, peek {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "With you, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-add-start",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

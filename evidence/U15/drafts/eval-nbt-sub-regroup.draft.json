@@ -1,0 +1,98 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-sub-regroup",
+        "standard": "NC.2.NBT.5",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "bead",
+        "start": 52,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 27,
+            "to": "Momo"
+          }
+        ]
+      },
+      "totals": [
+        52,
+        25
+      ],
+      "answer": 25
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-sub-regroup-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Do they give or get?",
+          "Point at each {item}?",
+          {
+            "exampleSay": "Had 9 shells, gave 4.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More {item}?",
+          "Fewer {item}?"
+        ]
+      },
+      {
+        "id": "eval-nbt-sub-regroup-qfinal-count",
+        "step": "final",
+        "ask": "What is {result} now?",
+        "interaction": "count",
+        "hints": [
+          "What is {missing}?",
+          "Make tens with {item}?",
+          {
+            "exampleSay": "Had 8 pebbles, lost 3.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Count each {item}",
+          "Point with {hero}"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Good, watch {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Nice, count {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Close, point {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Love this, see {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Good, count each {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Nice, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-sub-regroup",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

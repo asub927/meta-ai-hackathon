@@ -34,3 +34,50 @@ test("audio: playing a beat records cues", async ({ page }) => {
   expect(Array.isArray(cues)).toBe(true);
   expect(cues.length).toBeGreaterThan(0);
 });
+
+test("speech: Read-aloud toggle hides when no local voice exists", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, "speechSynthesis", {
+      configurable: true,
+      value: { getVoices: () => [], speak: () => {}, cancel: () => {} },
+    });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Start" }).click();
+  await expect(page.getByText("Read-aloud")).toHaveCount(0);
+});
+
+test("speech: Read-aloud speaks Pip lines through the on-device voice only", async ({ page }) => {
+  await page.addInitScript(() => {
+    const spoken: Array<{ text: string; voice: { localService: boolean } | null }> = [];
+    (window as any).__spoken = spoken;
+    const voices = [{ name: "OnDevice", localService: true, lang: "en-US" }];
+    class FakeUtterance {
+      text: string;
+      voice: unknown = null;
+      onboundary: unknown = null;
+      constructor(text: string) {
+        this.text = text;
+      }
+    }
+    Object.defineProperty(window, "speechSynthesis", {
+      configurable: true,
+      value: {
+        getVoices: () => voices,
+        speak: (u: { text: string; voice: { localService: boolean } | null }) =>
+          spoken.push({ text: u.text, voice: u.voice }),
+        cancel: () => {},
+      },
+    });
+    Object.defineProperty(window, "SpeechSynthesisUtterance", { configurable: true, value: FakeUtterance });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.getByLabel("Read-aloud").check();
+  await expect
+    .poll(() => page.evaluate(() => (window as any).__spoken?.length ?? 0))
+    .toBeGreaterThan(0);
+  const spoken = await page.evaluate(() => (window as any).__spoken);
+  expect(spoken[0].text.length).toBeGreaterThan(0);
+  expect(spoken.every((s: { voice: { localService: boolean } | null }) => s.voice?.localService)).toBe(true);
+});

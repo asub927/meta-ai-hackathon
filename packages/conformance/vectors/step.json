@@ -48,6 +48,7 @@
         "effects": [
           {
             "event": "answered-clean",
+            "template": "q0-predict",
             "type": "record"
           },
           {
@@ -109,6 +110,7 @@
         "effects": [
           {
             "event": "answered-clean",
+            "template": "q0-count",
             "type": "record"
           },
           {
@@ -170,6 +172,7 @@
         "effects": [
           {
             "event": "answered-clean",
+            "template": "q1-count",
             "type": "record"
           },
           {
@@ -244,7 +247,25 @@
           "qIndex": 0,
           "reaction": {
             "misconception": "direction-flip",
-            "pip": "Did {hero} get more, or give some away?"
+            "pip": "Did {hero} get more, or give some away?",
+            "smaller": {
+              "ask": "Did {hero} get more, or give some away?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-direction-flip",
+              "interaction": "predict",
+              "step": 0
+            }
           },
           "shown": 15,
           "tag": "reacting"
@@ -283,7 +304,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "wrong-operation",
-            "pip": "If {hero} had {shown}, where did they come from?"
+            "pip": "If {hero} had {shown}, where did they come from?",
+            "smaller": {
+              "ask": "Count what {hero} has now.",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-wrong-operation",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 33,
           "tag": "reacting"
@@ -322,7 +361,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "echoed-a-given",
-            "pip": "{shown} is how many flew away. How many stayed?"
+            "pip": "{shown} is how many flew away. How many stayed?",
+            "smaller": {
+              "ask": "How many stayed with {hero}?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-echoed-a-given",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 9,
           "tag": "reacting"
@@ -361,7 +418,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "off-by-one",
-            "pip": "So close. Let's count together."
+            "pip": "So close. Let's count together.",
+            "smaller": {
+              "ask": "Count once more, slowly. How many?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-off-by-one",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 16,
           "tag": "reacting"
@@ -400,7 +475,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "smaller-from-larger",
-            "pip": "{shown} is more than the start. Did any fly away?"
+            "pip": "{shown} is more than the start. Did any fly away?",
+            "smaller": {
+              "ask": "How many are left with {hero}?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-smaller-from-larger",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 25,
           "tag": "reacting"
@@ -439,7 +532,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "unknown",
-            "pip": "Let's count together, slowly."
+            "pip": "Let's count together, slowly.",
+            "smaller": {
+              "ask": "Let's count together. How many?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-unknown",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 0,
           "tag": "reacting"
@@ -478,7 +589,25 @@
           "qIndex": 2,
           "reaction": {
             "misconception": "wrong-operation",
-            "pip": "If {hero} had {shown}, where did they come from?"
+            "pip": "If {hero} had {shown}, where did they come from?",
+            "smaller": {
+              "ask": "Count what {hero} has now.",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-wrong-operation",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 10,
           "tag": "reacting"
@@ -517,7 +646,25 @@
           "qIndex": 2,
           "reaction": {
             "misconception": "echoed-a-given",
-            "pip": "{shown} is how many flew away. How many stayed?"
+            "pip": "{shown} is how many flew away. How many stayed?",
+            "smaller": {
+              "ask": "How many stayed with {hero}?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-echoed-a-given",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 5,
           "tag": "reacting"
@@ -556,7 +703,25 @@
           "qIndex": 2,
           "reaction": {
             "misconception": "off-by-one",
-            "pip": "So close. Let's count together."
+            "pip": "So close. Let's count together.",
+            "smaller": {
+              "ask": "Count once more, slowly. How many?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-off-by-one",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 19,
           "tag": "reacting"
@@ -595,7 +760,25 @@
           "qIndex": 2,
           "reaction": {
             "misconception": "off-by-one",
-            "pip": "So close. Let's count together."
+            "pip": "So close. Let's count together.",
+            "smaller": {
+              "ask": "Count once more, slowly. How many?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-off-by-one",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 21,
           "tag": "reacting"
@@ -634,7 +817,25 @@
           "qIndex": 2,
           "reaction": {
             "misconception": "unknown",
-            "pip": "Let's count together, slowly."
+            "pip": "Let's count together, slowly.",
+            "smaller": {
+              "ask": "Let's count together. How many?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-unknown",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 0,
           "tag": "reacting"
@@ -793,13 +994,32 @@
       "expected": {
         "effects": [
           {
-            "line": "How many does Momo have now?",
+            "line": "Count what Momo has now.",
             "type": "say"
           }
         ],
         "state": {
           "qIndex": 1,
           "rung": 0,
+          "smaller": {
+            "ask": "Count what {hero} has now.",
+            "explainChoices": [
+              "I counted back",
+              "I used tens",
+              "I guessed"
+            ],
+            "hints": [
+              "How many were there at the start?",
+              "Let's make tens. Take some away.",
+              {
+                "exampleSay": "12 balloons, 4 pop, leaves 8.",
+                "say": "Now you try."
+              }
+            ],
+            "id": "q0-count~wrong-operation",
+            "interaction": "count",
+            "step": 0
+          },
           "tag": "asking"
         }
       },
@@ -812,7 +1032,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "wrong-operation",
-            "pip": "If {hero} had {shown}, where did they come from?"
+            "pip": "If {hero} had {shown}, where did they come from?",
+            "smaller": {
+              "ask": "Count what {hero} has now.",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-wrong-operation",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 33,
           "tag": "reacting"
@@ -836,7 +1074,25 @@
           "qIndex": 1,
           "reaction": {
             "misconception": "unknown",
-            "pip": "Let's count together, slowly."
+            "pip": "Let's count together, slowly.",
+            "smaller": {
+              "ask": "Let's count together. How many?",
+              "explainChoices": [
+                "I counted",
+                "I guessed"
+              ],
+              "hints": [
+                "Point to each one as you count.",
+                "Say each number out loud.",
+                {
+                  "exampleSay": "I point, I count, I say how many.",
+                  "say": "Now you try."
+                }
+              ],
+              "id": "smaller-unknown",
+              "interaction": "count",
+              "step": 0
+            }
           },
           "shown": 0,
           "tag": "reacting"

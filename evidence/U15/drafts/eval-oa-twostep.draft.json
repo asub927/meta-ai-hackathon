@@ -1,0 +1,122 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-twostep",
+        "standard": "NC.2.OA.1",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "sticker",
+        "start": 6,
+        "steps": [
+          {
+            "kind": "find",
+            "n": 4,
+            "place": "bed"
+          },
+          {
+            "kind": "give",
+            "n": 3,
+            "to": "Momo"
+          }
+        ]
+      },
+      "totals": [
+        6,
+        10,
+        7
+      ],
+      "answer": 7
+    },
+    "questions": [
+      {
+        "id": "eval-oa-twostep-q0-predict",
+        "step": 0,
+        "ask": "{hero} finds more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Do they get more?",
+          "Can they point now?",
+          {
+            "exampleSay": "See 5 shells, get 2 more?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "They get more {item}",
+          "They get fewer {item}"
+        ]
+      },
+      {
+        "id": "eval-oa-twostep-q1-predict",
+        "step": 1,
+        "ask": "{hero} gives, more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Do they lose some?",
+          "Can they watch them?",
+          {
+            "exampleSay": "See 8 beads, lose 2?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "They have more {item}",
+          "They have fewer {item}"
+        ]
+      },
+      {
+        "id": "eval-oa-twostep-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "What do they see?",
+          "Can they make tens?",
+          {
+            "exampleSay": "See 9 stars, get 2?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Count all {item} now",
+          "Count with {hero} now"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Safe here, look at {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Nice, look at {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Close, point to {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Warm hug, see {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Near it, watch {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Stay kind, view {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-twostep",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

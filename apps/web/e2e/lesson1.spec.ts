@@ -56,6 +56,8 @@ test("lesson1: all-right completes all 5 stories with zero console errors", asyn
 });
 
 test("lesson1: story 1 misconception plays out, then lesson completes", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
   await startLesson1(page);
   const [first, ...rest] = SCRIPTS;
   for (const p of first!.predicts) {
@@ -73,9 +75,12 @@ test("lesson1: story 1 misconception plays out, then lesson completes", async ({
     await advanceFromDone(page, i + 1);
   }
   await expect(page.getByTestId("lesson1-done")).toBeVisible();
+  expect(errors).toEqual([]);
 });
 
 test("lesson1: hints climb to the worked example, then lesson completes", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
   await startLesson1(page);
   const [first, ...rest] = SCRIPTS;
   for (const p of first!.predicts) {
@@ -97,4 +102,5 @@ test("lesson1: hints climb to the worked example, then lesson completes", async 
     await advanceFromDone(page, i + 1);
   }
   await expect(page.getByTestId("lesson1-done")).toBeVisible();
+  expect(errors).toEqual([]);
 });

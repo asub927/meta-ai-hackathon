@@ -6,6 +6,7 @@
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { ANTHROPIC_MIN_TOKENS } from "./config.mjs";
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const CACHE_DIR = path.join(HERE, "cache");
@@ -107,6 +108,13 @@ export function cacheMode() {
 /** Shared client builder for the CLI and the eval: cache-backed gateway. */
 export function buildClient({ model, maxTokens, temperature }) {
   const protocol = gatewayProtocol();
+  if (protocol === "anthropic" && maxTokens < ANTHROPIC_MIN_TOKENS) {
+    throw new Error(
+      `headroom: maxTokens ${maxTokens} < ${ANTHROPIC_MIN_TOKENS} minimum for GEN_GATEWAY_PROTOCOL=anthropic ` +
+      `(thinking budget 1024 plus draft text; the longest eval specs needed 24000). ` +
+      `Set GEN_MAX_TOKENS=${ANTHROPIC_MIN_TOKENS} or higher.`,
+    );
+  }
   return async ({ system, user, key }) =>
     (await completeWithCache({
       key, mode: cacheMode(),

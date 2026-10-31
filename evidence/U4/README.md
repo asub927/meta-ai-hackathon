@@ -44,15 +44,17 @@ independent arithmetic in `core.test.ts` (in addition to the existing
 
 ## Verification (2026-10-29, all green)
 
-- **Unit tests:** `pnpm --filter @kids-math/core test` — 45/45 passed
-  (core 16, validate 11, fixtures 18; includes the 10,000-case oracle).
+- **Unit tests:** `pnpm --filter @kids-math/core test` — 71 passed
+  (evaluate 11, validate 11, lesson 4, fixtures 18, core 16, u5 11;
+  includes the 10,000-case oracle). Re-measured 2026-10-31; the old
+  all-green figure from 2026-10-29 predates the evaluate/lesson/u5 suites.
 - **Typecheck:** `pnpm -r typecheck` — clean for `packages/core` and `apps/web`.
 - **CLI:** `pnpm run validate fixtures/good/*.json` — 5/5 `ok`, exit 0.
   `pnpm run validate fixtures/bad/*.json` — 13/13 failed with the expected
   code from the matrix above, exit 1. (CLI compiles via `tsconfig.cli.json`
   to `.validate-dist/`; Node type-stripping cannot resolve the internal
   `.js` → `.ts` imports, so it is not used.)
-- **Formal verification:** `check_model.py` — PASS on P1–P5 (tutor never tells,
+- **Formal verification:** `.claude/skills/formal-verify-socratic-core/scripts/check_model.py` — PASS on P1–P5 (tutor never tells,
   every path reaches done, hint-ladder shape, double-tap safety, mastery
   monotonicity); all three mutants (tell-answer, stuck-reaction,
   mastery-drops) caught. Reducer semantics unchanged by U4, so the model

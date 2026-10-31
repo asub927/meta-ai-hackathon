@@ -1,0 +1,78 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-compare-smaller",
+        "standard": "NC.2.OA.1",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "cub",
+        "start": 0,
+        "steps": [],
+        "compare": {
+          "relation": "smaller",
+          "reference": 25,
+          "difference": 6
+        }
+      },
+      "totals": [
+        19
+      ],
+      "answer": 19
+    },
+    "questions": [
+      {
+        "id": "eval-oa-compare-smaller-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} has {hero}?",
+        "interaction": "count",
+        "hints": [
+          "Who has fewer {item}?",
+          "Can they point at {item}?",
+          {
+            "exampleSay": "{hero} saw 4 shells, 3 left.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Look at what {hero} keeps?",
+          "See what stays with them?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "They can check {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "They are near, see {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Look close at {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Point at {shown} with them?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Watch {shown} with them?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "They can watch {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-compare-smaller",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

@@ -15,6 +15,12 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 10. Human languages: English only. Spanish deferred, no timeline, no reviewer (Anantha has no Spanish expertise).
 11. Process: pstack throughout, no exceptions. All project communication goes through Delivery Lead. Scribe records decisions and discussion, including calls.
 
+## Proposed, needs Anantha approval at landing
+12. Spikes retired unbuilt: U1 bakeoff, U2 feel variants, U2b JSC/CoreBridge, U2c quicktype. No bakeoff table, proto dir, or evidence was ever produced. WAAPI stands as the animation surface. Native bridges defer with the backend (entry 4).
+13. Storage: web persists in IndexedDB via idb, the PROGRESS-STORAGE.md recommended default. navigator.storage.persist() result shown in settings, Add to Home Screen prompt with non-persistent warning. Mount performs a one-time import of kids-math-progress, kids-math-log-v1, and kids-math-sound from localStorage, copies only missing values into IndexedDB, then removes migrated legacy keys. No other src use remains.
+14. Mastery approximation: the stored log records correct answers but not mistakes or hint use, so clean (PLAN.md:58) is approximated as a recorded correct answer. The distinct-templates clause holds through question ids on record effects.
+15. Audio precache: no media assets exist (all cues synthesized through Web Audio), so the service-worker precache stays shell-only. No sfx.json baseline exists, so the 58-cue name-and-count diff is not runnable.
+
 ## Discussed, not decided
 - Progress storage options: PROGRESS-STORAGE.md (recommended default: IndexedDB with export file, teacher dashboard page from exports, SwiftData on iPad).
 - Competitor research: COMPETITOR-SYNTHESIS.md, COMPETITOR-LANDSCAPE.md. Vision: VISION.md.

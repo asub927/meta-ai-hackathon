@@ -1,11 +1,17 @@
 # Kid-flow findings — pre-gate review notes (U12 gate input)
 
 Date: 2026-10-29. Reviewer: Anantha (assisted review).
-Source: 12 extracted frames from U13 render `render/out/run1.mp4`
-(wrong-then-right path, `lessons/nc-2-oa-1-lesson-1.json`),
+Source: 12 extracted frames from the U13 wrong-then-right render
+(`lessons/nc-2-oa-1-lesson-1.json`),
 plus live-app expectations from `apps/web/src/main.tsx`.
 Status: DRAFT for the U12 "Anantha plays it on a real iPad" gate.
 Not yet validated by the full-video watch or the 3-path iPad playthrough.
+
+Note (2026-10-31, backfill): the original text named a render file that
+does not exist in the repo. The renders present are `render/out/final-a.mp4`
+and `render/out/final-b.mp4` (plus `final-frames/`, `frames12/`,
+`verify-frames/`). The finding text above is otherwise kept verbatim as
+history; any full-video rewatch should name which present file was watched.
 
 ## Must-resolve before any child session
 
@@ -56,6 +62,8 @@ Not yet validated by the full-video watch or the 3-path iPad playthrough.
 
 ## Next checks (the actual gate)
 
-- [ ] Watch run1.mp4 end to end, note timestamps of confusion.
+- [ ] Watch the U13 render end to end, note timestamps of confusion.
+  (Open: the original file named here is absent; present renders are
+  `final-a.mp4` and `final-b.mp4`. Record which file is watched.)
 - [ ] Real-iPad playthrough, all 3 U12 paths, sound + read-aloud on.
 - [ ] Write the U13 one-page report (hashes, ffprobe, frame notes).

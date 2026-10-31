@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-take-change",
+        "standard": "NC.2.OA.1",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "duck",
+        "start": 20,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 0,
+            "to": "Momo"
+          }
+        ],
+        "unknown": "change",
+        "result": 13
+      },
+      "totals": [
+        20,
+        13
+      ],
+      "answer": 7
+    },
+    "questions": [
+      {
+        "id": "eval-oa-take-change-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Did {hero} give away?",
+          "Can they watch {item} leave?",
+          {
+            "exampleSay": "See 5 plums, eat 4, left?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More with {hero}?",
+          "Fewer with {hero}?"
+        ]
+      },
+      {
+        "id": "eval-oa-take-change-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} for {hero}?",
+        "interaction": "count",
+        "hints": [
+          "What did {hero} give?",
+          "Can they point each {item}?",
+          {
+            "exampleSay": "See 6 stars, lose 4, left?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Count all {item} left?",
+          "Count with {hero} together?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Love {shown}, watch {item}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Nice {shown}, check {hero}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "See {shown} with {hero}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Love {shown} with {hero}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Close {shown} for {hero}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Safe {shown} with {hero}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-take-change",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

@@ -1,5 +1,6 @@
 import { solve } from "./core.js";
 import type { StoryData } from "./types.js";
+import { smallerTemplate } from "./types.js";
 
 /** Sticker demo from PLAN.md §2: 24 - 9 + 5 = 20, totals [24, 15, 20]. */
 export const stickerStory: StoryData = {
@@ -29,12 +30,12 @@ export const stickerStory: StoryData = {
     },
   ],
   reactions: [
-    { misconception: "wrong-operation", pip: "If {hero} had {shown}, where did they come from?" },
-    { misconception: "echoed-a-given", pip: "{shown} is how many flew away. How many stayed?" },
-    { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any fly away?" },
-    { misconception: "direction-flip", pip: "Did {hero} get more, or give some away?" },
-    { misconception: "off-by-one", pip: "So close. Let's count together." },
-    { misconception: "unknown", pip: "Let's count together, slowly." },
+    { misconception: "wrong-operation", pip: "If {hero} had {shown}, where did they come from?", smaller: smallerTemplate("wrong-operation") },
+    { misconception: "echoed-a-given", pip: "{shown} is how many flew away. How many stayed?", smaller: smallerTemplate("echoed-a-given") },
+    { misconception: "smaller-from-larger", pip: "{shown} is more than the start. Did any fly away?", smaller: smallerTemplate("smaller-from-larger") },
+    { misconception: "direction-flip", pip: "Did {hero} get more, or give some away?", smaller: smallerTemplate("direction-flip") },
+    { misconception: "off-by-one", pip: "So close. Let's count together.", smaller: smallerTemplate("off-by-one") },
+    { misconception: "unknown", pip: "Let's count together, slowly.", smaller: smallerTemplate("unknown") },
   ],
   source: { url: "PLAN.md §2 sticker example", licence: "CC BY-SA 4.0", changes: "Original story written for this app." },
 };

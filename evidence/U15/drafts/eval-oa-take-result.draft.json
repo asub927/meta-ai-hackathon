@@ -1,0 +1,98 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-take-result",
+        "standard": "NC.2.OA.1",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "shell",
+        "start": 26,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 8,
+            "to": "Kiwi"
+          }
+        ]
+      },
+      "totals": [
+        26,
+        18
+      ],
+      "answer": 18
+    },
+    "questions": [
+      {
+        "id": "eval-oa-take-result-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Did {hero} give away?",
+          "Watch {hero} give {item}.",
+          {
+            "exampleSay": "7 seeds, take 3, left 4.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Less to hold for {hero}.",
+          "Stay means with {hero}."
+        ]
+      },
+      {
+        "id": "eval-oa-take-result-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "What is left with {hero}?",
+          "Point at each {item}.",
+          {
+            "exampleSay": "9 beans, take 4, left 5.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Count each {item} slow.",
+          "Touch each {item} soft."
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Cozy glow, check {shown}."
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Warm hug, study {shown}."
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Held close, watch {shown}."
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Gentle pause, see {shown}."
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Close glow, view {shown}."
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Always safe, feel {shown}."
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-take-result",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

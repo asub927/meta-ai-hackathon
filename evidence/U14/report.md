@@ -29,9 +29,9 @@ Sample: `evidence/U14/sample-draft.json` (the validated story).
 
 ## Unit checks
 
-- `node --test gen/`: 9 passed (spec, good replay, numbers ignored,
-  red-team, retry with issues fed back, word-problem parse, replay
-  closed, shape checks).
+- `node --test gen/`: 20 passed across 6 suites (spec, good replay, numbers ignored,
+  red-team, retry with issues fed back, word-problem parse, replay closed,
+  shape checks, plus eval-harness cases added since).
 - `pnpm --filter @kids-math/core test`: 71 passed (unchanged).
 - Retry confirmed: bad draft, then fixed draft, second prompt carries
   the `digit-in-template` issue text.

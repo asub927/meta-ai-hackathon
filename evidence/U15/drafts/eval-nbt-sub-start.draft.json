@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-sub-start",
+        "standard": "NC.2.NBT.5",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "duck",
+        "start": 0,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 38,
+            "to": "Momo"
+          }
+        ],
+        "unknown": "start",
+        "result": 24
+      },
+      "totals": [
+        62,
+        24
+      ],
+      "answer": 62
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-sub-start-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Did {hero} give away?",
+          "Please point at each {item}?",
+          {
+            "exampleSay": "Had 5 shells, gave 1?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More for {hero}?",
+          "Fewer for {hero}?"
+        ]
+      },
+      {
+        "id": "eval-nbt-sub-start-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "What left for {hero}?",
+          "Please watch each {item}?",
+          {
+            "exampleSay": "See 9 beads, take 7?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "What shows {result}?",
+          "What shows {missing}?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Safe here, see {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Close, check {shown} with me?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Gentle look at {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Stay safe, view {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Almost there, see {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Here together, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-sub-start",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

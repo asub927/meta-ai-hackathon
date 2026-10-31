@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  append, fnv1aHex, loadStoredLog, parseImport, serialize, sha256Hex, withChecksum,
+  LOG_KEY_V1, append, fnv1aHex, loadStoredLog, parseImport, serialize, sha256Hex, splitEnvelope, verifyEnvelope, withChecksum,
 } from "./eventLog";
+import { createMemoryBackend } from "../shell/storage";
 
 describe("append", () => {
   it("assigns seq by length and returns a new array", () => {
@@ -30,9 +31,9 @@ describe("serialize / parseImport", () => {
     const log = append(append([], "answered-clean"), "strategy", { choice: "tens" });
     expect(parseImport(serialize(log))).toEqual(log);
   });
-  it("skips checksum lines, comments, and blanks", () => {
+  it("skips comments and blanks", () => {
     const body = serialize(append([], "answered-clean"));
-    const text = `\n${body}\n# sha256:deadbeef\n`;
+    const text = `\n${body}\n# exported by a test\n`;
     expect(parseImport(text)).toEqual([{ v: 1, seq: 0, type: "answered-clean" }]);
   });
   it("throws issue codes with the event line number", () => {
@@ -42,6 +43,19 @@ describe("serialize / parseImport", () => {
       "bad-event-line-2",
     );
     expect(() => parseImport('{"v":1,"seq":0,"type":"x","data":{"choice":[]}}')).toThrow("bad-event-line-1");
+  });
+});
+
+describe("envelope verification", () => {
+  it("accepts an intact export and rejects tampered or checksum-less files", async () => {
+    const body = serialize(append(append([], "answered-clean", { template: "q0" }), "strategy", { choice: "tens" }));
+    const text = withChecksum(body, await sha256Hex(body));
+    await expect(verifyEnvelope(text)).resolves.toBe(body);
+    expect(splitEnvelope(text)).toEqual({ body, hex: await sha256Hex(body) });
+    await expect(verifyEnvelope(`${body}\n# sha256:deadbeef`)).rejects.toThrow("checksum-mismatch");
+    const tampered = withChecksum(body.replace("answered-clean", "answered-tampered"), await sha256Hex(body));
+    await expect(verifyEnvelope(tampered)).rejects.toThrow("checksum-mismatch");
+    await expect(verifyEnvelope(body)).rejects.toThrow("missing-checksum");
   });
 });
 
@@ -70,5 +84,11 @@ describe("loadStoredLog", () => {
     expect(
       loadStoredLog(JSON.stringify([{ v: 1, seq: 5, type: "answered-clean" }, { v: 9 }, null])),
     ).toEqual([{ v: 1, seq: 0, type: "answered-clean" }]);
+  });
+  it("survives a write/read cycle through the storage backend", async () => {
+    const backend = createMemoryBackend();
+    const log = append(append([], "answered-clean"), "strategy", { choice: "tens" });
+    await backend.set(LOG_KEY_V1, JSON.stringify(log));
+    expect(loadStoredLog(await backend.get(LOG_KEY_V1))).toEqual(log);
   });
 });

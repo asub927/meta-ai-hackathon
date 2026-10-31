@@ -16,11 +16,25 @@
     "verify:react": "playwright test e2e/lesson.spec.ts -g reaction",
     "verify:hints": "playwright test e2e/lesson.spec.ts -g hints",
     "verify:speech": "playwright test e2e/lesson.spec.ts -g speech",
-    "verify:log": "playwright test e2e/lesson.spec.ts -g log"
+    "verify:log": "playwright test e2e/lesson.spec.ts -g log",
+    "verify:fps": "node scripts/verify-fps.mjs",
+    "verify:seek": "playwright test e2e/seek.spec.ts --project=chromium",
+    "verify:interact": "playwright test e2e/interact.spec.ts --project=chromium",
+    "verify:audio": "playwright test e2e/audio.spec.ts --project=chromium"
   },
-  "dependencies": { "@kids-math/core": "workspace:*", "react": "^19.1.0", "react-dom": "^19.1.0" },
+  "dependencies": {
+    "@kids-math/core": "workspace:*",
+    "idb": "8.0.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
   "devDependencies": {
-    "@playwright/test": "^1.54.0", "@types/react": "^19.1.0", "@types/react-dom": "^19.1.0",
-    "@vitejs/plugin-react": "^4.6.0", "typescript": "^5.9.0", "vite": "^7.0.0", "vitest": "^3.2.0"
+    "@playwright/test": "^1.54.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.0"
   }
 }

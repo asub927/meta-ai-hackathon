@@ -16,6 +16,25 @@ const DRAFTS_DIR = path.join(ROOT, "evidence/U15/drafts");
 
 const log = (...a) => console.error("[eval:gen]", ...a);
 
+/** Transient harness-gateway 5xx: retry with backoff instead of aborting
+ *  the whole run. Persistent errors (missing gateway/cache, empty content)
+ *  still throw to the caller's break below. */
+const TRANSIENT = /gateway-error: HTTP 5/;
+async function withGatewayRetry(fn, tries = 5) {
+  let last;
+  for (let i = 1; i <= tries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      last = e;
+      if (!TRANSIENT.test(e.message) || i === tries) throw e;
+      log(`transient (${e.message}), retry ${i}/${tries}`);
+      await new Promise((r) => setTimeout(r, 5000 * i));
+    }
+  }
+  throw last;
+}
+
 function buildCore() {
   execSync("pnpm --filter @kids-math/core exec tsc -p tsconfig.cli.json", { cwd: ROOT, stdio: "pipe" });
 }
@@ -72,7 +91,7 @@ async function main() {
     let calls = 0;
     const client = async (req) => { calls++; return rawClient(req); };
     try {
-      const r = await generateDraft(core, spec, client);
+      const r = await withGatewayRetry(() => generateDraft(core, spec, client));
       const firstPass = r.status === "validated" && calls === 1;
       rows.push({
         id: spec.id, standard: spec.standard, firstPass,

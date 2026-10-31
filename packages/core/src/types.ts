@@ -42,7 +42,43 @@ export interface Question {
   explainChoices: readonly string[];
 }
 
-export interface ReactionScript { misconception: MisconceptionId; pip: string; }
+export interface ReactionScript { misconception: MisconceptionId; pip: string; smaller: Question; }
+
+/** The follow-up ask per misconception. Placeholders only, never digits:
+ *  templates carry no numbers, the solver owns every count. */
+const SMALLER_ASK: Record<MisconceptionId, string> = {
+  "wrong-operation": "Count what {hero} has now.",
+  "echoed-a-given": "How many stayed with {hero}?",
+  "smaller-from-larger": "How many are left with {hero}?",
+  "direction-flip": "Did {hero} get more, or give some away?",
+  "off-by-one": "Count once more, slowly. How many?",
+  unknown: "Let's count together. How many?",
+};
+
+/** Code-authored smaller template per misconception. The transition re-steps
+ *  it to the current question, so stored templates never go stale. */
+export function smallerTemplate(miss: MisconceptionId): Question {
+  return {
+    id: `smaller-${miss}`, step: 0, ask: SMALLER_ASK[miss],
+    interaction: miss === "direction-flip" ? "predict" : "count",
+    hints: ["Point to each one as you count.", "Say each number out loud.",
+      { exampleSay: "I point, I count, I say how many.", say: "Now you try." }],
+    explainChoices: ["I counted", "I guessed"],
+  };
+}
+
+/** The smaller question after a reaction: same step as the question that
+ *  triggered it, so the target is unchanged. Reviewed stories may override
+ *  the ask; the JSON boundary never accepts one from the model. */
+export function smallerFor(
+  reaction: { misconception: MisconceptionId; smaller?: Question }, base: Question,
+): Question {
+  return {
+    id: `${base.id}~${reaction.misconception}`, step: base.step,
+    ask: reaction.smaller?.ask ?? SMALLER_ASK[reaction.misconception],
+    interaction: base.interaction, hints: base.hints, explainChoices: base.explainChoices,
+  };
+}
 export interface LessonSource { url: string; licence: string; changes: string }
 export interface StoryData {
   solved: Solved; questions: readonly Question[]; reactions: readonly ReactionScript[];
@@ -55,7 +91,7 @@ export interface Issue { code: string; path: string; message: string }
 
 export type StepPhase =
   | { tag: "telling" }
-  | { tag: "asking"; qIndex: number; rung: 0 | 1 | 2 | 3 }
+  | { tag: "asking"; qIndex: number; rung: 0 | 1 | 2 | 3; smaller?: Question }
   | { tag: "reacting"; qIndex: number; reaction: ReactionScript; shown: number }
   | { tag: "explaining"; qIndex: number }
   | { tag: "done" };
@@ -66,7 +102,7 @@ export type Event =
 
 export type Effect =
   | { type: "say"; line: string } | { type: "react"; shown: number }
-  | { type: "record"; event: string };
+  | { type: "record"; event: string; template?: string };
 
 export const initial: StepPhase = { tag: "telling" };
 

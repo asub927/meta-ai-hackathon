@@ -1,4 +1,5 @@
 import { detect, fill, targetFor } from "./core.js";
+import { smallerFor } from "./types.js";
 import type { Effect, Event, StepPhase, StoryData } from "./types.js";
 
 const say = (line: string): Effect => ({ type: "say", line });
@@ -16,7 +17,7 @@ export function step(state: StepPhase, ev: Event, story: StoryData): [StepPhase,
         ? [{ tag: "asking", qIndex: 0, rung: 0 }, [say(fill(story.questions[0]!.ask, solved))]]
         : [state, []];
     case "asking": {
-      const q = story.questions[state.qIndex]!;
+      const q = state.smaller ?? story.questions[state.qIndex]!;
       if (ev.type === "hint") {
         if (state.rung >= 3) // worked example already played: re-ask the original question
           return [{ ...state, rung: 0 }, [say(fill(q.ask, solved))]];
@@ -31,17 +32,20 @@ export function step(state: StepPhase, ev: Event, story: StoryData): [StepPhase,
       const miss = detect(solved, q, ev.a);
       if (miss === null)
         return [{ tag: "explaining", qIndex: state.qIndex },
-          [{ type: "record", event: "answered-clean" }, say("How did you know?")]];
+          [{ type: "record", event: "answered-clean", template: q.id }, say("How did you know?")]];
       const reaction = story.reactions.find((r) => r.misconception === miss)
         ?? story.reactions.find((r) => r.misconception === "unknown")!;
       const shown = ev.a.kind === "count" ? ev.a.value : targetFor(solved, q);
       return [{ tag: "reacting", qIndex: state.qIndex, reaction, shown },
         [{ type: "react", shown }, say(fill(reaction.pip, solved, { shown }))]];
     }
-    case "reacting": // back to the smaller question (modeled as the same question, fresh ladder)
-      return ev.type === "reaction-ended"
-        ? [{ tag: "asking", qIndex: state.qIndex, rung: 0 }, [say(fill(story.questions[state.qIndex]!.ask, solved))]]
-        : [state, []];
+    case "reacting": {
+      if (ev.type !== "reaction-ended") return [state, []];
+      const base = story.questions[state.qIndex]!;
+      const smaller = smallerFor(state.reaction, base);
+      return [{ tag: "asking", qIndex: state.qIndex, rung: 0, smaller },
+        [say(fill(smaller.ask, solved))]];
+    }
     case "explaining": {
       if (ev.type !== "explained") return [state, []];
       const next = state.qIndex + 1;

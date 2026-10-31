@@ -1,0 +1,98 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-sub-plain",
+        "standard": "NC.2.NBT.5",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "book",
+        "start": 68,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 34,
+            "to": "Kiwi"
+          }
+        ]
+      },
+      "totals": [
+        68,
+        34
+      ],
+      "answer": 34
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-sub-plain-q0-predict",
+        "step": 0,
+        "ask": "Will {hero} have more?",
+        "interaction": "predict",
+        "hints": [
+          "Did they give away?",
+          "Can you point now?",
+          {
+            "exampleSay": "Had 5 toys, gave 2?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "What felt smaller?",
+          "What looked bigger?"
+        ]
+      },
+      {
+        "id": "eval-nbt-sub-plain-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} left?",
+        "interaction": "count",
+        "hints": [
+          "What did they keep?",
+          "Will you point now?",
+          {
+            "exampleSay": "Had 9 pens, lost 7?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Which pile is less?",
+          "Which pile is more?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Ready to see {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Want to view {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Shall we see {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Can we view {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Will we check {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "May we study {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-sub-plain",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

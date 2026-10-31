@@ -1,0 +1,98 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-add-result",
+        "standard": "NC.2.OA.1",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "book",
+        "start": 25,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 6,
+            "from": "Kiwi"
+          }
+        ]
+      },
+      "totals": [
+        25,
+        31
+      ],
+      "answer": 31
+    },
+    "questions": [
+      {
+        "id": "eval-oa-add-result-q0-predict",
+        "step": 0,
+        "ask": "Will {hero} have more?",
+        "interaction": "predict",
+        "hints": [
+          "{hero} gets more?",
+          "Watch {item} pile grow?",
+          {
+            "exampleSay": "Have 4 pens, get 7?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More means pile grows?",
+          "Fewer means pile shrinks?"
+        ]
+      },
+      {
+        "id": "eval-oa-add-result-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "What did {hero} have?",
+          "Point at each {item}?",
+          {
+            "exampleSay": "Have 4 cups, join 8?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "{answer} fits all here?",
+          "{missing} fits all here?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Close, look at {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Nice, see {shown} now?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Almost, check {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Good, view {shown} now?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Close, count {shown} now?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Safe here, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-add-result",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

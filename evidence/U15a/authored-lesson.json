@@ -1,0 +1,210 @@
+{
+  "id": "author-shells-start",
+  "standard": "NC.2.OA.1",
+  "stories": [
+    {
+      "solved": {
+        "problem": {
+          "id": "author-shells-start-problem",
+          "standard": "NC.2.OA.1",
+          "hero": "Momo",
+          "friend": "Kiwi",
+          "item": "shells",
+          "start": 0,
+          "unknown": "start",
+          "result": 15,
+          "steps": [
+            {
+              "kind": "give",
+              "n": 9,
+              "to": "Kiwi"
+            }
+          ]
+        },
+        "totals": [
+          24,
+          15
+        ],
+        "answer": 24
+      },
+      "questions": [
+        {
+          "id": "author-shells-start-q0",
+          "step": 0,
+          "ask": "{hero} gives some away. More or fewer now?",
+          "interaction": "predict",
+          "hints": [
+            "When you give some away, do you keep them?",
+            "Watch the ones that go.",
+            {
+              "exampleSay": "7 balloons, 2 pop. Fewer!",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "Giving away makes fewer",
+            "I guessed"
+          ]
+        },
+        {
+          "id": "author-shells-start-q1",
+          "step": "final",
+          "ask": "How many did {hero} start with?",
+          "interaction": "count",
+          "hints": [
+            "How many are left at the end?",
+            "Start from the end and add back.",
+            {
+              "exampleSay": "Ended with 10, gave 4, started 14.",
+              "say": "Now you try."
+            }
+          ],
+          "explainChoices": [
+            "I added back",
+            "I counted back",
+            "I guessed"
+          ]
+        }
+      ],
+      "reactions": [
+        {
+          "misconception": "wrong-operation",
+          "pip": "If {hero} had {shown}, how come?",
+          "smaller": {
+            "id": "smaller-wrong-operation",
+            "step": 0,
+            "ask": "Count what {hero} has now.",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
+        },
+        {
+          "misconception": "echoed-a-given",
+          "pip": "{shown} went away. How many stayed?",
+          "smaller": {
+            "id": "smaller-echoed-a-given",
+            "step": 0,
+            "ask": "How many stayed with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
+        },
+        {
+          "misconception": "off-by-one",
+          "pip": "So close. Count once more.",
+          "smaller": {
+            "id": "smaller-off-by-one",
+            "step": 0,
+            "ask": "Count once more, slowly. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
+        },
+        {
+          "misconception": "smaller-from-larger",
+          "pip": "{shown} is more. Count what stayed.",
+          "smaller": {
+            "id": "smaller-smaller-from-larger",
+            "step": 0,
+            "ask": "How many are left with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
+        },
+        {
+          "misconception": "direction-flip",
+          "pip": "Did {hero} get more or give away?",
+          "smaller": {
+            "id": "smaller-direction-flip",
+            "step": 0,
+            "ask": "Did {hero} get more, or give some away?",
+            "interaction": "predict",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
+        },
+        {
+          "misconception": "unknown",
+          "pip": "Count with me, nice and slow.",
+          "smaller": {
+            "id": "smaller-unknown",
+            "step": 0,
+            "ask": "Let's count together. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
+        }
+      ],
+      "source": {
+        "url": "authoring-tool v1",
+        "licence": "CC BY-SA 4.0",
+        "changes": "Teacher-authored take-from-start story."
+      }
+    }
+  ]
+}

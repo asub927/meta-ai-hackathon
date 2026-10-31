@@ -69,27 +69,135 @@
       "reactions": [
         {
           "misconception": "wrong-operation",
-          "pip": "If {hero} had {shown}, where did they come from?"
+          "pip": "If {hero} had {shown}, where did they come from?",
+          "smaller": {
+            "id": "smaller-wrong-operation",
+            "step": 0,
+            "ask": "Count what {hero} has now.",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "echoed-a-given",
-          "pip": "{shown} is how many went away. How many stayed?"
+          "pip": "{shown} is how many went away. How many stayed?",
+          "smaller": {
+            "id": "smaller-echoed-a-given",
+            "step": 0,
+            "ask": "How many stayed with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "smaller-from-larger",
-          "pip": "{shown} is more than the start. Did any go away?"
+          "pip": "{shown} is more than the start. Did any go away?",
+          "smaller": {
+            "id": "smaller-smaller-from-larger",
+            "step": 0,
+            "ask": "How many are left with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "direction-flip",
-          "pip": "Did {hero} get more, or give some away?"
+          "pip": "Did {hero} get more, or give some away?",
+          "smaller": {
+            "id": "smaller-direction-flip",
+            "step": 0,
+            "ask": "Did {hero} get more, or give some away?",
+            "interaction": "predict",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "off-by-one",
-          "pip": "So close. Let's count together."
+          "pip": "So close. Let's count together.",
+          "smaller": {
+            "id": "smaller-off-by-one",
+            "step": 0,
+            "ask": "Count once more, slowly. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "unknown",
-          "pip": "Let's count together, slowly."
+          "pip": "Let's count together, slowly.",
+          "smaller": {
+            "id": "smaller-unknown",
+            "step": 0,
+            "ask": "Let's count together. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         }
       ],
       "source": {
@@ -165,27 +273,135 @@
       "reactions": [
         {
           "misconception": "wrong-operation",
-          "pip": "If {hero} had {shown}, where did they come from?"
+          "pip": "If {hero} had {shown}, where did they come from?",
+          "smaller": {
+            "id": "smaller-wrong-operation",
+            "step": 0,
+            "ask": "Count what {hero} has now.",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "echoed-a-given",
-          "pip": "{shown} came in. How many were there first?"
+          "pip": "{shown} came in. How many were there first?",
+          "smaller": {
+            "id": "smaller-echoed-a-given",
+            "step": 0,
+            "ask": "How many stayed with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "smaller-from-larger",
-          "pip": "{shown} is less. What else came in?"
+          "pip": "{shown} is less. What else came in?",
+          "smaller": {
+            "id": "smaller-smaller-from-larger",
+            "step": 0,
+            "ask": "How many are left with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "direction-flip",
-          "pip": "Did {hero} get more, or give some away?"
+          "pip": "Did {hero} get more, or give some away?",
+          "smaller": {
+            "id": "smaller-direction-flip",
+            "step": 0,
+            "ask": "Did {hero} get more, or give some away?",
+            "interaction": "predict",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "off-by-one",
-          "pip": "So close. Let's count together."
+          "pip": "So close. Let's count together.",
+          "smaller": {
+            "id": "smaller-off-by-one",
+            "step": 0,
+            "ask": "Count once more, slowly. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "unknown",
-          "pip": "Let's count together, slowly."
+          "pip": "Let's count together, slowly.",
+          "smaller": {
+            "id": "smaller-unknown",
+            "step": 0,
+            "ask": "Let's count together. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         }
       ],
       "source": {
@@ -238,27 +454,135 @@
       "reactions": [
         {
           "misconception": "wrong-operation",
-          "pip": "If {hero} had {shown}, where did they come from?"
+          "pip": "If {hero} had {shown}, where did they come from?",
+          "smaller": {
+            "id": "smaller-wrong-operation",
+            "step": 0,
+            "ask": "Count what {hero} has now.",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "echoed-a-given",
-          "pip": "{shown} is the other pile. Add the extra."
+          "pip": "{shown} is the other pile. Add the extra.",
+          "smaller": {
+            "id": "smaller-echoed-a-given",
+            "step": 0,
+            "ask": "How many stayed with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "smaller-from-larger",
-          "pip": "{shown} is less. Did {hero} add the extra?"
+          "pip": "{shown} is less. Did {hero} add the extra?",
+          "smaller": {
+            "id": "smaller-smaller-from-larger",
+            "step": 0,
+            "ask": "How many are left with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "direction-flip",
-          "pip": "Who has more, {hero} or the other pile?"
+          "pip": "Who has more, {hero} or the other pile?",
+          "smaller": {
+            "id": "smaller-direction-flip",
+            "step": 0,
+            "ask": "Did {hero} get more, or give some away?",
+            "interaction": "predict",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "off-by-one",
-          "pip": "So close. Let's count together."
+          "pip": "So close. Let's count together.",
+          "smaller": {
+            "id": "smaller-off-by-one",
+            "step": 0,
+            "ask": "Count once more, slowly. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "unknown",
-          "pip": "Let's count together, slowly."
+          "pip": "Let's count together, slowly.",
+          "smaller": {
+            "id": "smaller-unknown",
+            "step": 0,
+            "ask": "Let's count together. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         }
       ],
       "source": {
@@ -311,27 +635,135 @@
       "reactions": [
         {
           "misconception": "wrong-operation",
-          "pip": "If {hero} had {shown}, where did they come from?"
+          "pip": "If {hero} had {shown}, where did they come from?",
+          "smaller": {
+            "id": "smaller-wrong-operation",
+            "step": 0,
+            "ask": "Count what {hero} has now.",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "echoed-a-given",
-          "pip": "{shown} is the other pile. Take some away."
+          "pip": "{shown} is the other pile. Take some away.",
+          "smaller": {
+            "id": "smaller-echoed-a-given",
+            "step": 0,
+            "ask": "How many stayed with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "smaller-from-larger",
-          "pip": "{shown} is more. Did {hero} take some away?"
+          "pip": "{shown} is more. Did {hero} take some away?",
+          "smaller": {
+            "id": "smaller-smaller-from-larger",
+            "step": 0,
+            "ask": "How many are left with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "direction-flip",
-          "pip": "Who has fewer, {hero} or the other pile?"
+          "pip": "Who has fewer, {hero} or the other pile?",
+          "smaller": {
+            "id": "smaller-direction-flip",
+            "step": 0,
+            "ask": "Did {hero} get more, or give some away?",
+            "interaction": "predict",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "off-by-one",
-          "pip": "So close. Let's count together."
+          "pip": "So close. Let's count together.",
+          "smaller": {
+            "id": "smaller-off-by-one",
+            "step": 0,
+            "ask": "Count once more, slowly. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "unknown",
-          "pip": "Let's count together, slowly."
+          "pip": "Let's count together, slowly.",
+          "smaller": {
+            "id": "smaller-unknown",
+            "step": 0,
+            "ask": "Let's count together. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         }
       ],
       "source": {
@@ -429,27 +861,135 @@
       "reactions": [
         {
           "misconception": "wrong-operation",
-          "pip": "If {hero} had {shown}, where did they come from?"
+          "pip": "If {hero} had {shown}, where did they come from?",
+          "smaller": {
+            "id": "smaller-wrong-operation",
+            "step": 0,
+            "ask": "Count what {hero} has now.",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "echoed-a-given",
-          "pip": "{shown} is how many went away. How many stayed?"
+          "pip": "{shown} is how many went away. How many stayed?",
+          "smaller": {
+            "id": "smaller-echoed-a-given",
+            "step": 0,
+            "ask": "How many stayed with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "smaller-from-larger",
-          "pip": "{shown} is more than the start. Did any go away?"
+          "pip": "{shown} is more than the start. Did any go away?",
+          "smaller": {
+            "id": "smaller-smaller-from-larger",
+            "step": 0,
+            "ask": "How many are left with {hero}?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "direction-flip",
-          "pip": "Did {hero} get more, or give some away?"
+          "pip": "Did {hero} get more, or give some away?",
+          "smaller": {
+            "id": "smaller-direction-flip",
+            "step": 0,
+            "ask": "Did {hero} get more, or give some away?",
+            "interaction": "predict",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "off-by-one",
-          "pip": "So close. Let's count together."
+          "pip": "So close. Let's count together.",
+          "smaller": {
+            "id": "smaller-off-by-one",
+            "step": 0,
+            "ask": "Count once more, slowly. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         },
         {
           "misconception": "unknown",
-          "pip": "Let's count together, slowly."
+          "pip": "Let's count together, slowly.",
+          "smaller": {
+            "id": "smaller-unknown",
+            "step": 0,
+            "ask": "Let's count together. How many?",
+            "interaction": "count",
+            "hints": [
+              "Point to each one as you count.",
+              "Say each number out loud.",
+              {
+                "exampleSay": "I point, I count, I say how many.",
+                "say": "Now you try."
+              }
+            ],
+            "explainChoices": [
+              "I counted",
+              "I guessed"
+            ]
+          }
         }
       ],
       "source": {

@@ -82,6 +82,8 @@ test("log: answers are recorded on-device and exportable", async ({ page }) => {
   await startLesson(page);
   await page.getByRole("button", { name: "fewer" }).click();
   await finishExplaining(page);
-  const events = await page.evaluate(() => JSON.parse(localStorage.getItem("kids-math-log-v1") ?? "[]"));
-  expect(events.some((e: { type: string }) => e.type === "answered-clean")).toBe(true);
+  await expect.poll(async () => {
+    const raw = await page.evaluate(() => (window as any).__kidsMathStorage.get("kids-math-log-v1"));
+    return (JSON.parse(raw ?? "[]") as { type: string }[]).some((e) => e.type === "answered-clean");
+  }).toBe(true);
 });

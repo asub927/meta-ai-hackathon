@@ -17,6 +17,9 @@ importers:
       '@kids-math/core':
         specifier: workspace:*
         version: link:../../packages/core
+      idb:
+        specifier: 8.0.4
+        version: 8.0.4
       react:
         specifier: ^19.1.0
         version: 19.3.1
@@ -633,6 +636,9 @@ packages:
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
+
+  idb@8.0.4:
+    resolution: {integrity: sha512-jd0ITCrN+Zah4J7R/Z2jnR3W7A4BXDAjmo62MwWuSjxCiueUAf7X5rbodEdidWzeknwXHmLpdZkoiiCppNi30Q==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -1329,6 +1335,8 @@ snapshots:
     optional: true
 
   gensync@1.0.0-beta.2: {}
+
+  idb@8.0.4: {}
 
   js-tokens@4.0.0: {}
 

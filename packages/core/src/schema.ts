@@ -22,19 +22,22 @@ const problemSchema = z.strictObject({
   }).optional(),
 });
 
+const questionSchema = z.strictObject({
+  id: z.string(), step: z.union([z.number(), z.literal("final")]), ask: z.string(),
+  interaction: z.enum(["predict", "count"]),
+  hints: z.tuple([z.string(), z.string(), z.strictObject({ exampleSay: z.string(), say: z.string() })]),
+  explainChoices: z.array(z.string()),
+});
+
 export const storyDataSchema = z.strictObject({
   solved: z.strictObject({
     problem: problemSchema, totals: z.array(z.number()), answer: z.number(),
   }),
-  questions: z.array(z.strictObject({
-    id: z.string(), step: z.union([z.number(), z.literal("final")]), ask: z.string(),
-    interaction: z.enum(["predict", "count"]),
-    hints: z.tuple([z.string(), z.string(), z.strictObject({ exampleSay: z.string(), say: z.string() })]),
-    explainChoices: z.array(z.string()),
-  })).min(1),
+  questions: z.array(questionSchema).min(1),
   reactions: z.array(z.strictObject({
     misconception: z.enum(["wrong-operation", "echoed-a-given", "off-by-one", "smaller-from-larger", "direction-flip", "unknown"]),
     pip: z.string(),
+    smaller: questionSchema.optional(),
   })).min(1),
   source: z.strictObject({ url: z.string(), licence: z.string(), changes: z.string() }).optional(),
 });

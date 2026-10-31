@@ -122,14 +122,16 @@ export function templateIssues(template: string): string[] {
   return /\d/.test(template) ? ["digit-in-template"] : [];
 }
 
-export interface LogEvent { type: string; clean?: boolean; template?: string }
+export interface LogEvent { type: string; clean?: boolean; template?: string; data?: Record<string, string | number> }
 
 /** Mastery (PLAN.md): 3 clean in a row, >=2 distinct templates; never drops in a session. */
 export function mastery(log: readonly LogEvent[]): boolean {
+  const templateOf = (e: LogEvent): string =>
+    e.template ?? (typeof e.data?.template === "string" ? e.data.template : e.type);
   let streak: string[] = [], mastered = false;
   for (const e of log) {
-    if (e.type !== "answered") continue;
-    if (e.clean) { streak.push(e.template ?? "?"); if (streak.length >= 3 && new Set(streak.slice(-3)).size >= 2) mastered = true; }
+    if (e.type !== "answered" && e.type !== "answered-clean") continue;
+    if (e.clean ?? e.type === "answered-clean") { streak.push(templateOf(e)); if (streak.length >= 3 && new Set(streak.slice(-3)).size >= 2) mastered = true; }
     else streak = []; // a mistake schedules review; `mastered` itself never resets
   }
   return mastered;

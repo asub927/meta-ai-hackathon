@@ -21,6 +21,7 @@ test("shell: app shell serves offline after first visit", async ({ page }) => {
 test("shell: resume returns to the saved phase", async ({ page }) => {
   await startLesson(page);
   await page.getByRole("button", { name: "fewer" }).click();
+  await expect.poll(() => page.evaluate(() => (window as any).__kidsMathStorage.get("kids-math-progress"))).not.toBeNull();
   await page.reload();
   await page.getByRole("button", { name: "Start" }).click();
   await page.getByTestId("resume-lesson").click();
@@ -35,6 +36,7 @@ test("shell: log export/import round-trips events", async ({ page }) => {
   await page.getByRole("button", { name: "Start" }).click();
   const before = (await page.getByTestId("log-count").textContent()) ?? "0";
   expect(Number(before)).toBeGreaterThan(0);
+  const beforeProgress = (await page.getByTestId("progress-count").textContent()) ?? "0";
   // Capture the exact exported bytes (including the checksum line) via the blob.
   await page.evaluate(() => {
     (window as any).__exported = null;
@@ -51,7 +53,11 @@ test("shell: log export/import round-trips events", async ({ page }) => {
   await expect.poll(() => page.evaluate(() => (window as any).__exported as string | null)).not.toBeNull();
   const exported = (await page.evaluate(() => (window as any).__exported as string | null)) ?? "";
   expect(exported).toContain("# sha256:");
-  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => Promise.all([
+    (window as any).__kidsMathStorage.remove("kids-math-log-v1"),
+    (window as any).__kidsMathStorage.remove("kids-math-progress"),
+    (window as any).__kidsMathStorage.remove("kids-math-sound"),
+  ]));
   await page.reload();
   await page.getByRole("button", { name: "Start" }).click();
   await expect(page.getByTestId("log-count")).toHaveText("0");
@@ -64,6 +70,40 @@ test("shell: log export/import round-trips events", async ({ page }) => {
     input.dispatchEvent(new Event("change", { bubbles: true }));
   }, exported);
   await expect(page.getByTestId("log-count")).toHaveText(before);
+  await expect(page.getByTestId("progress-count")).toHaveText(beforeProgress);
+});
+
+test("shell: a tampered log import is rejected at the boundary", async ({ page }) => {
+  await startLesson(page);
+  await page.getByRole("button", { name: "fewer" }).click();
+  await page.getByRole("button", { name: /counted|Giving|tens/i }).first().click();
+  await page.reload();
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.evaluate(() => {
+    (window as any).__exported = null;
+    const orig = URL.createObjectURL.bind(URL);
+    URL.createObjectURL = (blob: any) => {
+      void (blob as Blob).text().then((t) => { (window as any).__exported = t; });
+      return orig(blob);
+    };
+  });
+  await Promise.all([
+    page.waitForEvent("download"),
+    page.getByTestId("export-log").click(),
+  ]);
+  await expect.poll(() => page.evaluate(() => (window as any).__exported as string | null)).not.toBeNull();
+  const exported = (await page.evaluate(() => (window as any).__exported as string | null)) ?? "";
+  const tampered = exported.replace("answered-clean", "answered-tampered");
+  expect(tampered).not.toBe(exported);
+  await page.evaluate((text: string) => {
+    const input = document.querySelector('[data-testid="import-log"]') as HTMLInputElement | null;
+    if (!input) throw new Error("no import input");
+    const dt = new DataTransfer();
+    dt.items.add(new File([text], "kids-math-log.ndjson", { type: "application/x-ndjson" }));
+    input.files = dt.files;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }, tampered);
+  await expect(page.getByTestId("import-error")).toContainText("checksum-mismatch");
 });
 
 test("shell: lesson loads with same-origin requests only", async ({ page }) => {

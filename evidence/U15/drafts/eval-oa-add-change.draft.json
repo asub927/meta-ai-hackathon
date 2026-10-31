@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-add-change",
+        "standard": "NC.2.OA.1",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "kite",
+        "start": 14,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 0,
+            "from": "Kiwi"
+          }
+        ],
+        "unknown": "change",
+        "result": 23
+      },
+      "totals": [
+        14,
+        23
+      ],
+      "answer": 9
+    },
+    "questions": [
+      {
+        "id": "eval-oa-add-change-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Did they get more?",
+          "Can you point to see?",
+          {
+            "exampleSay": "Had 5 dots, got 6, total?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "What shows more {item}?",
+          "What shows fewer {item}?"
+        ]
+      },
+      {
+        "id": "eval-oa-add-change-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "How did it grow?",
+          "Can you make tens here?",
+          {
+            "exampleSay": "Had 7 stars, got 5, total?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Which fits {item} best?",
+          "What matches them now?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Nice work {shown}, what next?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "I see {shown}, what changed?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Close {shown}, which is more?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Good eye {shown}, add?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Almost {shown}, recount?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Safe here {shown}, what fits?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-add-change",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

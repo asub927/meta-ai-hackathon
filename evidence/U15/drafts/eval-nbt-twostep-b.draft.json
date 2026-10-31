@@ -1,0 +1,122 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-twostep-b",
+        "standard": "NC.2.NBT.5",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "sticker",
+        "start": 84,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 29,
+            "to": "Momo"
+          },
+          {
+            "kind": "receive",
+            "n": 13,
+            "from": "Momo"
+          }
+        ]
+      },
+      "totals": [
+        84,
+        55,
+        68
+      ],
+      "answer": 68
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-twostep-b-q0-predict",
+        "step": 0,
+        "ask": "{hero} gives, more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Does giving mean less?",
+          "Can they watch {item} go?",
+          {
+            "exampleSay": "See 4 dots, add 2, total?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More means add?",
+          "Fewer means take?"
+        ]
+      },
+      {
+        "id": "eval-nbt-twostep-b-q1-predict",
+        "step": 1,
+        "ask": "{hero} gets, more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Does getting mean more?",
+          "Can they point at {item}?",
+          {
+            "exampleSay": "See 5 dots, add 3, total?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More means add?",
+          "Fewer means take?"
+        ]
+      },
+      {
+        "id": "eval-nbt-twostep-b-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} now?",
+        "interaction": "count",
+        "hints": [
+          "What did {hero} keep?",
+          "Can they make tens now?",
+          {
+            "exampleSay": "See 6 dots, take 2, left?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Is {result} left?",
+          "Is {missing} left?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Nice try, see {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Good eye, see {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Love care, see {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Kind work, see {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Close, see {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Warm hug, see {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-twostep-b",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

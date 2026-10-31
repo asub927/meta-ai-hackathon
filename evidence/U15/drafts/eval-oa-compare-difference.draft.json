@@ -1,0 +1,79 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-compare-difference",
+        "standard": "NC.2.OA.1",
+        "hero": "Momo",
+        "friend": null,
+        "item": "balloon",
+        "start": 0,
+        "steps": [],
+        "compare": {
+          "relation": "difference",
+          "reference": 19,
+          "difference": 8,
+          "heroCount": 27
+        }
+      },
+      "totals": [
+        8
+      ],
+      "answer": 8
+    },
+    "questions": [
+      {
+        "id": "eval-oa-compare-difference-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} for {hero}?",
+        "interaction": "count",
+        "hints": [
+          "Who has more?",
+          "Can you point to match?",
+          {
+            "exampleSay": "2 hats plus 3 hats is 5?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "What does {hero} show?",
+          "What has {item} now?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Can we look at {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "What fits with {shown}?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "How to match {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Who needs {shown} now?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Can you point {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Shall we watch {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-compare-difference",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

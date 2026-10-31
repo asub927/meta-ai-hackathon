@@ -12,7 +12,7 @@ execSync("pnpm --filter @kids-math/core exec tsc -p tsconfig.cli.json", { cwd: R
 
 const core = await import("../packages/core/.validate-dist/index.js");
 const { loadSpec, problemFromSpec, skeletonFor } = await import("./spec.mjs");
-const { generateDraft, shapeIssues } = await import("./draft.mjs");
+const { generateDraft, shapeIssues, mergeRepair, validateModel } = await import("./draft.mjs");
 const { completeWithCache } = await import("./llm.mjs");
 
 const SPEC = JSON.parse(readFileSync(new URL("./examples/stickers-31-12.spec.json", import.meta.url), "utf8"));
@@ -128,6 +128,117 @@ describe("generateDraft", () => {
 
   it("fails closed when the cache is absent in replay mode", async () => {
     await assert.rejects(replayClient({ key: "no-such-key" }), /missing-cache/);
+  });
+
+  it("repairs dropped trailing reactions with a pips-only call", async () => {
+    const skeleton = skeletonFor(core.solve(problemFromSpec(loadSpec(SPEC))), SPEC.id);
+    const full = cleanLines(skeleton);
+    const { ["off-by-one"]: _drop1, ["unknown"]: _drop2, ...keptReactions } = full.reactions;
+    const tailed = JSON.stringify({ ...full, reactions: keptReactions });
+    const repair = JSON.stringify({ reactions: {
+      "off-by-one": "So close. Count again.", unknown: "Count together, slowly.",
+    } });
+    const seen = [];
+    const result = await generateDraft(core, loadSpec(SPEC), async ({ key, user }) => {
+      seen.push(key);
+      if (key.endsWith(".repair1")) {
+        assert.match(user, /off-by-one/);
+        assert.match(user, /unknown/);
+        assert.doesNotMatch(user, /wrong-operation/);
+        return repair;
+      }
+      return tailed;
+    });
+    assert.deepEqual(seen, [`${SPEC.id}.attempt1`, `${SPEC.id}.repair1`]);
+    assert.equal(result.status, "validated");
+    assert.equal(result.story.reactions.length, 6);
+  });
+
+  it("hands slots to a human when the repair itself is unusable", async () => {
+    const skeleton = skeletonFor(core.solve(problemFromSpec(loadSpec(SPEC))), SPEC.id);
+    const full = cleanLines(skeleton);
+    const { ["unknown"]: _drop, ...keptReactions } = full.reactions;
+    const tailed = JSON.stringify({ ...full, reactions: keptReactions });
+    const calls = [];
+    const result = await generateDraft(core, loadSpec(SPEC), async ({ key }) => {
+      calls.push(key);
+      return tailed;
+    });
+    assert.deepEqual(calls, [`${SPEC.id}.attempt1`, `${SPEC.id}.repair1`]);
+    assert.equal(result.status, "needs-human");
+    assert.equal(result.story, null);
+    assert.ok(result.issues.some((i) => i.code === "missing-reaction"));
+  });
+
+  it("repairs invented reaction ids after the full retry", async () => {
+    const skeleton = skeletonFor(core.solve(problemFromSpec(loadSpec(SPEC))), SPEC.id);
+    const full = cleanLines(skeleton);
+    const invented = JSON.stringify({
+      ...full,
+      reactions: {
+        "wrong-operation": full.reactions["wrong-operation"],
+        "echoed-a-given": full.reactions["echoed-a-given"],
+        "smaller-from-larger": full.reactions["smaller-from-larger"],
+        "direction-flip": full.reactions["direction-flip"],
+        "lost-track": "Look again slowly.",
+        "other-error": "Count together, slowly.",
+      },
+    });
+    const repair = JSON.stringify({ reactions: {
+      "off-by-one": full.reactions["off-by-one"], unknown: full.reactions.unknown,
+    } });
+    const texts = ["{truncated", invented, repair];
+    const seen = [];
+    const result = await generateDraft(core, loadSpec(SPEC), async ({ key }) => { seen.push(key); return texts.shift(); });
+    assert.deepEqual(seen, [`${SPEC.id}.attempt1`, `${SPEC.id}.attempt2`, `${SPEC.id}.repair2`]);
+    assert.equal(result.status, "validated");
+    assert.equal(result.story.reactions.length, 6);
+  });
+
+  it("still takes the full retry path for non-reaction issues", async () => {
+    const skeleton = skeletonFor(core.solve(problemFromSpec(loadSpec(SPEC))), SPEC.id);
+    const bad = JSON.stringify({
+      ...cleanLines(skeleton),
+      lines: { ...cleanLines(skeleton).lines, [skeleton[0].id]: { ...cleanLines(skeleton).lines[skeleton[0].id], ask: "Momo has 15 left!" } },
+    });
+    const texts = [bad, JSON.stringify(cleanLines(skeleton))];
+    const seen = [];
+    const result = await generateDraft(core, loadSpec(SPEC), async ({ key }) => { seen.push(key); return texts.shift(); });
+    assert.deepEqual(seen, [`${SPEC.id}.attempt1`, `${SPEC.id}.attempt2`]);
+    assert.equal(result.status, "validated");
+  });
+});
+
+describe("mergeRepair", () => {
+  it("fills only the missing ids and ignores non-strings", () => {
+    const model = { lines: {}, reactions: { a: "Keep." } };
+    const merged = mergeRepair(model, ["b", "c"], JSON.stringify({ reactions: { b: "Fixed.", c: 42 } }));
+    assert.deepEqual(merged.reactions, { a: "Keep.", b: "Fixed." });
+  });
+
+  it("returns null when the repair text is not a reactions object", () => {
+    assert.equal(mergeRepair({ lines: {}, reactions: {} }, ["b"], "nope"), null);
+    assert.equal(mergeRepair({ lines: {}, reactions: {} }, ["b"], JSON.stringify({ lines: {} })), null);
+  });
+});
+
+describe("validateModel", () => {
+  it("validates a good model object without any client", () => {
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    const result = validateModel(core, spec, cleanLines(skeleton));
+    assert.equal(result.status, "validated");
+    assert.equal(result.story.reactions.length, 6);
+  });
+
+  it("reports slots for a tailed model object", () => {
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    const full = cleanLines(skeleton);
+    const { ["unknown"]: _drop, ...keptReactions } = full.reactions;
+    const result = validateModel(core, spec, { ...full, reactions: keptReactions });
+    assert.equal(result.status, "needs-human");
+    assert.deepEqual(result.issues.map((i) => i.code), ["missing-reaction"]);
   });
 });
 

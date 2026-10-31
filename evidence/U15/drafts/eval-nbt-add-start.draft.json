@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-add-start",
+        "standard": "NC.2.NBT.5",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "kite",
+        "start": 0,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 29,
+            "from": "Kiwi"
+          }
+        ],
+        "unknown": "start",
+        "result": 61
+      },
+      "totals": [
+        32,
+        61
+      ],
+      "answer": 32
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-add-start-q0-predict",
+        "step": 0,
+        "ask": "Will {hero} have more?",
+        "interaction": "predict",
+        "hints": [
+          "Did {hero} get more?",
+          "Point at each {item}?",
+          {
+            "exampleSay": "4 beads and 4 more is 8.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Does more mean up?",
+          "Does fewer mean down?"
+        ]
+      },
+      {
+        "id": "eval-nbt-add-start-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} here?",
+        "interaction": "count",
+        "hints": [
+          "What can they count?",
+          "Watch {hero} count {item}?",
+          {
+            "exampleSay": "5 beads and 3 more is 8.",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Which pile to count?",
+          "What comes after {start}?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Can we look at {shown}?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "What does {shown} tell us?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Can we point at {shown}?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Want to watch {shown}?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Can they recount {shown}?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "Shall we check {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-add-start",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

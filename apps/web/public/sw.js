@@ -1,4 +1,6 @@
-/* Kids Math app shell (U11): precache the shell, cache-first for same-origin GET. */
+/* Kids Math app shell (U11): precache the shell, cache-first for same-origin GET.
+ *  No audio assets are precached: every cue is synthesized through Web Audio,
+ *  so public/ and src/ hold zero media files. */
 const CACHE = "kids-math-shell-v1";
 const SHELL = ["/", "/index.html"];
 

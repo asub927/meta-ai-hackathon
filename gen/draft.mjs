@@ -57,8 +57,8 @@ function systemPrompt(solved) {
     "OUTPUT: one JSON object only, no prose around it:",
     '{"lines": {"<questionId>": {"ask": "...", "hints": ["...", "...",',
     '  {"exampleSay": "...", "say": "Now you try."}],, "explainChoices": ["...", "..."]}, ...},',
-    ' "reactions": {"<misconceptionId>": "...", ...}}',
-    "Write every question id listed in the task, and all six reaction ids.",
+    ` "reactions": {${REACTION_IDS.map((id) => `"${id}": "..."`).join(", ")}}`,
+    "Write every question id listed in the task, and all six reaction ids above, spelled exactly as shown.",
   ].join("\n");
 }
 
@@ -79,11 +79,73 @@ function retryPrompt(previous, issues) {
   return [
     "Your last draft failed validation. Fix every issue below and return the full JSON again.",
     "Do not explain. Return only the corrected JSON object.",
+    `Reaction ids must be exactly these six, spelled exactly as shown: ${REACTION_IDS.join(", ")}.`,
+    "Never invent other ids.",
     "ISSUES:",
     ...issues.map((i) => `- ${i.path} [${i.code}]: ${i.message}`),
     "YOUR LAST DRAFT:",
     previous,
   ].join("\n");
+}
+
+/** Prompt for the surgical repair pass: only the missing reaction pips, not
+ *  the whole draft. Reactions sit at the end of the longest outputs, so a
+ *  draft that drops trailing ids is under output-budget pressure; re-asking
+ *  for the full JSON reproduces the same pressure and fails the same way.
+ *  A pips-only object is a few lines and has no tail to drop. */
+function repairPrompt(missingIds) {
+  return [
+    "Some reaction lines are missing from the story draft. Write ONLY these reaction ids:",
+    ...missingIds.map((id) => `- ${id}`),
+    "",
+    "RULES FOR EVERY LINE YOU WRITE:",
+    `- Placeholders only, from this list: ${PLACEHOLDERS}. You may also use {shown}.`,
+    "- Never write a digit 0-9 in any line.",
+    "- Never write a number word (one, two, three, ... twenty).",
+    "- Refer to the child-facing characters only with {hero} or they/them/their.",
+    "- Reaction lines comfort and redirect. They never contain the answer and never shame:",
+    "  no wrong, no incorrect, no try again, no saying no.",
+    "",
+    "OUTPUT: one JSON object only, no prose around it:",
+    `{"reactions": {${missingIds.map((id) => `"${id}": "..."`).join(", ")}}`,
+  ].join("\n");
+}
+
+/** Merge repaired pips into the previous draft. Returns the merged model,
+ *  or null when the repair text is not a JSON object with a reactions map. */
+export function mergeRepair(model, missingIds, text) {
+  let repaired = null;
+  try { repaired = JSON.parse(text); } catch { repaired = null; }
+  if (repaired === null || typeof repaired !== "object" || Array.isArray(repaired)) return null;
+  const pips = repaired.reactions;
+  if (!pips || typeof pips !== "object") return null;
+  const reactions = { ...(model.reactions ?? {}) };
+  for (const id of missingIds) {
+    if (typeof pips[id] === "string") reactions[id] = pips[id];
+  }
+  return { ...model, reactions };
+}
+
+/** Shape-check one parsed model object, then assemble and validate it. */
+function evaluate(core, spec, solved, skeleton, model) {
+  const shaped = shapeIssues(model, skeleton);
+  if (shaped.length) return { ok: false, story: null, issues: shaped };
+  const { story, issues } = assembleStory(core, spec, solved, skeleton, model);
+  if (!issues.length && story) return { ok: true, story, issues: [] };
+  return { ok: false, story: null, issues };
+}
+
+/** Validate one model object against a spec: shape-check, assemble,
+ *  validate. Shared by generateDraft and the repair CLI. */
+export function validateModel(core, spec, model) {
+  const solved = core.solve(problemFromSpec(spec));
+  const skeleton = skeletonFor(solved, spec.id);
+  const evaluated = evaluate(core, spec, solved, skeleton, model);
+  if (evaluated.ok) return { status: "validated", story: evaluated.story, slots: [], issues: [] };
+  return {
+    status: "needs-human", story: null,
+    slots: evaluated.issues.map(toSlot), issues: evaluated.issues,
+  };
 }
 
 /** Words-kind phase 1: the model parses a word problem into Problem params.
@@ -157,7 +219,9 @@ const toSlot = (i) => `${i.path} [${i.code}]: ${i.message}`;
 
 /** Full unit: spec -> validated draft or human slots. `client` is an async
  *  ({system, user, key}) => text, so tests inject fakes and the CLI injects
- *  the cached gateway. Attempts: initial + one retry with issues fed back. */
+ *  the cached gateway. Attempts: initial, a pips-only repair when only
+ *  reactions are missing, one full retry with issues fed back, then a final
+ *  pips-only repair when only reactions are still missing. */
 export async function generateDraft(core, spec, client) {
   let problem;
   if (spec.problem.words !== undefined) {
@@ -187,26 +251,55 @@ export async function generateDraft(core, spec, client) {
   const system = systemPrompt(solved);
   const user = taskPrompt(solved, skeleton);
 
-  let previous = null;
-  let pending = [];
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    const key = `${spec.id}.attempt${attempt}`;
-    const text = previous === null
-      ? await client({ system, user, key })
-      : await client({ system, user: retryPrompt(previous, pending), key });
-    previous = text;
-    let model = null;
-    try { model = JSON.parse(text); } catch { model = null; }
-    const shaped = shapeIssues(model, skeleton);
-    if (shaped.length) {
-      pending = shaped;
-      if (attempt === 2) return { status: "needs-human", story: null, slots: shaped.map(toSlot), issues: shaped };
-      continue;
-    }
-    const { story, issues } = assembleStory(core, spec, solved, skeleton, model);
-    if (!issues.length && story) return { status: "validated", story, slots: [], issues: [] };
-    pending = issues;
-    if (attempt === 2) return { status: "needs-human", story: null, slots: issues.map(toSlot), issues };
+  // Attempt 1: the full draft.
+  const first = await client({ system, user, key: `${spec.id}.attempt1` });
+  let model = null;
+  try { model = JSON.parse(first); } catch { model = null; }
+  let evaluated = evaluate(core, spec, solved, skeleton, model);
+  if (evaluated.ok) return { status: "validated", story: evaluated.story, slots: [], issues: [] };
+
+  // Tail-drop repair: the model wrote valid lines but stopped before the
+  // last reaction ids, or filled them with invented ids. Re-asking for the
+  // full JSON reproduces the same output-budget pressure (and the retry can
+  // reinforce invented ids by quoting them back), so ask only for the
+  // missing pips and merge them in code. Anything else still gets the full
+  // retry below.
+  const repaired = await tryRepair(core, spec, solved, skeleton, system, client, model, evaluated.issues, 1);
+  if (repaired !== null) {
+    if (repaired.ok) return { status: "validated", story: repaired.story, slots: [], issues: [] };
+    return {
+      status: "needs-human", story: null,
+      slots: repaired.issues.map(toSlot), issues: repaired.issues,
+    };
   }
-  throw new Error("unreachable: retry loop always returns");
+
+  // Attempt 2: the full draft again, with the issues fed back. When this
+  // still leaves only missing reactions (dropped or invented ids), one
+  // pips-only repair gets the last word instead of another full rewrite.
+  const second = await client({ system, user: retryPrompt(first, evaluated.issues), key: `${spec.id}.attempt2` });
+  let retry = null;
+  try { retry = JSON.parse(second); } catch { retry = null; }
+  evaluated = evaluate(core, spec, solved, skeleton, retry);
+  if (evaluated.ok) return { status: "validated", story: evaluated.story, slots: [], issues: [] };
+  const repaired2 = await tryRepair(core, spec, solved, skeleton, system, client, retry, evaluated.issues, 2);
+  if (repaired2 !== null) {
+    if (repaired2.ok) return { status: "validated", story: repaired2.story, slots: [], issues: [] };
+    evaluated = repaired2;
+  }
+  return {
+    status: "needs-human", story: null,
+    slots: evaluated.issues.map(toSlot), issues: evaluated.issues,
+  };
+}
+
+/** One pips-only repair round for missing reactions. Returns the fresh
+ *  evaluation, or null when the shape is not a repair candidate (model
+ *  unparseable, no issues, or issues beyond missing reactions). */
+async function tryRepair(core, spec, solved, skeleton, system, client, model, issues, round) {
+  if (model === null || issues.length === 0 || !issues.every((i) => i.code === "missing-reaction")) return null;
+  const missingIds = [...new Set(issues.map((i) => i.path.replace(/^reactions\./, "")))];
+  const repairText = await client({ system, user: repairPrompt(missingIds), key: `${spec.id}.repair${round}` });
+  const merged = mergeRepair(model, missingIds, repairText);
+  if (merged === null) return null;
+  return evaluate(core, spec, solved, skeleton, merged);
 }

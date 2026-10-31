@@ -42,6 +42,18 @@ test("reaction 42 on final: count-together staging", async ({ page }) => {
   await expect(page.locator("body")).not.toContainText(/wrong|try again/i);
 });
 
+test("reaction leads to a distinct smaller question, then the flow continues", async ({ page }) => {
+  await reachCountQ(page);
+  const before = await page.getByTestId("pip").textContent();
+  await answerCount(page, 33);
+  await page.getByRole("button", { name: "Keep going" }).click();
+  const smaller = await page.getByTestId("pip").textContent();
+  expect(smaller).toContain("Count what Momo has now.");
+  expect(smaller).not.toBe(before);
+  await answerCount(page, 15);
+  await expect(page.getByTestId("pip")).toContainText("How did you know?");
+});
+
 test("reduced motion keeps state, drops movement", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await reachCountQ(page);

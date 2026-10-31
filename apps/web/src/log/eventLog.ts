@@ -6,7 +6,7 @@ export const CHECKSUM_PREFIX = "# sha256:";
 
 /** Default allowlist for data keys. Strategy choices come from the fixed
  *  explainChoices list, so recording them as data is not free text. */
-export const DEFAULT_KEYS: readonly string[] = ["choice", "shown", "qIndex", "rung"];
+export const DEFAULT_KEYS: readonly string[] = ["choice", "shown", "qIndex", "rung", "template"];
 
 export interface LocalEvent {
   v: 1;
@@ -45,6 +45,29 @@ export function serialize(log: LocalEvent[]): string {
 /** Export envelope: NDJSON body plus a trailing checksum line. */
 export function withChecksum(body: string, hex: string): string {
   return body.length > 0 ? `${body}\n${CHECKSUM_PREFIX}${hex}` : `${CHECKSUM_PREFIX}${hex}`;
+}
+
+/** Split an export envelope into its NDJSON body plus trailing checksum hex.
+ *  Null hex when the file carries no checksum line. */
+export function splitEnvelope(text: string): { body: string; hex: string | null } {
+  const lines = text.split("\n");
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const t = lines[i]!.trim();
+    if (t === "") continue;
+    if (t.startsWith(CHECKSUM_PREFIX)) return { body: lines.slice(0, i).join("\n"), hex: t.slice(CHECKSUM_PREFIX.length).trim() };
+    return { body: text, hex: null };
+  }
+  return { body: text, hex: null };
+}
+
+/** Boundary check for an imported file: the trailing checksum must match the
+ *  body. Resolves with the body; rejects with `missing-checksum` or
+ *  `checksum-mismatch` so a tampered file never reaches the parser. */
+export async function verifyEnvelope(text: string): Promise<string> {
+  const { body, hex } = splitEnvelope(text);
+  if (hex === null || hex === "") throw new Error("missing-checksum");
+  if ((await sha256Hex(body)) !== hex.toLowerCase()) throw new Error("checksum-mismatch");
+  return body;
 }
 
 /** Parse an export file. Skips blank lines and "#" comment/checksum lines.

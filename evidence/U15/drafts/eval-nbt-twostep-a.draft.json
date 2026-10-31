@@ -1,0 +1,122 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-nbt-twostep-a",
+        "standard": "NC.2.NBT.5",
+        "hero": "Momo",
+        "friend": "Kiwi",
+        "item": "balloon",
+        "start": 50,
+        "steps": [
+          {
+            "kind": "receive",
+            "n": 23,
+            "from": "Kiwi"
+          },
+          {
+            "kind": "give",
+            "n": 18,
+            "to": "Kiwi"
+          }
+        ]
+      },
+      "totals": [
+        50,
+        73,
+        55
+      ],
+      "answer": 55
+    },
+    "questions": [
+      {
+        "id": "eval-nbt-twostep-a-q0-predict",
+        "step": 0,
+        "ask": "More or fewer for {hero}?",
+        "interaction": "predict",
+        "hints": [
+          "Did they get extra?",
+          "Can they point to see?",
+          {
+            "exampleSay": "4 pears plus 6, how many?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More means extra?",
+          "Fewer means less?"
+        ]
+      },
+      {
+        "id": "eval-nbt-twostep-a-q1-predict",
+        "step": 1,
+        "ask": "They give, more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Did they let go?",
+          "Can they watch to see?",
+          {
+            "exampleSay": "6 plums take 4, how many?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More means extra?",
+          "Fewer means less?"
+        ]
+      },
+      {
+        "id": "eval-nbt-twostep-a-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} for {hero}?",
+        "interaction": "count",
+        "hints": [
+          "What is left to count?",
+          "Can they make tens to see?",
+          {
+            "exampleSay": "9 grapes plus 4, how many?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Count up to find?",
+          "Count back to check?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "I see {shown}, what fits?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "I see {shown}, what else?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "{hero} views {shown} gently."
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "{hero} traces {shown} softly."
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "{hero} sees {shown} softly."
+      },
+      {
+        "misconception": "unknown",
+        "pip": "{hero} stays with {shown}."
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-nbt-twostep-a",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}

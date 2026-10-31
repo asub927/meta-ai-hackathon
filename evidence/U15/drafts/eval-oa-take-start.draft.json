@@ -1,0 +1,100 @@
+{
+  "status": "validated",
+  "story": {
+    "solved": {
+      "problem": {
+        "id": "eval-oa-take-start",
+        "standard": "NC.2.OA.1",
+        "hero": "Kiwi",
+        "friend": "Momo",
+        "item": "marble",
+        "start": 0,
+        "steps": [
+          {
+            "kind": "give",
+            "n": 9,
+            "to": "Momo"
+          }
+        ],
+        "unknown": "start",
+        "result": 14
+      },
+      "totals": [
+        23,
+        14
+      ],
+      "answer": 23
+    },
+    "questions": [
+      {
+        "id": "eval-oa-take-start-q0-predict",
+        "step": 0,
+        "ask": "{hero} gave, more or fewer?",
+        "interaction": "predict",
+        "hints": [
+          "Did {hero} give away?",
+          "Watch {hero} give, see?",
+          {
+            "exampleSay": "See 6 shells, give 5 left?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "More means they grew?",
+          "Fewer means they gave?"
+        ]
+      },
+      {
+        "id": "eval-oa-take-start-qfinal-count",
+        "step": "final",
+        "ask": "How many {item} left now?",
+        "interaction": "count",
+        "hints": [
+          "What is left with {hero}?",
+          "Point to each {item} left?",
+          {
+            "exampleSay": "See 7 beads, take 6 left?",
+            "say": "Now you try."
+          }
+        ],
+        "explainChoices": [
+          "Count each {item} left?",
+          "Look at what they hold?"
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "misconception": "wrong-operation",
+        "pip": "Nice {shown}, point to see?"
+      },
+      {
+        "misconception": "echoed-a-given",
+        "pip": "Good {shown}, watch to see?"
+      },
+      {
+        "misconception": "smaller-from-larger",
+        "pip": "Love {shown}, point to see?"
+      },
+      {
+        "misconception": "direction-flip",
+        "pip": "Kind {shown}, watch to see?"
+      },
+      {
+        "misconception": "off-by-one",
+        "pip": "Close {shown}, point to see?"
+      },
+      {
+        "misconception": "unknown",
+        "pip": "{hero} hugs {shown}?"
+      }
+    ],
+    "source": {
+      "url": "https://example.org/generator-eval/eval-oa-take-start",
+      "licence": "CC BY-SA 4.0",
+      "changes": "Original story written for the generator eval."
+    }
+  },
+  "slots": [],
+  "issues": []
+}
