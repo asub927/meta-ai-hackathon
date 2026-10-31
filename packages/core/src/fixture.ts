@@ -2,6 +2,20 @@ import { solve } from "./core.js";
 import type { StoryData } from "./types.js";
 import { smallerTemplate } from "./types.js";
 
+/** Rung-3 explainer for the sticker story: the give step retraced as a
+ *  take-away derivation (24 − 9 = 15). Matches deriveExplainer output. */
+const takeAway24_9 = {
+  type: "take-away",
+  params: { minuend: 24, subtrahend: 9 },
+  steps: [
+    { id: "question", text: "24 take away 9. What is left?" },
+    { id: "show-total", text: "Here are 24." },
+    { id: "remove", text: "Take away 9. 9 go away." },
+    { id: "count-remainder", text: "Count what is left: 15." },
+    { id: "summary", text: "24 take away 9 leaves 15." },
+  ],
+} as const;
+
 /** Sticker demo from PLAN.md §2: 24 - 9 + 5 = 20, totals [24, 15, 20]. */
 export const stickerStory: StoryData = {
   solved: solve({
@@ -13,19 +27,19 @@ export const stickerStory: StoryData = {
     {
       id: "q0-predict", step: 0, ask: "{hero} gives some away. More or fewer now?", interaction: "predict",
       hints: ["When you give some away, do you keep them?", "Watch the ones that fly.",
-        { exampleSay: "7 balloons, 2 pop. Fewer!", say: "Now you try." }],
+        takeAway24_9],
       explainChoices: ["Giving away makes fewer", "I guessed"],
     },
     {
       id: "q0-count", step: 0, ask: "How many does {hero} have now?", interaction: "count",
       hints: ["How many were there at the start?", "Let's make tens. Take some away.",
-        { exampleSay: "12 balloons, 4 pop, leaves 8.", say: "Now you try." }],
+        takeAway24_9],
       explainChoices: ["I counted back", "I used tens", "I guessed"],
     },
     {
       id: "q1-count", step: "final", ask: "Then {hero} finds more. How many in all?", interaction: "count",
       hints: ["How many after giving some away?", "Count on from there.",
-        { exampleSay: "8 shells, find 3, makes 11.", say: "Now you try." }],
+        takeAway24_9],
       explainChoices: ["I counted on", "I used tens", "I guessed"],
     },
   ],

@@ -6,7 +6,7 @@ import {
   buildStory,
   defaultDraft,
   draftIssues,
-  pickExample,
+  explainerFor,
   validateDraftStory,
   type AuthorDraft,
 } from "./author";
@@ -73,18 +73,34 @@ describe("output passes the core validator", () => {
   });
 });
 
-describe("worked examples never leak the answer", () => {
-  test("picker skips candidates sharing a problem number", () => {
-    const say = pickExample(
-      [{ say: "7 balloons, 2 pop. Fewer!", nums: [7, 2] }, { say: "9 cubs, 3 leave. Fewer!", nums: [9, 3] }],
-      new Set([7, 2]),
-    );
-    expect(say).toBe("9 cubs, 3 leave. Fewer!");
+describe("rung 3 derives the same question", () => {
+  test("take-from-result explainer states the derived answer last", () => {
+    const d = draft({ kind: "take-from-result", start: 20, change: 5 });
+    const story = buildStory(d);
+    const explainer = story.questions[0]!.hints[2];
+    expect(explainer.type).toBe("take-away");
+    expect(explainer.params).toEqual({ minuend: 20, subtrahend: 5 });
+    expect(explainer.steps[explainer.steps.length - 1]!.text).toContain("15");
+    expect(validateStory(story)).toEqual([]);
   });
 
-  test("colliding givens still validate", () => {
-    const d = draft({ kind: "take-from-result", start: 9, change: 2 });
-    expect(validateStory(buildStory(d))).toEqual([]);
+  test("every kind produces a derivation the validator accepts", () => {
+    const kinds = [
+      draft({ kind: "take-from-result", start: 9, change: 2 }),
+      draft({ kind: "add-to-result", start: 20, change: 5 }),
+      draft({ kind: "take-from-start", result: 15, change: 9 }),
+      draft({ kind: "add-to-start", result: 31, change: 6 }),
+      draft({ kind: "compare-bigger", reference: 18, difference: 7 }),
+      draft({ kind: "compare-smaller", reference: 32, difference: 8 }),
+      draft({ kind: "two-step", start: 7, change: 5, secondChange: 4 }),
+    ] as AuthorDraft[];
+    for (const d of kinds) {
+      const story = buildStory(d);
+      const explainer = explainerFor(d, story.solved);
+      expect(explainer.steps.length).toBeGreaterThan(0);
+      for (const s of explainer.steps) expect(s.text.trim()).not.toBe("");
+      expect(validateStory(story)).toEqual([]);
+    }
   });
 });
 

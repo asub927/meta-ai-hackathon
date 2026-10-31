@@ -10,7 +10,8 @@ import digitTemplate from "../fixtures/bad/digit-in-template.json" with { type: 
 import aboveCapacity from "../fixtures/bad/above-capacity.json" with { type: "json" };
 import negative from "../fixtures/bad/negative.json" with { type: "json" };
 import hintOrder from "../fixtures/bad/hint-order.json" with { type: "json" };
-import workedShares from "../fixtures/bad/worked-shares.json" with { type: "json" };
+import workedEmptyStep from "../fixtures/bad/worked-empty-step.json" with { type: "json" };
+import workedWrongAnswer from "../fixtures/bad/worked-wrong-answer.json" with { type: "json" };
 import tryAgain from "../fixtures/bad/try-again.json" with { type: "json" };
 import bubbleLong from "../fixtures/bad/bubble-too-long.json" with { type: "json" };
 import gendered from "../fixtures/bad/gendered.json" with { type: "json" };
@@ -29,7 +30,8 @@ const bad: [string, unknown, string][] = [
   ["above-capacity", aboveCapacity, "count-above-capacity"],
   ["negative", negative, "negative-count"],
   ["hint-order", hintOrder, "invalid-hint-ladder"],
-  ["worked-shares", workedShares, "worked-example-shares-number"],
+  ["worked-empty-step", workedEmptyStep, "explainer-empty-step"],
+  ["worked-wrong-answer", workedWrongAnswer, "explainer-answer-mismatch"],
   ["try-again", tryAgain, "never-wrong"],
   ["bubble-too-long", bubbleLong, "bubble-too-long"],
   ["gendered", gendered, "gendered-word"],

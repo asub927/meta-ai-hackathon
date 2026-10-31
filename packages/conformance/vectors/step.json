@@ -258,8 +258,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-direction-flip",
@@ -315,8 +340,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-wrong-operation",
@@ -372,8 +422,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-echoed-a-given",
@@ -429,8 +504,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-off-by-one",
@@ -486,8 +586,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-smaller-from-larger",
@@ -543,8 +668,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-unknown",
@@ -600,8 +750,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-wrong-operation",
@@ -657,8 +832,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-echoed-a-given",
@@ -714,8 +914,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-off-by-one",
@@ -771,8 +996,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-off-by-one",
@@ -828,8 +1078,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-unknown",
@@ -916,7 +1191,7 @@
       "expected": {
         "effects": [
           {
-            "line": "12 balloons, 4 pop, leaves 8. Now you try.",
+            "line": "How many does Momo have now?",
             "type": "say"
           }
         ],
@@ -1012,8 +1287,33 @@
               "How many were there at the start?",
               "Let's make tens. Take some away.",
               {
-                "exampleSay": "12 balloons, 4 pop, leaves 8.",
-                "say": "Now you try."
+                "params": {
+                  "minuend": 24,
+                  "subtrahend": 9
+                },
+                "steps": [
+                  {
+                    "id": "question",
+                    "text": "24 take away 9. What is left?"
+                  },
+                  {
+                    "id": "show-total",
+                    "text": "Here are 24."
+                  },
+                  {
+                    "id": "remove",
+                    "text": "Take away 9. 9 go away."
+                  },
+                  {
+                    "id": "count-remainder",
+                    "text": "Count what is left: 15."
+                  },
+                  {
+                    "id": "summary",
+                    "text": "24 take away 9 leaves 15."
+                  }
+                ],
+                "type": "take-away"
               }
             ],
             "id": "q0-count~wrong-operation",
@@ -1043,8 +1343,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-wrong-operation",
@@ -1085,8 +1410,33 @@
                 "Point to each one as you count.",
                 "Say each number out loud.",
                 {
-                  "exampleSay": "I point, I count, I say how many.",
-                  "say": "Now you try."
+                  "params": {
+                    "minuend": 10,
+                    "subtrahend": 3
+                  },
+                  "steps": [
+                    {
+                      "id": "question",
+                      "text": "10 take away 3. What is left?"
+                    },
+                    {
+                      "id": "show-total",
+                      "text": "Here are 10."
+                    },
+                    {
+                      "id": "remove",
+                      "text": "Take away 3. 3 go away."
+                    },
+                    {
+                      "id": "count-remainder",
+                      "text": "Count what is left: 7."
+                    },
+                    {
+                      "id": "summary",
+                      "text": "10 take away 3 leaves 7."
+                    }
+                  ],
+                  "type": "take-away"
                 }
               ],
               "id": "smaller-unknown",

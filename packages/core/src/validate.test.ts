@@ -52,10 +52,17 @@ describe("validateStory (rule contract, codes not messages)", () => {
     (under.solved as { totals: readonly number[] }).totals = [5, -4]; (under.solved as { answer: number }).answer = -4;
     expect(codes(under)).toContain("negative-count");
   });
-  it("a worked example sharing a problem number fails", () => {
+  it("a worked explainer with an empty step text fails", () => {
     const s = clone();
-    (s.questions[0]!.hints[2] as { exampleSay: string }).exampleSay = "24 balloons, 2 pop. Fewer!";
-    expect(codes(s)).toContain("worked-example-shares-number");
+    const steps = s.questions[0]!.hints[2].steps as unknown as { text: string }[];
+    steps[2]!.text = "";
+    expect(codes(s)).toContain("explainer-empty-step");
+  });
+  it("a worked explainer whose final step disagrees with solve fails", () => {
+    const s = clone();
+    const steps = s.questions[0]!.hints[2].steps as unknown as { text: string }[];
+    steps[steps.length - 1]!.text = "24 take away 9 leaves 7.";
+    expect(codes(s)).toContain("explainer-answer-mismatch");
   });
   it("never-wrong wording, long bubbles, gendered words and unknown placeholders fail", () => {
     const wrong = clone(); (wrong.reactions[0] as { pip: string }).pip = "Try again now.";

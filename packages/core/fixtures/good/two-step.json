@@ -1,16 +1,90 @@
 {
   "solved": {
-    "problem": { "id": "stickers-two-step-7-5-4", "standard": "NC.2.OA.1", "hero": "Momo", "friend": null, "item": "sticker", "start": 7, "steps": [{ "kind": "find", "n": 5, "place": "bed" }, { "kind": "pop", "n": 4 }] },
-    "totals": [7, 12, 8], "answer": 8
+    "problem": {
+      "id": "stickers-two-step-7-5-4",
+      "standard": "NC.2.OA.1",
+      "hero": "Momo",
+      "friend": null,
+      "item": "sticker",
+      "start": 7,
+      "steps": [
+        {
+          "kind": "find",
+          "n": 5,
+          "place": "bed"
+        },
+        {
+          "kind": "pop",
+          "n": 4
+        }
+      ]
+    },
+    "totals": [
+      7,
+      12,
+      8
+    ],
+    "answer": 8
   },
   "questions": [
-    { "id": "q0-count", "step": "final", "ask": "How many does {hero} have in all?", "interaction": "count",
-      "hints": ["How many after finding more?", "Count on, then take some away.", { "exampleSay": "Had 10, found 3, lost 2, now 11.", "say": "Now you try." }],
-      "explainChoices": ["I counted on", "I counted back", "I guessed"] }
+    {
+      "id": "q0-count",
+      "step": "final",
+      "ask": "How many does {hero} have in all?",
+      "interaction": "count",
+      "hints": [
+        "How many after finding more?",
+        "Count on, then take some away.",
+        {
+          "type": "take-away",
+          "params": {
+            "minuend": 12,
+            "subtrahend": 4
+          },
+          "steps": [
+            {
+              "id": "question",
+              "text": "12 take away 4. What is left?"
+            },
+            {
+              "id": "show-total",
+              "text": "Here are 12."
+            },
+            {
+              "id": "remove",
+              "text": "Take away 4. 4 go away."
+            },
+            {
+              "id": "count-remainder",
+              "text": "Count what is left: 8."
+            },
+            {
+              "id": "summary",
+              "text": "12 take away 4 leaves 8."
+            }
+          ]
+        }
+      ],
+      "explainChoices": [
+        "I counted on",
+        "I counted back",
+        "I guessed"
+      ]
+    }
   ],
   "reactions": [
-    { "misconception": "wrong-operation", "pip": "If {hero} had {shown}, where did they come from?" },
-    { "misconception": "unknown", "pip": "Let's count together, slowly." }
+    {
+      "misconception": "wrong-operation",
+      "pip": "If {hero} had {shown}, where did they come from?"
+    },
+    {
+      "misconception": "unknown",
+      "pip": "Let's count together, slowly."
+    }
   ],
-  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+  "source": {
+    "url": "Original content for this app",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Written for this app."
+  }
 }

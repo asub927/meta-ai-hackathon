@@ -38,8 +38,22 @@ export type MisconceptionId = "wrong-operation" | "echoed-a-given" | "off-by-one
 export interface Question {
   id: string; step: number | "final"; ask: string;
   interaction: "predict" | "count";
-  hints: readonly [string, string, { exampleSay: string; say: string }];
+  /** Rung 3 is the worked example explainer (docs/WORKED-EXAMPLE-EXPLAINER.md):
+   *  a same-question derivation, not a different story. Steps carry literal
+   *  numbers, so line-template rules never apply to them. */
+  hints: readonly [string, string, WorkedExplainer];
   explainChoices: readonly string[];
+}
+
+/** Rung-3 explainer templates (PLAN.md §2, PR4). One template per explanation
+ *  type holds an ordered steps array; deriveExplainer plugs in the numbers
+ *  from the current problem. `params` values must be problem numbers. */
+export type ExplainerType = "take-away" | "make-10" | "compare-more";
+export interface WorkedExplainerStep { id: string; text: string }
+export interface WorkedExplainer {
+  type: ExplainerType;
+  params: Record<string, number>;
+  steps: readonly WorkedExplainerStep[];
 }
 
 export interface ReactionScript { misconception: MisconceptionId; pip: string; smaller: Question; }
@@ -56,13 +70,24 @@ const SMALLER_ASK: Record<MisconceptionId, string> = {
 };
 
 /** Code-authored smaller template per misconception. The transition re-steps
- *  it to the current question, so stored templates never go stale. */
+ *  it to the current question, so stored templates never go stale. The
+ *  explainer below is shape-valid only: smallerFor always replaces hints with
+ *  the base question's, so this derivation never reaches a child. */
 export function smallerTemplate(miss: MisconceptionId): Question {
   return {
     id: `smaller-${miss}`, step: 0, ask: SMALLER_ASK[miss],
     interaction: miss === "direction-flip" ? "predict" : "count",
     hints: ["Point to each one as you count.", "Say each number out loud.",
-      { exampleSay: "I point, I count, I say how many.", say: "Now you try." }],
+      {
+        type: "take-away", params: { minuend: 10, subtrahend: 3 },
+        steps: [
+          { id: "question", text: "10 take away 3. What is left?" },
+          { id: "show-total", text: "Here are 10." },
+          { id: "remove", text: "Take away 3. 3 go away." },
+          { id: "count-remainder", text: "Count what is left: 7." },
+          { id: "summary", text: "10 take away 3 leaves 7." },
+        ],
+      }],
     explainChoices: ["I counted", "I guessed"],
   };
 }

@@ -1,6 +1,79 @@
 {
-  "solved": { "problem": { "id": "bad-negative", "standard": "NC.2.OA.1", "hero": "Momo", "friend": null, "item": "balloon", "start": 5, "steps": [{ "kind": "pop", "n": 9 }] }, "totals": [5, -4], "answer": -4 },
-  "questions": [{ "id": "q0", "step": 0, "ask": "How many does {hero} have now?", "interaction": "count", "hints": ["How many were there at the start?", "Watch the ones that fly away.", { "exampleSay": "14 shells, 3 lost, leaves 11.", "say": "Now you try." }], "explainChoices": ["I counted back", "I guessed"] }],
-  "reactions": [{ "misconception": "unknown", "pip": "Let's count together, slowly." }],
-  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+  "solved": {
+    "problem": {
+      "id": "bad-negative",
+      "standard": "NC.2.OA.1",
+      "hero": "Momo",
+      "friend": null,
+      "item": "balloon",
+      "start": 5,
+      "steps": [
+        {
+          "kind": "pop",
+          "n": 9
+        }
+      ]
+    },
+    "totals": [
+      5,
+      -4
+    ],
+    "answer": -4
+  },
+  "questions": [
+    {
+      "id": "q0",
+      "step": 0,
+      "ask": "How many does {hero} have now?",
+      "interaction": "count",
+      "hints": [
+        "How many were there at the start?",
+        "Watch the ones that fly away.",
+        {
+          "type": "take-away",
+          "params": {
+            "minuend": 5,
+            "subtrahend": 5
+          },
+          "steps": [
+            {
+              "id": "question",
+              "text": "5 take away 5. What is left?"
+            },
+            {
+              "id": "show-total",
+              "text": "Here are 5."
+            },
+            {
+              "id": "remove",
+              "text": "Take away 5. 5 go away."
+            },
+            {
+              "id": "count-remainder",
+              "text": "Count what is left: 0."
+            },
+            {
+              "id": "summary",
+              "text": "5 take away 5 leaves 0."
+            }
+          ]
+        }
+      ],
+      "explainChoices": [
+        "I counted back",
+        "I guessed"
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "misconception": "unknown",
+      "pip": "Let's count together, slowly."
+    }
+  ],
+  "source": {
+    "url": "Original content for this app",
+    "licence": "CC BY-SA 4.0",
+    "changes": "Written for this app."
+  }
 }

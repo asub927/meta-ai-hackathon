@@ -7,8 +7,10 @@ const say = (line: string): Effect => ({ type: "say", line });
 /** Pure Socratic reducer (PLAN.md §2). No DOM, no I/O.
  *  Invariants (formal-verify-socratic-core): tutor never states the answer
  *  before a correct answer; every path can reach done; hints climb 0..3,
- *  rung 3 is the worked example, then the original question is re-asked;
- *  answered events outside `asking` are ignored (double-tap answers once). */
+ *  rung 3 opens the worked example explainer (same-question derivation, shown
+ *  in the step panel, never in a `say`), then the original question is
+ *  re-asked; answered events outside `asking` are ignored (double-tap
+ *  answers once). */
 export function step(state: StepPhase, ev: Event, story: StoryData): [StepPhase, Effect[]] {
   const { solved } = story;
   switch (state.tag) {
@@ -22,10 +24,7 @@ export function step(state: StepPhase, ev: Event, story: StoryData): [StepPhase,
         if (state.rung >= 3) // worked example already played: re-ask the original question
           return [{ ...state, rung: 0 }, [say(fill(q.ask, solved))]];
         const rung = (state.rung + 1) as 0 | 1 | 2 | 3;
-        if (rung === 3) {
-          const worked = q.hints[2];
-          return [{ ...state, rung }, [say(`${worked.exampleSay} ${fill(worked.say, solved)}`)]];
-        }
+        if (rung === 3) return [{ ...state, rung }, [say(fill(q.ask, solved))]];
         return [{ ...state, rung }, [say(fill(state.rung === 1 ? q.hints[1] : q.hints[0], solved))]];
       }
       if (ev.type !== "answered") return [state, []];

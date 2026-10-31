@@ -94,7 +94,16 @@ describe("stagingFor", () => {
     };
     const q: Question = {
       id: "s3-q0-count", step: "final", ask: "How many books does Momo have?",
-      interaction: "count", hints: ["a", "b", { exampleSay: "e", say: "s" }],
+      interaction: "count", hints: ["a", "b", {
+        type: "take-away", params: { minuend: 10, subtrahend: 3 },
+        steps: [
+          { id: "question", text: "10 take away 3. What is left?" },
+          { id: "show-total", text: "Here are 10." },
+          { id: "remove", text: "Take away 3. 3 go away." },
+          { id: "count-remainder", text: "Count what is left: 7." },
+          { id: "summary", text: "10 take away 3 leaves 7." },
+        ],
+      }],
       explainChoices: ["x"],
     };
     const staging = stagingFor("unknown", solved, q, 40);

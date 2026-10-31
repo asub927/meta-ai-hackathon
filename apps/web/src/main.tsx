@@ -8,6 +8,7 @@ import { countTogetherSteps, stagingFor } from "./story/react";
 import { CountWidget } from "./interact/CountWidget";
 import { DragTray } from "./interact/DragTray";
 import { hintCueFor } from "./story/hints";
+import { ExplainerPanel } from "./story/ExplainerPanel";
 import { LOG_KEY_V1, append, loadStoredLog, parseImport, serialize, sha256Hex, verifyEnvelope, withChecksum, type LocalEvent } from "./log/eventLog";
 import { PROGRESS_KEY, loadProgress, progressDots, resumePhaseFrom, saveProgress } from "./shell/progress";
 import { createIdbBackend, ensurePersistent, migrateLegacyKeys, type StorageBackend } from "./shell/storage";
@@ -308,14 +309,14 @@ function App() {
                     {Array.from({ length: cue.tenFrame.partial }, (_, i) => <span className="ten-frame-dot" data-testid="ten-frame-dot" key={i} />)}
                   </div>)}
               </div>)}
-            {cue.kind === "worked" && (
-              <div className="worked-example" data-testid="worked-example">
-                <div className="worked-chips">
-                  {cue.workedNumbers?.map((n, i) => <span className="worked-chip" data-testid="worked-chip" key={i}>{n}</span>)}
-                </div>
-                <p>{cue.say}</p>
-              </div>)}
-            {cue.kind !== "ten-frame" && cue.kind !== "worked" && <p>{cue.say}</p>}
+            {cue.kind === "explainer" && cue.explainer && (
+              <ExplainerPanel
+                key={`rung3-${cue.explainer.question}`}
+                question={cue.explainer.question}
+                steps={cue.explainer.steps}
+                onDone={() => send({ type: "hint" })}
+              />)}
+            {cue.kind !== "ten-frame" && cue.kind !== "explainer" && <p>{cue.say}</p>}
           </div>)}
         {phase.tag === "reacting" && <button onClick={() => send({ type: "reaction-ended" })}>Keep going</button>}
         {phase.tag === "explaining" && q && <div><p>How did you know?</p>

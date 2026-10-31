@@ -18,7 +18,7 @@ async function reachCountQ(page: import("@playwright/test").Page) {
   await page.getByRole("button", { name: /counted|Giving|tens/i }).first().click();
 }
 
-test("hints climb in order; worked example uses its own numbers; strategy recorded", async ({ page }) => {
+test("hints climb to the worked example explainer, then return to the question", async ({ page }) => {
   await reachCountQ(page);
   await answerCount(page, 33); // one reaction unlocks the hint button
   await page.getByRole("button", { name: "Keep going" }).click();
@@ -32,13 +32,36 @@ test("hints climb in order; worked example uses its own numbers; strategy record
   await expect(page.getByTestId("ten-frame-dot")).toHaveCount(15);
 
   await page.getByRole("button", { name: "Hint" }).click();
-  await expect(page.getByTestId("hint-cue")).toHaveAttribute("data-cue-kind", "worked");
-  const worked = page.getByTestId("worked-example");
-  await expect(worked).toBeVisible();
-  await expect(worked).toContainText("12");
-  await expect(worked).not.toContainText("15");
-  expect(await page.getByTestId("worked-chip").allTextContents()).toEqual(["12", "4", "8"]);
+  await expect(page.getByTestId("hint-cue")).toHaveAttribute("data-cue-kind", "explainer");
+  const panel = page.getByTestId("explainer-panel");
+  await expect(panel).toBeVisible();
 
+  // The original question stays pinned at the top of the panel.
+  const question = await page.getByTestId("explainer-question").textContent();
+  expect(question).toContain("Momo");
+  // No mascot voice inside the explainer.
+  expect(await panel.textContent()).not.toContain("Pip");
+  expect(await panel.textContent()).not.toContain("puffbun");
+
+  // One idea per step: Next advances exactly one step, Back returns.
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9. What is left?");
+  await expect(page.getByTestId("explainer-progress")).toContainText("Step 1 of 5");
+  await page.getByTestId("explainer-next").click();
+  await expect(page.getByTestId("explainer-step")).toContainText("Here are 24.");
+  await expect(page.getByTestId("explainer-progress")).toContainText("Step 2 of 5");
+  await expect(page.getByTestId("explainer-question")).toHaveText(question ?? "");
+  await page.getByTestId("explainer-back").click();
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9. What is left?");
+
+  // Walk to the summary, then Try it returns to the re-asked original question.
+  for (let i = 0; i < 4; i++) await page.getByTestId("explainer-next").click();
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9 leaves 15.");
+  await page.getByTestId("explainer-done").click();
+  await expect(panel).toBeHidden();
+  await expect(page.getByTestId("pip")).toHaveText(question ?? "");
+  await expect(page.getByTestId("count-input")).toBeVisible();
+
+  // The re-asked smaller question still records the strategy on success.
   await answerCount(page, 15);
   await page.getByRole("button", { name: /counted|tens/i }).first().click();
   await expect.poll(async () => {
