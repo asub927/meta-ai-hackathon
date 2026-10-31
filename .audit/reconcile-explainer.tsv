@@ -1,0 +1,4 @@
+ts	phase	decision	why	evidence	result
+2026-10-31T19:02:25Z	S1-reconcile	merged origin/main into poteto/reconcile, conflicts only in DECISIONS-LOG.md	PLAN.md auto-merged; same entry numbers 12-15 used by both sides	9cb44f1	merged
+2026-10-31T19:02:25Z	S1-reconcile	renumbered local entries 12-15 to 17-20, fixed PLAN.md retirement refs to entry 17	origin entries 12-16 are dated approved; local are proposed-at-landing	docs/DECISIONS-LOG.md, PLAN.md:366,376,386,389	resolved
+2026-10-31T19:02:25Z	S1-verify	merge is docs-only (8 files), gap-check 34/35, u2-retirement-recorded still passes	no code changed so suites carry over; full typecheck reruns at Unit 2 gate	gap-check 34/35	VERIFIED
