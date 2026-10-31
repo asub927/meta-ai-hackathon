@@ -47,7 +47,7 @@ test("reaction: wrong answer plays out, never marked wrong", async ({ page }) =>
   await page.screenshot({ path: "../../evidence/U0/reaction-33.png" });
 });
 
-test("hints: ladder climbs, worked example does not state this answer", async ({ page }) => {
+test("hints: ladder climbs to the worked example explainer, then back to the question", async ({ page }) => {
   await startLesson(page);
   await page.getByRole("button", { name: "fewer" }).click();
   await finishExplaining(page);
@@ -56,8 +56,13 @@ test("hints: ladder climbs, worked example does not state this answer", async ({
   await page.getByRole("button", { name: "Hint" }).click();
   await page.getByRole("button", { name: "Hint" }).click();
   await page.getByRole("button", { name: "Hint" }).click();
-  await expect(page.getByTestId("pip")).toContainText("12 balloons");
-  await expect(page.getByTestId("pip")).not.toContainText("15");
+  await expect(page.getByTestId("explainer-panel")).toBeVisible();
+  await expect(page.getByTestId("explainer-question")).toContainText("Momo");
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9. What is left?");
+  await page.getByTestId("explainer-next").click();
+  await expect(page.getByTestId("explainer-step")).toContainText("Here are 24.");
+  await page.getByTestId("explainer-back").click();
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9. What is left?");
 });
 
 test("speech: only local voices are used", async ({ page }) => {

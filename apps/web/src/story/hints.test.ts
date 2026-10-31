@@ -25,12 +25,15 @@ describe("hintCueFor", () => {
     expect(cue?.tenFrame).toEqual({ full: 1, partial: 5 });
   });
 
-  it("maps rung 3 to the worked example on its own numbers", () => {
+  it("maps rung 3 to the same-question explainer derivation", () => {
     const cue = hintCueFor(q1, 3, story.solved);
-    expect(cue?.kind).toBe("worked");
-    expect(cue?.workedNumbers).toEqual([12, 4, 8]);
-    expect(cue?.say).toContain("balloons");
-    expect(cue?.say).not.toContain("15");
+    expect(cue?.kind).toBe("explainer");
+    expect(cue?.explainer?.question).toBe("How many does Momo have now?");
+    expect(cue?.say).toBe("How many does Momo have now?");
+    const steps = cue?.explainer?.steps ?? [];
+    expect(steps.length).toBeGreaterThan(0);
+    for (const s of steps) expect(s.text.trim()).not.toBe("");
+    expect(steps[steps.length - 1]!.text).toContain("15");
   });
 
   it("builds a full ten-frame for target 20", () => {

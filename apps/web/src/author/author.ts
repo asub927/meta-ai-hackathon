@@ -1,11 +1,14 @@
-import { solve, smallerTemplate, validateStory } from "@kids-math/core";
+import { deriveExplainer, solve, smallerTemplate, validateStory } from "@kids-math/core";
 import type {
+  ExplainerType,
   Issue,
   MisconceptionId,
   Problem,
   Question,
   ReactionScript,
+  Solved,
   StoryData,
+  WorkedExplainer,
 } from "@kids-math/core";
 import type { LessonFile } from "@kids-math/core";
 
@@ -164,62 +167,31 @@ export function buildProblem(d: AuthorDraft): Problem {
   }
 }
 
-interface ExamplePick { say: string; nums: number[]; }
-
-const GIVE_EXAMPLES: ExamplePick[] = [
-  { say: "7 balloons, 2 pop. Fewer!", nums: [7, 2] },
-  { say: "9 cubs, 3 leave. Fewer!", nums: [9, 3] },
-  { say: "8 boats, 4 sail. Fewer!", nums: [8, 4] },
-];
-const GET_EXAMPLES: ExamplePick[] = [
-  { say: "5 ducks, 3 join. More!", nums: [5, 3] },
-  { say: "6 kites, 2 join. More!", nums: [6, 2] },
-  { say: "4 pups, 5 join. More!", nums: [4, 5] },
-];
-const ADD_BACK_EXAMPLES: ExamplePick[] = [
-  { say: "Ended with 10, gave 4, started 14.", nums: [10, 4, 14] },
-  { say: "Ended with 12, gave 3, started 15.", nums: [12, 3, 15] },
-  { say: "Ended with 9, gave 2, started 11.", nums: [9, 2, 11] },
-  { say: "Ended with 16, gave 5, started 21.", nums: [16, 5, 21] },
-];
-const TAKE_BACK_EXAMPLES: ExamplePick[] = [
-  { say: "Ended with 12, got 2, started 10.", nums: [12, 2, 10] },
-  { say: "Ended with 15, got 3, started 12.", nums: [15, 3, 12] },
-  { say: "Ended with 11, got 4, started 7.", nums: [11, 4, 7] },
-  { say: "Ended with 20, got 6, started 14.", nums: [20, 6, 14] },
-];
-const COMPARE_ADD_EXAMPLES: ExamplePick[] = [
-  { say: "Pile is 10, extra 3, makes 13.", nums: [10, 3, 13] },
-  { say: "Pile is 12, extra 2, makes 14.", nums: [12, 2, 14] },
-  { say: "Pile is 8, extra 5, makes 13.", nums: [8, 5, 13] },
-];
-const COMPARE_SUB_EXAMPLES: ExamplePick[] = [
-  { say: "Pile is 11, short 4, makes 7.", nums: [11, 4, 7] },
-  { say: "Pile is 14, short 3, makes 11.", nums: [14, 3, 11] },
-  { say: "Pile is 16, short 6, makes 10.", nums: [16, 6, 10] },
-];
-const TWOSTEP_EXAMPLES: ExamplePick[] = [
-  { say: "Had 10, found 3, lost 2, now 11.", nums: [10, 3, 2, 11] },
-  { say: "Had 8, found 4, lost 3, now 9.", nums: [8, 4, 3, 9] },
-  { say: "Had 12, found 2, lost 5, now 9.", nums: [12, 2, 5, 9] },
-];
-const SAFE_FALLBACK: ExamplePick = { say: "Point at each one and count up.", nums: [] };
-
-function problemNumbers(solved: { problem: Problem; totals: readonly number[]; answer: number }): Set<number> {
-  const p = solved.problem;
-  return new Set<number>([
-    ...(p.compare || p.unknown === "start" ? [] : [p.start]),
-    ...p.steps.filter((s) => !(p.unknown === "change" && s.n === 0)).map((s) => s.n),
-    ...solved.totals, solved.answer,
-    ...(p.result !== undefined ? [p.result] : []),
-    ...(p.compare ? [p.compare.reference, p.compare.difference] : []),
-  ]);
-}
-
-/** A worked example from another story: first candidate sharing no number
- *  with this problem, so it can never leak the answer. */
-export function pickExample(candidates: ExamplePick[], forbidden: Set<number>): string {
-  return (candidates.find((c) => c.nums.every((n) => !forbidden.has(n))) ?? SAFE_FALLBACK).say;
+/** Rung 3 is the same-question derivation (docs/WORKED-EXAMPLE-EXPLAINER.md):
+ *  deriveExplainer plugs the solver's numbers into the template matching the
+ *  story kind. Add and two-step stories retrace the take-away step, the same
+ *  scaffold the reviewed lesson stories use. */
+export function explainerFor(d: AuthorDraft, solved: Solved): WorkedExplainer {
+  const shape = ((): { type: ExplainerType; params: Record<string, number> } => {
+    switch (d.kind) {
+      case "take-from-result":
+        return { type: "take-away" as const, params: { minuend: d.start, subtrahend: d.change } };
+      case "take-from-start":
+        return { type: "take-away" as const, params: { minuend: solved.answer, subtrahend: d.change } };
+      case "add-to-result":
+        return { type: "take-away" as const, params: { minuend: solved.answer, subtrahend: d.change } };
+      case "add-to-start":
+        return { type: "take-away" as const, params: { minuend: d.result, subtrahend: d.change } };
+      case "compare-bigger":
+        return { type: "compare-more" as const, params: { bigger: solved.answer, smaller: d.reference } };
+      case "compare-smaller":
+        return { type: "take-away" as const, params: { minuend: d.reference, subtrahend: d.difference } };
+      case "two-step":
+        return { type: "take-away" as const, params: { minuend: solved.totals[1]!, subtrahend: d.secondChange } };
+    }
+  })();
+  const derived = deriveExplainer(shape.type, shape.params);
+  return { type: shape.type, params: shape.params, steps: [...derived.steps] };
 }
 
 type KindGroup = "give" | "get" | "compare";
@@ -244,73 +216,73 @@ function pipFor(miss: MisconceptionId, group: KindGroup): string {
 }
 
 const COUNT_HINTS: [string, string] = ["Move a dot for each count.", "Say each count out loud."];
-const say = (exampleSay: string): { exampleSay: string; say: string } => ({ exampleSay, say: "Now you try." });
 
 function q(
   id: string, askStep: number | "final", ask: string, interaction: "predict" | "count",
-  hintPair: [string, string], exampleSay: string, explainChoices: string[],
+  hintPair: [string, string], explainer: WorkedExplainer, explainChoices: string[],
 ): Question {
-  return { id, step: askStep, ask, interaction, hints: [hintPair[0], hintPair[1], say(exampleSay)], explainChoices };
+  return { id, step: askStep, ask, interaction, hints: [hintPair[0], hintPair[1], explainer], explainChoices };
 }
 
-const PREDICT_GIVE = (ex: string): { pair: [string, string]; ex: string; choices: string[] } => ({
+const PREDICT_GIVE = (): { pair: [string, string]; choices: string[] } => ({
   pair: ["When you give some away, do you keep them?", "Watch the ones that go."],
-  ex, choices: ["Giving away makes fewer", "I guessed"],
+  choices: ["Giving away makes fewer", "I guessed"],
 });
-const PREDICT_GET = (ex: string): { pair: [string, string]; ex: string; choices: string[] } => ({
+const PREDICT_GET = (): { pair: [string, string]; choices: string[] } => ({
   pair: ["When you get more, do you have fewer?", "Watch the ones that come in."],
-  ex, choices: ["Getting more makes more", "I guessed"],
+  choices: ["Getting more makes more", "I guessed"],
 });
 
-function questionsFor(d: AuthorDraft, forbidden: Set<number>): Question[] {
+function questionsFor(d: AuthorDraft, solved: Solved): Question[] {
   const lid = d.lessonId;
-  const give = PREDICT_GIVE(pickExample(GIVE_EXAMPLES, forbidden));
-  const get = PREDICT_GET(pickExample(GET_EXAMPLES, forbidden));
-  const find = { pair: ["When you find more, do you have fewer?", "Watch the ones that show up."] as [string, string], ex: pickExample(GET_EXAMPLES, forbidden), choices: ["Finding more makes more", "I guessed"] };
+  const explainer = explainerFor(d, solved);
+  const give = PREDICT_GIVE();
+  const get = PREDICT_GET();
+  const find = { pair: ["When you find more, do you have fewer?", "Watch the ones that show up."] as [string, string], choices: ["Finding more makes more", "I guessed"] };
   switch (d.kind) {
     case "take-from-result":
       return [
-        q(`${lid}-q0`, 0, "{hero} gives some away. More or fewer now?", "predict", give.pair, give.ex, give.choices),
-        q(`${lid}-q1`, "final", "How many {item} now?", "count", COUNT_HINTS, SAFE_FALLBACK.say, ["I counted", "I guessed"]),
+        q(`${lid}-q0`, 0, "{hero} gives some away. More or fewer now?", "predict", give.pair, explainer, give.choices),
+        q(`${lid}-q1`, "final", "How many {item} now?", "count", COUNT_HINTS, explainer, ["I counted", "I guessed"]),
       ];
     case "add-to-result":
       return [
-        q(`${lid}-q0`, 0, "{hero} gets some more. More or fewer now?", "predict", get.pair, get.ex, get.choices),
-        q(`${lid}-q1`, "final", "How many {item} now?", "count", COUNT_HINTS, SAFE_FALLBACK.say, ["I counted", "I guessed"]),
+        q(`${lid}-q0`, 0, "{hero} gets some more. More or fewer now?", "predict", get.pair, explainer, get.choices),
+        q(`${lid}-q1`, "final", "How many {item} now?", "count", COUNT_HINTS, explainer, ["I counted", "I guessed"]),
       ];
     case "take-from-start":
       return [
-        q(`${lid}-q0`, 0, "{hero} gives some away. More or fewer now?", "predict", give.pair, give.ex, give.choices),
+        q(`${lid}-q0`, 0, "{hero} gives some away. More or fewer now?", "predict", give.pair, explainer, give.choices),
         q(`${lid}-q1`, "final", "How many did {hero} start with?", "count",
           ["How many are left at the end?", "Start from the end and add back."],
-          pickExample(ADD_BACK_EXAMPLES, forbidden), ["I added back", "I counted back", "I guessed"]),
+          explainer, ["I added back", "I counted back", "I guessed"]),
       ];
     case "add-to-start":
       return [
-        q(`${lid}-q0`, 0, "{hero} gets some more. More or fewer now?", "predict", get.pair, get.ex, get.choices),
+        q(`${lid}-q0`, 0, "{hero} gets some more. More or fewer now?", "predict", get.pair, explainer, get.choices),
         q(`${lid}-q1`, "final", "How many did {hero} start with?", "count",
           ["How many are there at the end?", "Start from the end and take back."],
-          pickExample(TAKE_BACK_EXAMPLES, forbidden), ["I took back", "I counted back", "I guessed"]),
+          explainer, ["I took back", "I counted back", "I guessed"]),
       ];
     case "compare-bigger":
       return [
         q(`${lid}-q0`, "final", "How many {item} does {hero} have?", "count",
           ["Who has the pile we compare with?", "Start there, then add the extra."],
-          pickExample(COMPARE_ADD_EXAMPLES, forbidden), ["I counted on", "I guessed"]),
+          explainer, ["I counted on", "I guessed"]),
       ];
     case "compare-smaller":
       return [
         q(`${lid}-q0`, "final", "How many {item} does {hero} have?", "count",
           ["Who has the pile we compare with?", "Start there, then take some away."],
-          pickExample(COMPARE_SUB_EXAMPLES, forbidden), ["I counted back", "I guessed"]),
+          explainer, ["I counted back", "I guessed"]),
       ];
     case "two-step":
       return [
-        q(`${lid}-q0`, 0, "{hero} finds some more. More or fewer now?", "predict", find.pair, find.ex, find.choices),
-        q(`${lid}-q1`, 1, "{hero} gives some away. More or fewer now?", "predict", give.pair, give.ex, give.choices),
+        q(`${lid}-q0`, 0, "{hero} finds some more. More or fewer now?", "predict", find.pair, explainer, find.choices),
+        q(`${lid}-q1`, 1, "{hero} gives some away. More or fewer now?", "predict", give.pair, explainer, give.choices),
         q(`${lid}-q2`, "final", "How many {item} in the end?", "count",
           ["How many after finding more?", "Count on, then take some away."],
-          pickExample(TWOSTEP_EXAMPLES, forbidden), ["I counted on", "I counted back", "I guessed"]),
+          explainer, ["I counted on", "I counted back", "I guessed"]),
       ];
   }
 }
@@ -320,13 +292,12 @@ function questionsFor(d: AuthorDraft, forbidden: Set<number>): Question[] {
 export function buildStory(d: AuthorDraft): StoryData {
   const solved = solve(buildProblem(d));
   const group = groupOf(d.kind);
-  const forbidden = problemNumbers(solved);
   const reactions: ReactionScript[] = ALL_MISCONCEPTIONS
     .filter((m) => d.misconceptions.includes(m.id))
     .map((m) => ({ misconception: m.id, pip: pipFor(m.id, group), smaller: smallerTemplate(m.id) }));
   const story: StoryData = {
     solved,
-    questions: questionsFor(d, forbidden),
+    questions: questionsFor(d, solved),
     reactions,
     source: { url: "authoring-tool v1", licence: "CC BY-SA 4.0", changes: `Teacher-authored ${d.kind} story.` },
   };

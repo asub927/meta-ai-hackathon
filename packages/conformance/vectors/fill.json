@@ -25,22 +25,6 @@
       }
     },
     {
-      "expected": "7 balloons, 2 pop. Fewer!",
-      "id": "fill-q0-hint2-example",
-      "input": {
-        "story": "stickers",
-        "template": "7 balloons, 2 pop. Fewer!"
-      }
-    },
-    {
-      "expected": "Now you try.",
-      "id": "fill-q0-hint2-say",
-      "input": {
-        "story": "stickers",
-        "template": "Now you try."
-      }
-    },
-    {
       "expected": "How many does Momo have now?",
       "id": "fill-q1-ask",
       "input": {
@@ -65,22 +49,6 @@
       }
     },
     {
-      "expected": "12 balloons, 4 pop, leaves 8.",
-      "id": "fill-q1-hint2-example",
-      "input": {
-        "story": "stickers",
-        "template": "12 balloons, 4 pop, leaves 8."
-      }
-    },
-    {
-      "expected": "Now you try.",
-      "id": "fill-q1-hint2-say",
-      "input": {
-        "story": "stickers",
-        "template": "Now you try."
-      }
-    },
-    {
       "expected": "Then Momo finds more. How many in all?",
       "id": "fill-q2-ask",
       "input": {
@@ -102,22 +70,6 @@
       "input": {
         "story": "stickers",
         "template": "Count on from there."
-      }
-    },
-    {
-      "expected": "8 shells, find 3, makes 11.",
-      "id": "fill-q2-hint2-example",
-      "input": {
-        "story": "stickers",
-        "template": "8 shells, find 3, makes 11."
-      }
-    },
-    {
-      "expected": "Now you try.",
-      "id": "fill-q2-hint2-say",
-      "input": {
-        "story": "stickers",
-        "template": "Now you try."
       }
     },
     {

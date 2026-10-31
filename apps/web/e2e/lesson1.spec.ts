@@ -92,8 +92,13 @@ test("lesson1: hints climb to the worked example, then lesson completes", async 
   await page.getByRole("button", { name: "Hint" }).click();
   await page.getByRole("button", { name: "Hint" }).click();
   await page.getByRole("button", { name: "Hint" }).click();
-  await expect(page.getByTestId("pip")).toContainText("Ended with 10");
-  await expect(page.getByTestId("pip")).not.toContainText("24");
+  await expect(page.getByTestId("explainer-panel")).toBeVisible();
+  await expect(page.getByTestId("explainer-question")).toContainText("Momo");
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9. What is left?");
+  for (let i = 0; i < 4; i++) await page.getByTestId("explainer-next").click();
+  await expect(page.getByTestId("explainer-step")).toContainText("24 take away 9 leaves 15.");
+  await page.getByTestId("explainer-done").click();
+  await expect(page.getByTestId("explainer-panel")).toBeHidden();
   await answerCount(page, 24);
   await finishExplaining(page);
   await advanceFromDone(page, 0);
