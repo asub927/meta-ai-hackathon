@@ -23,7 +23,7 @@ flowchart TD
   D -->|Right| E[Fill sentence, settle, brief celebration]
   E --> F[Pip compares with your guess]
   D -->|Wrong| G[Story consequence, amber number]
-  G --> H[Hints: smaller question → Show me → ten-frame → worked example]
+  G --> H[Hints: smaller question → visual cue → worked example explainer]
   H --> C
 ```
 
@@ -31,7 +31,11 @@ flowchart TD
 2. **Do the story.** The story pauses. The child drags stickers from the giver’s pile or the sticker sheet onto the receiver. A live count updates as they go. Tapping the pile sends one sticker if drag is hard. The pile being counted shows **?** so the answer is never shown early. Dropping elsewhere returns the sticker.
 3. **Answer.** The child types the number on a 0–9 pad (up to 20), with Undo and Check. Every tap target is at least 64 px.
 4. **Check — right.** The number sentence fills in (for example, 14 − 6 = 8). Stickers settle. A brief celebration runs under 2 s. Pip compares the result with the earlier guess.
-5. **Check — wrong.** The wrong number plays out as a story consequence (amber number, not “wrong”). Then the hint ladder runs: a smaller two-option question, **Show me** (zoom, slow replay, ring on the pile), a ten-frame the child fills by tapping cells, then a three-step worked example. Hints fade and reset on each new problem.
+5. **Check — wrong.** The wrong number plays out as a story consequence (amber number, not “wrong”). That consequence stays in the story layer (cast and setting). Then the hint ladder runs on the same question:
+   - **Rung 1 — smaller question.** A two-option Socratic question (Pip in the main flow).
+   - **Rung 2 — visual cue.** Highlight, **Show me** (zoom, slow replay, ring on the pile), count-along, or a ten-frame the child fills by tapping cells.
+   - **Rung 3 — worked example explainer.** A step-by-step derivation of the answer for this question: plain dots or a ten-frame, no story card, no mascots. Spec: [WORKED-EXAMPLE-EXPLAINER.md](WORKED-EXAMPLE-EXPLAINER.md).
+   Hints fade and reset on each new problem.
 
 ## Lessons
 
