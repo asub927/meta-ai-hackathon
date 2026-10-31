@@ -29,7 +29,7 @@ Every unit below follows these. None is open.
 
 These hold in every lesson, on both platforms. The validator (U4) and the reducer property tests (U5) enforce them, so a lesson that breaks one cannot ship.
 
-- **The tutor never states the answer.** It only asks the next Socratic question. No `say` effect, hint, reaction or explain line contains the answer before the child gives it. Hints climb question → visual cue → worked example, and the worked example uses a different story with different numbers (validator: a worked example sharing any number with the problem fails, as in the U4 "worked example sharing 24" fixture). After three hints the worked example plays and the original question is asked again; the tutor still does not say the answer.
+- **The tutor never states the answer.** It only asks the next Socratic question. No `say` effect, hint, reaction or explain line contains the answer before the child gives it. Hints climb question → visual cue → worked example explainer ([WORKED-EXAMPLE-EXPLAINER.md](docs/WORKED-EXAMPLE-EXPLAINER.md)): step-by-step derivation for the **same** question, no story cast. After three hints the explainer finishes and the original question is asked again; the tutor still does not say the answer in the main story flow before the child gives it.
 - **Short prompts, one idea per turn.** One question per bubble, one action asked for at a time. Bubbles stay within the validator's length limit (a 46-character bubble fails in U4). No compound questions ("and then…") in one turn.
 - **The mascot's face carries the emotion.** Feelings are expression states, not extra text. Proposed mapping (the `choreograph` output, a `BeatScript` track on the mascot rig):
 
@@ -114,7 +114,7 @@ Built with pstack. `poteto-mode` set the bar. `architect` shaped the types and t
 ## 1. Problem and non-goals
 
 **Problem.** v3 is a 41-second film. The child watches and learns nothing they had to work out. We need these four things:
-1. **Socratic mode.** Pip asks. The child drags, taps a count, or picks an equation. A wrong answer plays out on screen, and Pip asks a smaller question. A right answer gets "how did you know?" Hints climb a ladder (question, visual cue, worked example with different numbers) and never start with the answer.
+1. **Socratic mode.** Pip asks. The child drags, taps a count, or picks an equation. A wrong answer plays out on screen, and Pip asks a smaller question. A right answer gets "how did you know?" Hints climb a ladder (question, visual cue, worked example explainer on the same question) and never start with the answer.
 2. **Data in, story out.** A problem plus a learning goal becomes validated `StoryData`. Code checks the math. A model may write the questions and reactions, but code checks every number before anything renders.
 3. **Web app first, then native SwiftUI iPad.** Touch, pointer events, landscape and portrait, audio unlock, safe areas, offline, read-aloud.
 4. **A curriculum, one NCDPI section at a time.** NC grade 2 math sections go in, approved CC BY-SA lessons come out. Progress, rewards and the parent view are computed from the on-device event log. Child data never leaves the device unless an adult exports a file.
@@ -183,9 +183,10 @@ type Question = { id: string; step: StepIndex | "final"; ask: LineTemplate;
 type HintLadder = readonly [
   { rung: "question"; say: LineTemplate },                       // a smaller question
   { rung: "visual"; cue: VisualCue; say: LineTemplate },          // highlight, count-along, ten-frame
-  { rung: "worked"; example: WorkedExample; say: LineTemplate } ]; // different story, different numbers
+  { rung: "worked"; explainer: WorkedExplainer } ]; // same question; see docs/WORKED-EXAMPLE-EXPLAINER.md
 type VisualCue = "highlight-leaving" | "count-along" | "ten-frame" | "show-start-pile";
-type WorkedExample = { item: ItemKind; start: number; step: Step }; // validator: no shared numbers with the problem
+type ExplainerType = "take-away" | "make-10" | "compare-more";
+type WorkedExplainer = { type: ExplainerType; params: Record<string, number>; steps: readonly { id: string; text: string }[] };
 
 type ExplainPrompt = { ask: LineTemplate; choices: readonly ExplainChoice[] }; // "How did you know?"
 type ExplainChoice = { label: LineTemplate; strategy: "counted-back" | "counted-on" | "tens-and-ones" | "known-fact" | "guessed" };
@@ -245,8 +246,8 @@ declare function step(state: StepPhase, ev: Event, s: Solved): [StepPhase, Effec
       "hints": [
         { "rung": "question", "say": "When you give some away, do you keep them?" },
         { "rung": "visual", "cue": "highlight-leaving", "say": "Watch the ones that fly." },
-        { "rung": "worked", "example": { "item": "balloon", "start": 7, "step": { "kind": "pop", "n": 2 } },
-          "say": "{wStart} balloons, {wN} pop. Fewer!" } ],
+        { "rung": "worked", "explainer": { "type": "take-away", "params": { "minuend": 7, "subtrahend": 2 },
+          "steps": [ { "id": "summary", "text": "7 take away 2 leaves 5." } ] } } ],
       "explain": { "ask": "How did you know?", "choices": [
         { "label": "Giving away makes fewer", "strategy": "known-fact" },
         { "label": "I guessed", "strategy": "guessed" } ] } },
@@ -255,8 +256,8 @@ declare function step(state: StepPhase, ev: Event, s: Solved): [StepPhase, Effec
       "hints": [
         { "rung": "question", "say": "How many were there at the start?" },
         { "rung": "visual", "cue": "ten-frame", "say": "Let's make tens. Take {n} away." },
-        { "rung": "worked", "example": { "item": "balloon", "start": 13, "step": { "kind": "pop", "n": 4 } },
-          "say": "{wStart} take away {wN} is {wAfter}." } ],
+        { "rung": "worked", "explainer": { "type": "take-away", "params": { "minuend": 13, "subtrahend": 4 },
+          "steps": [ { "id": "summary", "text": "13 take away 4 leaves 9." } ] } } ],
       "explain": { "ask": "How did you know?", "choices": [
         { "label": "I counted back", "strategy": "counted-back" },
         { "label": "I used tens", "strategy": "tens-and-ones" },
@@ -307,7 +308,7 @@ render/ (offline, Node + Chrome)           -> interact (pointer, drag, count, eq
 |---|---|---|---|
 | `schema/` | types, `parseStoryData(json): Result<StoryData, Issue[]>` | types, `parse*` | yes |
 | `math/` | `solve(p: Problem): Solved`, `misconceptions` registry, `equationChoices` | `solve`, `detect` | yes |
-| `lesson/` | `validate(sd): Issue[]` covering numbers, placeholders, reading level, bubble length, gendered words, hint order, worked-example numbers, "never wrong" lint | `validate`, CLI `npm run validate <file>` | yes |
+| `lesson/` | `validate(sd): Issue[]` covering numbers, placeholders, reading level, bubble length, gendered words, hint order, worked-explainer steps (non-empty text per step, solver match), "never wrong" lint | `validate`, CLI `npm run validate <file>` | yes |
 | `socratic/` | `step(state, event, solved)` reducer and question order | `step`, `initial` | yes |
 | `narrator/` | `fill(template, vars)` with vars only from `Solved` (`{n}{before}{after}{start}{result}{ones}{tens}{shown}{sum}{w*}`) | `fill`, `pipLine` | yes |
 | `progress/` | `mastery`, `review`, `rewards`, `streak`, `parentReport`: pure functions over `LocalEvent[]` | those functions | yes |
@@ -331,7 +332,7 @@ render/ (offline, Node + Chrome)           -> interact (pointer, drag, count, eq
 - a Flesch-Kincaid grade above the target
 - a gendered word not in the cast's pronouns
 - a hint rung out of order
-- a worked example that reuses a problem number
+- a worked explainer whose steps omit text alternatives or whose final step disagrees with `solve`
 - any of the words "wrong", "incorrect", "no", or "try again"
 - a misconception id outside the registry
 
@@ -398,7 +399,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: `schema/` (Zod 4, `z.toJSONSchema`), `math/solve.ts`, `math/misconceptions.ts`, `lesson/validate.ts`, CLI, and `fixtures/{good,bad}/*.json`. Also: the `SubjectModule` interface with math as its first module; `Problem` extended with unknown position and compare shapes (NC.2.OA.1); the `BeatScript` type (tracks, keyframes, sampled springs, cues on the 1280×720 stage); a `source` record on every lesson (URL, licence, changes) and NCDPI standard IDs with our own paraphrase.
 - ACCEPTANCE:
   - The good fixtures are stickers, balloons, and 3 more from D4, and they validate clean.
-  - Each bad fixture fails with its specific `Issue.code`. The bad fixtures cover these cases: totals hand-edited, a digit in a template (the `{ones}` example above), a count above capacity, a negative result, a hint ladder out of order (fails to parse), a worked example sharing 24, "try again" in a line, a 46-character bubble, a gendered word, an unknown misconception, an NC- or ND-licensed source, a lesson without an NCDPI ID, and pasted NCDPI standards text.
+  - Each bad fixture fails with its specific `Issue.code`. The bad fixtures cover these cases: totals hand-edited, a digit in a template (the `{ones}` example above), a count above capacity, a negative result, a hint ladder out of order (fails to parse), a worked explainer with an empty step text or wrong derived answer, "try again" in a line, a 46-character bubble, a gendered word, an unknown misconception, an NC- or ND-licensed source, a lesson without an NCDPI ID, and pasted NCDPI standards text.
   - `solve` agrees with an independent brute-force oracle on 10,000 random problems.
 - VERIFY: `npm test -- lesson math` and `npm run validate fixtures/bad/*` (expect one non-zero exit per file and the expected code). Tests assert the issue codes callers branch on, not message text (**Test Behavior, Not Implementation**).
 - TIMEBOX: 1.5 days.
@@ -411,7 +412,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - ACCEPTANCE:
   - Right answer: `asking` → `explaining` → `done`.
   - Each detected misconception: `asking` → `reacting` → `asking` on the smaller question.
-  - Three hints and still stuck: the worked example plays, then the original question is asked again. No `say` effect ever contains the answer before the child gives it.
+  - Three hints and still stuck: the worked example explainer runs, then the original question is asked again. No `say` effect in the main story flow ever contains the answer before the child gives it.
   - A double-tap answers only once.
   - Unknown wrong answers fall back to `count-together`.
   - `choreograph` output is deterministic and vectors match in Node and WebKit byte for byte.
@@ -447,10 +448,10 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - FORBIDDEN: base.
 - REPORT: video, numbers per reaction.
 
-**U9. Hint ladder and "how did you know?"**
-- GOAL: Hints climb in order and the explain step records a strategy locally.
-- SCOPE: `story/hints.ts` (visual cues: highlight, count-along, ten-frame, worked mini-story), `interact/explain.ts`.
-- ACCEPTANCE: The hint button only shows after 8 s of no input or one reaction. Rungs appear in order. The worked example uses its own numbers on a separate mini-stage. The chosen strategy is written to IndexedDB as a `LocalEvent`, with no free text and no identifiers.
+**U9. Hint ladder, worked example explainer, and "how did you know?"**
+- GOAL: Hints climb in order; rung 3 is the worked example explainer per [WORKED-EXAMPLE-EXPLAINER.md](docs/WORKED-EXAMPLE-EXPLAINER.md); the explain step records a strategy locally.
+- SCOPE: `story/hints.ts` (visual cues: highlight, count-along, ten-frame, show-start-pile), `story/worked-explainer.ts` (templated step UI for take-away, make-10, compare-more; Next/Back; plain text per step for VoiceOver), `interact/explain.ts`.
+- ACCEPTANCE: The hint button only shows after 8 s of no input or one reaction. Rungs appear in order. Rung 3 uses the same question numbers, no mascots, light theme, child-paced steps, reduced-motion final states. Every explainer step has a text alternative. The chosen strategy is written to IndexedDB as a `LocalEvent`, with no free text and no identifiers.
 - VERIFY: `npm run verify:hints` (DOM order and number checks), an IndexedDB dump in `evidence/U9/`, and a video. Review gate.
 - TIMEBOX: 1.5 days.
 - FORBIDDEN: base.

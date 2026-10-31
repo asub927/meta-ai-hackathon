@@ -9,6 +9,7 @@ This repository holds planning for an iPad-first, open-source Socratic math app 
 - [docs/VISION.md](docs/VISION.md) — product vision and roadmap
 - [docs/DECISIONS-LOG.md](docs/DECISIONS-LOG.md) — recorded decisions
 - [docs/DESIGN-PLAN.md](docs/DESIGN-PLAN.md) — approved interaction design (Oct 30, 2026)
+- [docs/WORKED-EXAMPLE-EXPLAINER.md](docs/WORKED-EXAMPLE-EXPLAINER.md) — worked example help (hint rung 3)
 - [docs/COMPETITOR-LANDSCAPE.md](docs/COMPETITOR-LANDSCAPE.md) — competitor scan
 - [docs/COMPETITOR-SYNTHESIS.md](docs/COMPETITOR-SYNTHESIS.md) — Synthesis Tutor brief
 - [docs/PRIVACY-COMPARISON.md](docs/PRIVACY-COMPARISON.md) — privacy comparison research
