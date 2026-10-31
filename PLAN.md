@@ -412,7 +412,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - ACCEPTANCE:
   - Right answer: `asking` → `explaining` → `done`.
   - Each detected misconception: `asking` → `reacting` → `asking` on the smaller question.
-  - Three hints and still stuck: the worked example plays, then the original question is asked again. No `say` effect ever contains the answer before the child gives it.
+  - Three hints and still stuck: the worked example explainer runs, then the original question is asked again. No `say` effect in the main story flow ever contains the answer before the child gives it.
   - A double-tap answers only once.
   - Unknown wrong answers fall back to `count-together`.
   - `choreograph` output is deterministic and vectors match in Node and WebKit byte for byte.
