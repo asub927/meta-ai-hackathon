@@ -68,6 +68,8 @@ Each live lane runs in its own worktree at the PR head. No cloud VMs exist in th
 - [ ] Edit `docs/DECISIONS-LOG.md`. Append entries 17 and 18 in the existing numbered style.
 - [ ] Create no other file. Touch no code.
 
+Note: these entries landed as 12 through 15 instead of 17 and 18. Content matches. Lane text below still says 17 and 18.
+
 **Build.**
 
 - [ ] Entry 17 retires the U1, U2, U2b, and U2c spikes. It records WAAPI as the settled default per the licence decision, notes that no bakeoff table exists, and names the risk that a future feel regression reopens the question.
@@ -143,7 +145,7 @@ Each live lane runs in its own worktree at the PR head. No cloud VMs exist in th
 - [ ] Lane 7. The audio alias lists the resume test. Save `eb2-resume-list.log`. Pass when the visibility resume title appears.
 - [ ] Lane 8. The audio alias lists the cue log test. Save `eb2-cue-list.log`. Pass when the cue log title appears.
 - [ ] Lane 9. The map doc covers every PLAN.md verify name from U3 through U12a. Save `eb2-map-coverage.log`. Pass when each name appears with a command or an explicit unwired mark.
-- [ ] Lane 10. The map marks `proto:bench`, `verify:input`, `verify:fps`, `verify:seek`, and `coverage:content` as unwired. Save `eb2-map-gaps.log`. Pass when all five appear as unwired.
+- [ ] Lane 10. The map marks `proto:bench`, `verify:input`, and `coverage:content` as unwired, `verify:fps` as chromium-pinned, and `verify:seek` as wired. Save `eb2-map-gaps.log`. Pass when all five appear with those marks.
 
 **Verify, perf.** Tests alone are not sufficient verification. A PR is verified only when its unit, live, and perf boxes are all checked.
 

@@ -347,6 +347,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: New repo `kids-math-socratic` (name pending D5) at `.cursor/skills/verify-kids-math/` with `features/`, `tools/evidence.ts`, and a copy of v3 as `baseline/` (read-only reference).
 - CONTEXT: `create-verification-skill` sections (Launch, Doctor, Drive, Evidence, Cleanup, Helpers). v3 `tests/test_shots.py` reads numbers from the DOM through `window.__story`.
 - ACCEPTANCE: `npm run verify:doctor` reports the server, build hash, and both browsers. `npm run verify:beats -- --problem 1` writes `evidence/U0/beats.json` with totals `[24,15,20]` and 5 PNGs per device (iPad Pro 11 landscape, iPad Mini portrait, Desktop Chrome).
+- STATUS: Device matrix corrected. Only iPad Pro 11 and Desktop Chrome projects exist. Beats.json holds 3 PNGs and notes the shortfall. The skill path reads `.cursor/skills/verify-kids-math/`. The tree uses `.claude/skills/verify-kids-math-web/`.
 - VERIFY: Run the skill's own steps once end to end (launch, doctor, drive one feature, cleanup), then `ls evidence/U0` after cleanup. The evidence must survive.
 - TIMEBOX: half a day.
 - FORBIDDEN: base.
@@ -358,6 +359,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - CONTEXT: v3 `part5.js` (`fly`, `peel`, `squash`), `part6.js` (`beatStep`), `part3.js` (`cue`, `spring`). Emil's skills. WAAPI's `Animation.currentTime` is seekable. Motion is MIT.
 - ACCEPTANCE: A table per engine with these columns: fps and frames over 20 ms at 4x CPU throttle in Chromium, the same in WebKit, the seek determinism hash (two renders of 90 frames compared), the cue offset max (ms), shipped kB gzipped, adapter lines, licence, and a reduced-motion parity check.
 - VERIFY: `npm run proto:bench` prints the table to `evidence/U1/bench.md`. Side-by-side MP4s go in `evidence/U1/`. Run `review-animations` on each.
+- STATUS: Retired unbuilt per DECISIONS-LOG entry 12. WAAPI stands as the default. No bench table, MP4s, or per-engine passes exist and none are planned. A future feel regression reopens the question.
 - TIMEBOX: 1.5 days.
 - FORBIDDEN: base, plus no production code.
 - REPORT: table, recommendation, frames of the worst case.
@@ -367,6 +369,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: Throwaway `proto/input/` with 3 variants: tap-items-to-count, a big number pad (0 to 9 plus a clear key), and a tens-and-ones dial. Add drag-to-tray and choose-equation once each.
 - ACCEPTANCE: Every target is 64 CSS px or larger. A WebKit iPad run passes in both orientations. Drag works with touch and with Apple Pencil hover ignored. A screenshot and a 20-second video exist per variant.
 - VERIFY: `npm run verify:input` (Playwright touch emulation, `page.touchscreen`). Anantha reviews the videos (review gate) and ideally tries them on a real iPad through a LAN URL.
+- STATUS: Retired unbuilt per DECISIONS-LOG entry 12. No proto variants, videos, or target-size tables exist. The shipped widgets carry U7-era coverage only. The Anantha review gate stays open.
 - TIMEBOX: 1 day.
 - FORBIDDEN: base.
 - REPORT: videos, measured target sizes, Anantha's pick.
@@ -376,8 +379,10 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: Throwaway `proto/jsc/`: `core.ios.js` IIFE bundle, a minimal `CoreBridge.swift`, 1,000 `step` + `fill` round trips.
 - ACCEPTANCE: p95 latency over 3 runs on an iPad simulator and a real iPad, spread under 20 percent; keep JSC if p95 is under 4 ms, else Swift port with the same vectors. Threshold written before the run.
 - VERIFY: `.xcresult` and a bench table in `evidence/U2b/` from the macOS runner. TIMEBOX: 1 day (Mac-gated). FORBIDDEN: base. REPORT: table, decision row.
+- STATUS: Retired unbuilt per DECISIONS-LOG entry 12. Never run. Mac-gated.
 
 **U2c. quicktype unions spike.** GOAL: Know whether quicktype emits usable Swift enums for `Step`, `Interaction`, `Answer`, `Effect`. ACCEPTANCE: generated code round-trips the fixture JSON byte-equal, or a decision to hand-write the ~12 union types. VERIFY: `swift test` in the `swift:6.4` Docker image. TIMEBOX: 2 hours. REPORT: generated file, decision.
+- STATUS: Retired unbuilt per DECISIONS-LOG entry 12.
 
 ### M1. One Socratic lesson of 5 problems, web app, with read-aloud
 
@@ -386,6 +391,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: Vite (MIT), TypeScript strict, Vitest (MIT), Playwright (Apache-2.0). Port `src/part*.{html,js}` into `story/`, `audio/`, `narrator/`, and `shell/`. Delete `index-problem2.html` (use `?problem=2`), `build.sh` concatenation, and the 2.8 MB base64 `sounds.js` (serve `audio/*.wav` and precache them in the service worker). Keep GSAP behind `motion/` for now.
 - ACCEPTANCE: Same DOM numbers per beat as baseline (`[24,15,20]`, `[31,19,27]`). Same 58 cues by name and count. Reduced-motion numbers unchanged. Clean console. Bundle no larger than v3 minus `sounds.js`.
 - VERIFY: `npm run verify:beats -- --compare baseline` diffs `beats.json` and `sfx.json` against baseline. `npm run verify:fps -- --throttle 4` gives 59 fps or better and 6 or fewer frames over 20 ms. Do a visual check of 10 beat shots per device.
+- STATUS: Two acceptance lines are unrunnable as written. No `sfx.json` baseline exists, so the 58-cue diff cannot run. No baseline copy sits in the repo, so the bundle comparison cannot run. The `[31,19,27]` parity run has no record.
 - TIMEBOX: 2 days.
 - FORBIDDEN: base, plus no behaviour change.
 - REPORT: deleted lines vs added, diff output, fps table.
@@ -431,6 +437,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: `interact/` (the D2 count widget, drag-to-tray, choose-equation, predict). Also `shell/` layout covering landscape and portrait, `env(safe-area-inset-*)`, `touch-action`, no double-tap zoom, and `pointercancel` handling.
 - ACCEPTANCE: Each widget emits the right `Answer` via real pointer events. Drag cancels cleanly when a second finger touches. Targets are 64 px or larger. Tap feedback appears in under 100 ms. VoiceOver labels exist on every control. The portrait layout keeps the counter, Pip's bubble, and the input visible without overlap.
 - VERIFY: `npm run verify:interact` in WebKit for iPad Pro 11 and iPad Mini, both orientations. A bounding-box overlap check like v3's `overlap.py` covers the bubble, input, counter, and safe areas. Screenshots go to `evidence/U7/`. Review gate.
+- STATUS: Run matrix corrected. Only iPad Pro 11 ran, plus chromium. No screenshots or video were saved. The equation branch has no implementation and no test.
 - TIMEBOX: 2 days.
 - FORBIDDEN: base.
 - REPORT: screenshot grid, overlap minimum gaps, video.
@@ -493,6 +500,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
   - Read-aloud covers every line (U12a).
   - Anantha plays it on a real iPad and approves.
 - VERIFY: `npm run verify:lesson -- --paths all`, the fps table, and 3 videos. Review gate.
+- STATUS: Runnable part proven in `evidence/U12/paths-report.md`. Videos, fps table, real-iPad read-aloud, and Anantha approval stay open at the gate. Requirement unchanged.
 - TIMEBOX: 1.5 days.
 - FORBIDDEN: base.
 - REPORT: videos, fps, and Anantha's notes.
