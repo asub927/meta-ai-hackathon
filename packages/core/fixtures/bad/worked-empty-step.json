@@ -1,0 +1,18 @@
+{
+  "solved": { "problem": { "id": "shells-empty-step", "standard": "NC.2.OA.1", "hero": "Momo", "friend": null, "item": "shell", "start": 17, "steps": [{ "kind": "pop", "n": 5 }] }, "totals": [17, 12], "answer": 12 },
+  "questions": [{ "id": "q0", "step": 0, "ask": "How many does {hero} have now?", "interaction": "count",
+    "hints": ["How many were there at the start?", "Watch the ones that fly away.",
+      { "type": "take-away", "params": { "minuend": 17, "subtrahend": 5 },
+        "steps": [
+          { "id": "question", "text": "17 take away 5. What is left?" },
+          { "id": "show-total", "text": "Here are 17." },
+          { "id": "remove", "text": "" },
+          { "id": "count-remainder", "text": "Count what is left: 12." },
+          { "id": "summary", "text": "17 take away 5 leaves 12." } ] }],
+    "explainChoices": ["I counted back", "I guessed"] }],
+  "reactions": [
+    { "misconception": "off-by-one", "pip": "So close. Count once more." },
+    { "misconception": "unknown", "pip": "Count with me, nice and slow." }
+  ],
+  "source": { "url": "Original content for this app", "licence": "CC BY-SA 4.0", "changes": "Written for this app." }
+}
