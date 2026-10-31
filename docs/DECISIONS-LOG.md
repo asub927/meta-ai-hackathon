@@ -15,11 +15,21 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 10. Human languages: English only. Spanish deferred, no timeline, no reviewer (Anantha has no Spanish expertise).
 11. Process: pstack throughout, no exceptions. All project communication goes through Delivery Lead. Scribe records decisions and discussion, including calls.
 
+## Oct 30, 2026 — Interaction design and cast (Anantha, approved)
+
+12. **Interaction design:** [DESIGN-PLAN.md](DESIGN-PLAN.md) is the approved child-facing flow (predict → drag/count → number pad → check; hint ladder; six-lesson strip with x/6 ticks, no points on screen). Light theme only. Calm mode swaps animals for plain objects. Motion: transform/opacity only, `cubic-bezier(0.23, 1, 0.32, 1)`; while input waits, only Pip’s slow blink moves.
+13. **Cast model:** **Pip** (barn owl) is the fixed **narrator** (`role: "narrator"`). **Momo** (lop-eared rabbit) and **Kiwi** (kiwi bird) are real **story** species (`role: "story"`) for M1. Six more story animals (toucan, fox, elephant, turtle, hedgehog, macaw) join at **M4** with cast lint. Random hero/friend pairing happens **between problems only**, not mid-problem. Story animals never speak hints or answers and are never countable. *No study supports random character rotation; see [research/mascots.md](research/mascots.md).*
+14. **Art before release:** AI concept sketches are reference only. A person redraws each character as original layered SVG, then CC0. Thaler v. Perlmutter and US Copyright Office AI Part 2 (Jan 2025) noted in DESIGN-PLAN and mascot research.
+15. **Pedagogy research on file:** [research/brilliant-pedagogy.md](research/brilliant-pedagogy.md) — borrow try-first and fading scaffolds; avoid leagues and streak pressure for young children. *No independent Brilliant efficacy study exists.*
+16. **Worked example explainer (rung 3):** [WORKED-EXAMPLE-EXPLAINER.md](WORKED-EXAMPLE-EXPLAINER.md) — when still stuck, the third hint is its own calm explainer that walks through the **same question** and derives the answer step by step (Next / Back, no timers). Light theme, dots or ten-frame, question pinned at top; mascots and story cards stay in the main flow and wrong-answer consequences, not here. Explanations are templated data (ordered steps plus text per step). Pip as a small text voice on each step is undecided (default none).
+
 ## Proposed, needs Anantha approval at landing
-12. Spikes retired unbuilt: U1 bakeoff, U2 feel variants, U2b JSC/CoreBridge, U2c quicktype. No bakeoff table, proto dir, or evidence was ever produced. WAAPI stands as the animation surface. Native bridges defer with the backend (entry 4).
-13. Storage: web persists in IndexedDB via idb, the PROGRESS-STORAGE.md recommended default. navigator.storage.persist() result shown in settings, Add to Home Screen prompt with non-persistent warning. Mount performs a one-time import of kids-math-progress, kids-math-log-v1, and kids-math-sound from localStorage, copies only missing values into IndexedDB, then removes migrated legacy keys. No other src use remains.
-14. Mastery approximation: the stored log records correct answers but not mistakes or hint use, so clean (PLAN.md:58) is approximated as a recorded correct answer. The distinct-templates clause holds through question ids on record effects.
-15. Audio precache: no media assets exist (all cues synthesized through Web Audio), so the service-worker precache stays shell-only. No sfx.json baseline exists, so the 58-cue name-and-count diff is not runnable.
+
+Drafted as 12–15 before entries 12–16 above landed via PR3/PR4. Renumbered 17–20 to avoid collision. Content unchanged.
+17. Spikes retired unbuilt: U1 bakeoff, U2 feel variants, U2b JSC/CoreBridge, U2c quicktype. No bakeoff table, proto dir, or evidence was ever produced. WAAPI stands as the animation surface. Native bridges defer with the backend (entry 4).
+18. Storage: web persists in IndexedDB via idb, the PROGRESS-STORAGE.md recommended default. navigator.storage.persist() result shown in settings, Add to Home Screen prompt with non-persistent warning. Mount performs a one-time import of kids-math-progress, kids-math-log-v1, and kids-math-sound from localStorage, copies only missing values into IndexedDB, then removes migrated legacy keys. No other src use remains.
+19. Mastery approximation: the stored log records correct answers but not mistakes or hint use, so clean (PLAN.md:58) is approximated as a recorded correct answer. The distinct-templates clause holds through question ids on record effects.
+20. Audio precache: no media assets exist (all cues synthesized through Web Audio), so the service-worker precache stays shell-only. No sfx.json baseline exists, so the 58-cue name-and-count diff is not runnable.
 
 ## Discussed, not decided
 - Progress storage options: PROGRESS-STORAGE.md (recommended default: IndexedDB with export file, teacher dashboard page from exports, SwiftData on iPad).
