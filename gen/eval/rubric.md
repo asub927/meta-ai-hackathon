@@ -14,8 +14,8 @@ only after it validates clean AND passes all three rows below.
 
 - Exactly one question per bubble, one action asked for at a time.
 - Hints climb: a smaller question, then a visual cue, then a worked
-  mini-story with different numbers, then the original question again.
-- The worked example could not be mistaken for this problem.
+  derivation of the same question, then the original question again.
+- The worked example retraces this problem's numbers, never new ones.
 
 ## On goal
 
