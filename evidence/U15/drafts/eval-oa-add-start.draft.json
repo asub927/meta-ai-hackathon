@@ -35,8 +35,33 @@
           "Did {hero} get {item}?",
           "Watch {hero} hold {item}?",
           {
-            "exampleSay": "3 stars plus 3 are 6?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 27,
+              "subtrahend": 8
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "27 take away 8. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 27."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 8. 8 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 19."
+              },
+              {
+                "id": "summary",
+                "text": "27 take away 8 leaves 19."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -53,8 +78,33 @@
           "What did {hero} see?",
           "Point at each {item}?",
           {
-            "exampleSay": "4 moons plus 0 are 4?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 27,
+              "subtrahend": 8
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "27 take away 8. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 27."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 8. 8 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 19."
+              },
+              {
+                "id": "summary",
+                "text": "27 take away 8 leaves 19."
+              }
+            ]
           }
         ],
         "explainChoices": [

@@ -31,8 +31,33 @@
           "Who has fewer {item}?",
           "Can they point at {item}?",
           {
-            "exampleSay": "{hero} saw 4 shells, 3 left.",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 25,
+              "subtrahend": 6
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "25 take away 6. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 25."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 6. 6 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 19."
+              },
+              {
+                "id": "summary",
+                "text": "25 take away 6 leaves 19."
+              }
+            ]
           }
         ],
         "explainChoices": [

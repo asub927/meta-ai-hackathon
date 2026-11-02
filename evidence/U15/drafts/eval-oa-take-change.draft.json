@@ -35,8 +35,33 @@
           "Did {hero} give away?",
           "Can they watch {item} leave?",
           {
-            "exampleSay": "See 5 plums, eat 4, left?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 20,
+              "subtrahend": 7
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "20 take away 7. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 20."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 7. 7 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 13."
+              },
+              {
+                "id": "summary",
+                "text": "20 take away 7 leaves 13."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -53,8 +78,33 @@
           "What did {hero} give?",
           "Can they point each {item}?",
           {
-            "exampleSay": "See 6 stars, lose 4, left?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 20,
+              "subtrahend": 7
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "20 take away 7. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 20."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 7. 7 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 13."
+              },
+              {
+                "id": "summary",
+                "text": "20 take away 7 leaves 13."
+              }
+            ]
           }
         ],
         "explainChoices": [

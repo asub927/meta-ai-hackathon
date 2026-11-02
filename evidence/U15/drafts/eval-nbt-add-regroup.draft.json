@@ -33,8 +33,33 @@
           "Did they get some?",
           "watch what they hold?",
           {
-            "exampleSay": "They had 3 cubes, got 6.",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 75,
+              "subtrahend": 28
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "75 take away 28. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 75."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 28. 28 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 47."
+              },
+              {
+                "id": "summary",
+                "text": "75 take away 28 leaves 47."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -51,8 +76,33 @@
           "What did they have?",
           "point to each {item}?",
           {
-            "exampleSay": "They had 3 beads, got 6.",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 75,
+              "subtrahend": 28
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "75 take away 28. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 75."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 28. 28 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 47."
+              },
+              {
+                "id": "summary",
+                "text": "75 take away 28 leaves 47."
+              }
+            ]
           }
         ],
         "explainChoices": [

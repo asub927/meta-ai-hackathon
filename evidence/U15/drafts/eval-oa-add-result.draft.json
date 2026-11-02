@@ -33,8 +33,33 @@
           "{hero} gets more?",
           "Watch {item} pile grow?",
           {
-            "exampleSay": "Have 4 pens, get 7?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 31,
+              "subtrahend": 6
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "31 take away 6. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 31."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 6. 6 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 25."
+              },
+              {
+                "id": "summary",
+                "text": "31 take away 6 leaves 25."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -51,8 +76,33 @@
           "What did {hero} have?",
           "Point at each {item}?",
           {
-            "exampleSay": "Have 4 cups, join 8?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 31,
+              "subtrahend": 6
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "31 take away 6. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 31."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 6. 6 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 25."
+              },
+              {
+                "id": "summary",
+                "text": "31 take away 6 leaves 25."
+              }
+            ]
           }
         ],
         "explainChoices": [

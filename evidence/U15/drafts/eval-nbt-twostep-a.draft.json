@@ -39,8 +39,33 @@
           "Did they get extra?",
           "Can they point to see?",
           {
-            "exampleSay": "4 pears plus 6, how many?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 73,
+              "subtrahend": 18
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "73 take away 18. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 73."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 18. 18 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 55."
+              },
+              {
+                "id": "summary",
+                "text": "73 take away 18 leaves 55."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -57,8 +82,33 @@
           "Did they let go?",
           "Can they watch to see?",
           {
-            "exampleSay": "6 plums take 4, how many?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 73,
+              "subtrahend": 18
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "73 take away 18. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 73."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 18. 18 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 55."
+              },
+              {
+                "id": "summary",
+                "text": "73 take away 18 leaves 55."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -75,8 +125,33 @@
           "What is left to count?",
           "Can they make tens to see?",
           {
-            "exampleSay": "9 grapes plus 4, how many?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 73,
+              "subtrahend": 18
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "73 take away 18. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 73."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 18. 18 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 55."
+              },
+              {
+                "id": "summary",
+                "text": "73 take away 18 leaves 55."
+              }
+            ]
           }
         ],
         "explainChoices": [

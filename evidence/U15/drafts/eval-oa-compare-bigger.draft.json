@@ -31,8 +31,33 @@
           "Who has more {item}?",
           "Can you watch them?",
           {
-            "exampleSay": "{hero} saw 4 leaves, 5 total?",
-            "say": "Now you try."
+            "type": "compare-more",
+            "params": {
+              "bigger": 30,
+              "smaller": 21
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "30 and 21. How many more is 30?"
+              },
+              {
+                "id": "line-up",
+                "text": "Line up 30 and 21."
+              },
+              {
+                "id": "extras",
+                "text": "These dots have no partner."
+              },
+              {
+                "id": "count-extras",
+                "text": "Count the extras: 9."
+              },
+              {
+                "id": "summary",
+                "text": "30 is 9 more than 21."
+              }
+            ]
           }
         ],
         "explainChoices": [

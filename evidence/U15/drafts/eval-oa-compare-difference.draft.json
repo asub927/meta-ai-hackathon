@@ -32,8 +32,33 @@
           "Who has more?",
           "Can you point to match?",
           {
-            "exampleSay": "2 hats plus 3 hats is 5?",
-            "say": "Now you try."
+            "type": "compare-more",
+            "params": {
+              "bigger": 27,
+              "smaller": 19
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "27 and 19. How many more is 27?"
+              },
+              {
+                "id": "line-up",
+                "text": "Line up 27 and 19."
+              },
+              {
+                "id": "extras",
+                "text": "These dots have no partner."
+              },
+              {
+                "id": "count-extras",
+                "text": "Count the extras: 8."
+              },
+              {
+                "id": "summary",
+                "text": "27 is 8 more than 19."
+              }
+            ]
           }
         ],
         "explainChoices": [

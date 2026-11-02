@@ -35,8 +35,33 @@
           "Did they get more?",
           "Can you point to see?",
           {
-            "exampleSay": "Had 5 dots, got 6, total?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 23,
+              "subtrahend": 9
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "23 take away 9. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 23."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 9. 9 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 14."
+              },
+              {
+                "id": "summary",
+                "text": "23 take away 9 leaves 14."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -53,8 +78,33 @@
           "How did it grow?",
           "Can you make tens here?",
           {
-            "exampleSay": "Had 7 stars, got 5, total?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 23,
+              "subtrahend": 9
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "23 take away 9. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 23."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 9. 9 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 14."
+              },
+              {
+                "id": "summary",
+                "text": "23 take away 9 leaves 14."
+              }
+            ]
           }
         ],
         "explainChoices": [

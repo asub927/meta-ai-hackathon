@@ -8,18 +8,6 @@ import { REACTION_IDS, problemFromSpec, skeletonFor } from "./spec.mjs";
 const PLACEHOLDERS = "{hero} {item} {start} {answer} {result} {missing}";
 const MAX_LINE = 30;
 
-function forbiddenDigits(solved) {
-  const p = solved.problem;
-  const nums = new Set([
-    ...solved.totals, solved.answer,
-    ...(p.compare || p.unknown === "start" ? [] : [p.start]),
-    ...p.steps.filter((s) => !(p.unknown === "change" && s.n === 0)).map((s) => s.n),
-    ...(p.result !== undefined ? [p.result] : []),
-    ...(p.compare ? [p.compare.reference, p.compare.difference] : []),
-  ]);
-  return [...nums].sort((a, b) => a - b).join(", ");
-}
-
 function stepWords(solved, q) {
   if (q.interaction === "count") {
     if (solved.problem.compare) return `asks how many ${solved.problem.hero} has in the comparison`;
@@ -42,21 +30,21 @@ function systemPrompt(solved) {
     "",
     "RULES FOR EVERY LINE YOU WRITE:",
     `- Placeholders only, from this list: ${PLACEHOLDERS}. Reactions may also use {shown}.`,
-    "- Never write a digit 0-9 in any line, except the worked-example numbers (below).",
+    "- Never write a digit 0-9 in any line.",
     "- Never write a number word (one, two, three, ... twenty).",
     `- Keep every line under ${MAX_LINE} characters; the app rejects bubbles over 45 after filling.`,
     "- Refer to the child-facing characters only with {hero} or they/them/their.",
     "  Never he, she, him, her, his, hers.",
     "- Ask exactly one thing per line. No compound questions.",
     "- Hints climb in this order: 1. a smaller question 2. a visual cue",
-    "  (watch, point, make tens) 3. a worked mini-story with DIFFERENT numbers, then Now you try.",
-    `- Worked mini-stories use a different item and small numbers. NEVER reuse these digits: ${forbiddenDigits(solved)}.`,
+    "  (watch, point, make tens). The third hint, the worked example, is",
+    "  derived by code from the story numbers, so you do not write it.",
     "- Reaction lines comfort and redirect with {shown} where it fits.",
     "  They never contain the answer and never shame.",
     "",
     "OUTPUT: one JSON object only, no prose around it:",
-    '{"lines": {"<questionId>": {"ask": "...", "hints": ["...", "...",',
-    '  {"exampleSay": "...", "say": "Now you try."}],, "explainChoices": ["...", "..."]}, ...},',
+    '{"lines": {"<questionId>": {"ask": "...", "hints": ["...", "..."],',
+    '  "explainChoices": ["...", "..."]}, ...},',
     ` "reactions": {${REACTION_IDS.map((id) => `"${id}": "..."`).join(", ")}}`,
     "Write every question id listed in the task, and all six reaction ids above, spelled exactly as shown.",
   ].join("\n");
@@ -185,9 +173,8 @@ export function shapeIssues(model, skeleton) {
     const l = lines[q.id];
     if (!l || typeof l !== "object") { add("missing-line", `lines.${q.id}`, `no lines for ${q.id}`); continue; }
     if (typeof l.ask !== "string") add("missing-line", `lines.${q.id}.ask`, "ask must be a string");
-    if (!Array.isArray(l.hints) || typeof l.hints[0] !== "string" || typeof l.hints[1] !== "string" ||
-      !l.hints[2] || typeof l.hints[2].exampleSay !== "string" || typeof l.hints[2].say !== "string")
-      add("invalid-hint-ladder", `lines.${q.id}.hints`, "hints must be [string, string, {exampleSay, say}]");
+    if (!Array.isArray(l.hints) || l.hints.length !== 2 || typeof l.hints[0] !== "string" || typeof l.hints[1] !== "string")
+      add("invalid-hint-ladder", `lines.${q.id}.hints`, "hints must be [smaller question, visual cue]; the worked example is derived by code");
     if (!Array.isArray(l.explainChoices) || !l.explainChoices.every((c) => typeof c === "string"))
       add("missing-line", `lines.${q.id}.explainChoices`, "explainChoices must be strings");
   }
@@ -199,12 +186,52 @@ export function shapeIssues(model, skeleton) {
   return issues;
 }
 
+/** Rung 3 is a same-question derivation (docs/WORKED-EXAMPLE-EXPLAINER.md):
+ *  deriveExplainer plugs the solver's numbers into the template matching the
+ *  story shape. Mirrors the web authoring tool's explainerFor
+ *  (apps/web/src/author/author.ts), keyed off Problem structure instead of
+ *  the teacher-facing draft kind. Add, find, and two-step stories retrace one
+ *  take-away step; comparisons use compare-more except smaller-without-count,
+ *  which retraces take-away. A retrace explains where the numbers came from,
+ *  so the explainer's own answer may differ from the story answer; the core
+ *  validator checks the derivation against its own numbers. */
+export function explainerShapeFor(problem, solved) {
+  const totals = solved.totals;
+  const last = totals[totals.length - 1];
+  if (problem.compare) {
+    const c = problem.compare;
+    if (c.relation === "smaller" && c.heroCount === undefined)
+      return { type: "take-away", params: { minuend: c.reference, subtrahend: c.difference } };
+    const counts = c.heroCount !== undefined ? [c.heroCount, c.reference] : [solved.answer, c.reference];
+    return { type: "compare-more", params: { bigger: Math.max(...counts), smaller: Math.min(...counts) } };
+  }
+  const steps = problem.steps;
+  const lastStep = steps[steps.length - 1];
+  const before = totals[totals.length - 2];
+  const change = lastStep.n === 0 ? Math.abs(last - before) : lastStep.n;
+  if (lastStep.kind === "give") {
+    const minuend = steps.length === 1
+      ? (problem.unknown === "start" ? solved.answer : problem.start)
+      : before;
+    return { type: "take-away", params: { minuend, subtrahend: change } };
+  }
+  return { type: "take-away", params: { minuend: last, subtrahend: change } };
+}
+
 function assembleStory(core, spec, solved, skeleton, model) {
+  const shape = explainerShapeFor(solved.problem, solved);
+  let derived;
+  try {
+    derived = core.deriveExplainer(shape.type, shape.params);
+  } catch (e) {
+    return { issues: [{ code: "explainer-bad-params", path: "solved.problem", message: e instanceof Error ? e.message : String(e) }] };
+  }
+  const explainer = { type: shape.type, params: shape.params, steps: [...derived.steps] };
   const questions = skeleton.map((q) => {
     const l = model.lines[q.id];
     return {
       id: q.id, step: q.step, ask: l.ask, interaction: q.interaction,
-      hints: [l.hints[0], l.hints[1], { exampleSay: l.hints[2].exampleSay, say: l.hints[2].say }],
+      hints: [l.hints[0], l.hints[1], explainer],
       explainChoices: l.explainChoices,
     };
   });

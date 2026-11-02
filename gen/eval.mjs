@@ -61,7 +61,8 @@ export function storyLines(core, story) {
   const out = [];
   const extra = { shown: story.solved.answer };
   for (const q of story.questions) {
-    out.push(q.ask, q.hints[0], q.hints[1], q.hints[2].exampleSay, q.hints[2].say, ...q.explainChoices);
+    out.push(q.ask, q.hints[0], q.hints[1],
+      ...q.hints[2].steps.map((s) => s.text), ...q.explainChoices);
   }
   for (const r of story.reactions) out.push(r.pip);
   return out.map((t) => core.fill(t, story.solved, extra));

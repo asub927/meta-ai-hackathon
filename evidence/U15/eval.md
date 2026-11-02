@@ -1,6 +1,12 @@
 # U15 evidence — generator eval
 
-Model: muse-spark-1.3-contributor. Specs: 20.
+Recorded responses from the live model (muse-spark-1.3-contributor),
+replayed under the post-PR4 validator (`GEN_CACHE=replay`, no network).
+Rung 3 is now derived by code, so every draft carries a solver-derived
+worked example; the model text (ask, two hints, choices, pips) is unchanged
+from the recording. Model label below is the config default; the words
+measured are the recorded live-model lines plus code-derived explainers.
+Specs: 20.
 
 ## Rates
 
@@ -39,8 +45,8 @@ Model: muse-spark-1.3-contributor. Specs: 20.
 
 ## Reading level (Flesch-Kincaid estimate over filled lines of validated drafts)
 
-- Lines measured: 400. Mean grade: -2.1.
-- Distribution: 2-3: 17, >3: 24, <=1: 345, 1-2: 14.
+- Lines measured: 520. Mean grade: -2.6.
+- Distribution: 2-3: 17, >3: 24, <=1: 465, 1-2: 14.
 
 ## Worst 3 (by first-pass slot count; all finals hold 0 slots)
 

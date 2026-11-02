@@ -33,8 +33,33 @@
           "Does getting add {item}?",
           "Can you point at {item}?",
           {
-            "exampleSay": "They had 6 beads got 7, more?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 59,
+              "subtrahend": 25
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "59 take away 25. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 59."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 25. 25 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 34."
+              },
+              {
+                "id": "summary",
+                "text": "59 take away 25 leaves 34."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -51,8 +76,33 @@
           "What is {result} now?",
           "Can you watch {hero} count?",
           {
-            "exampleSay": "They had 8 beads got 6 total?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 59,
+              "subtrahend": 25
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "59 take away 25. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 59."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 25. 25 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 34."
+              },
+              {
+                "id": "summary",
+                "text": "59 take away 25 leaves 34."
+              }
+            ]
           }
         ],
         "explainChoices": [

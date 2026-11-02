@@ -33,8 +33,33 @@
           "Did they give away?",
           "Can you point now?",
           {
-            "exampleSay": "Had 5 toys, gave 2?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 68,
+              "subtrahend": 34
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "68 take away 34. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 68."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 34. 34 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 34."
+              },
+              {
+                "id": "summary",
+                "text": "68 take away 34 leaves 34."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -51,8 +76,33 @@
           "What did they keep?",
           "Will you point now?",
           {
-            "exampleSay": "Had 9 pens, lost 7?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 68,
+              "subtrahend": 34
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "68 take away 34. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 68."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 34. 34 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 34."
+              },
+              {
+                "id": "summary",
+                "text": "68 take away 34 leaves 34."
+              }
+            ]
           }
         ],
         "explainChoices": [

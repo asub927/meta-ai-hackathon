@@ -39,8 +39,33 @@
           "Does giving mean less?",
           "Can they watch {item} go?",
           {
-            "exampleSay": "See 4 dots, add 2, total?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 68,
+              "subtrahend": 13
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "68 take away 13. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 68."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 13. 13 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 55."
+              },
+              {
+                "id": "summary",
+                "text": "68 take away 13 leaves 55."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -57,8 +82,33 @@
           "Does getting mean more?",
           "Can they point at {item}?",
           {
-            "exampleSay": "See 5 dots, add 3, total?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 68,
+              "subtrahend": 13
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "68 take away 13. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 68."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 13. 13 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 55."
+              },
+              {
+                "id": "summary",
+                "text": "68 take away 13 leaves 55."
+              }
+            ]
           }
         ],
         "explainChoices": [
@@ -75,8 +125,33 @@
           "What did {hero} keep?",
           "Can they make tens now?",
           {
-            "exampleSay": "See 6 dots, take 2, left?",
-            "say": "Now you try."
+            "type": "take-away",
+            "params": {
+              "minuend": 68,
+              "subtrahend": 13
+            },
+            "steps": [
+              {
+                "id": "question",
+                "text": "68 take away 13. What is left?"
+              },
+              {
+                "id": "show-total",
+                "text": "Here are 68."
+              },
+              {
+                "id": "remove",
+                "text": "Take away 13. 13 go away."
+              },
+              {
+                "id": "count-remainder",
+                "text": "Count what is left: 55."
+              },
+              {
+                "id": "summary",
+                "text": "68 take away 13 leaves 55."
+              }
+            ]
           }
         ],
         "explainChoices": [

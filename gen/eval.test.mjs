@@ -19,7 +19,10 @@ const story = {
     id: "q", step: 0, ask: "{hero} gives some away. More or fewer now?",
     interaction: "predict",
     hints: ["Do you keep them?", "Watch them go.",
-      { exampleSay: "6 kites, 2 leave. Fewer!", say: "Now you try." }],
+      { type: "take-away", params: { minuend: 10, subtrahend: 3 }, steps: [
+        { id: "question", text: "10 take away 3. What is left?" },
+        { id: "summary", text: "10 take away 3 leaves 7." },
+      ] }],
     explainChoices: ["Giving away makes fewer"],
   }],
   reactions: [{ misconception: "unknown", pip: "Count together, slowly." }],

@@ -29,8 +29,7 @@ const replayClient = async ({ key }) =>
 const cleanLines = (skeleton) => ({
   lines: Object.fromEntries(skeleton.map((q) => [q.id, {
     ask: q.interaction === "predict" ? "More or fewer now?" : "How many are there now?",
-    hints: ["A smaller question?", "Watch closely.",
-      { exampleSay: "6 kites, 2 leave. Fewer!", say: "Now you try." }],
+    hints: ["A smaller question?", "Watch closely."],
     explainChoices: ["I counted", "I guessed"],
   }])),
   reactions: {
@@ -78,7 +77,7 @@ describe("generateDraft", () => {
   it("rejects the red-team draft twice, then hands slots to a human", async () => {
     const poison = (id) => ({
       ask: "Momo has 15 left! try again, count!",
-      hints: ["Momo has 15 left! try again!", "wrong, guess again.", { exampleSay: "try again!", say: "try again!" }],
+      hints: ["Momo has 15 left! try again!", "wrong, guess again."],
       explainChoices: ["try again"],
     });
     const skeleton = skeletonFor(core.solve(problemFromSpec(loadSpec(SPEC))), SPEC.id);
