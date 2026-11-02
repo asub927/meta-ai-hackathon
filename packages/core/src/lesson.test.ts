@@ -22,4 +22,15 @@ describe("lesson 1 (NC.2.OA.1)", () => {
   it("committed JSON stories deep-equal buildLesson1().stories", () => {
     expect(loaded.lesson.stories).toEqual(buildLesson1().stories);
   });
+  it("parses an optional content status when present", () => {
+    const withStatus = loadLesson({ ...lessonJson, status: "validated" });
+    expect(withStatus.ok).toBe(true);
+    if (withStatus.ok) expect(withStatus.lesson.status).toBe("validated");
+    expect(loaded.lesson.status).toBeUndefined();
+  });
+  it("rejects a content status outside the flow", () => {
+    const bad = loadLesson({ ...lessonJson, status: "shipped" });
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) expect(bad.issues.some((issue) => issue.path === "status")).toBe(true);
+  });
 });

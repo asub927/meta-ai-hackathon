@@ -104,6 +104,16 @@ export function smallerFor(
     interaction: base.interaction, hints: base.hints, explainChoices: base.explainChoices,
   };
 }
+export type ContentStatus = "draft" | "validated" | "approved";
+
+export function isContentStatus(value: unknown): value is ContentStatus {
+  return value === "draft" || value === "validated" || value === "approved";
+}
+
+export type CoverageRow = { standard: string; templates: number; contexts: number; ladderSteps: number; instances: number; approved: number; meetsTarget: boolean };
+
+export const CONTENT_TARGET = { templates: 6, contexts: 4, ladderSteps: 3, instances: 150 };
+
 export interface LessonSource { url: string; licence: string; changes: string }
 export interface StoryData {
   solved: Solved; questions: readonly Question[]; reactions: readonly ReactionScript[];

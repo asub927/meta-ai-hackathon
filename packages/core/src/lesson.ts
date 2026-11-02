@@ -1,10 +1,10 @@
 import { solve } from "./core.js";
 import { parseStoryData } from "./schema.js";
 import { validateStory } from "./validate.js";
-import { smallerTemplate } from "./types.js";
-import type { Issue, ReactionScript, StoryData } from "./types.js";
+import { smallerTemplate, isContentStatus } from "./types.js";
+import type { ContentStatus, Issue, ReactionScript, StoryData } from "./types.js";
 
-export interface LessonFile { id: string; standard: string; stories: StoryData[] }
+export interface LessonFile { id: string; standard: string; stories: StoryData[]; status?: ContentStatus }
 
 export type LoadLessonResult = { ok: true; lesson: LessonFile } | { ok: false; issues: Issue[] };
 
@@ -20,6 +20,8 @@ export function loadLesson(json: unknown): LoadLessonResult {
     top.push({ code: "invalid-shape", path: "standard", message: "lesson needs a standard id" });
   if (!Array.isArray(rec.stories))
     top.push({ code: "invalid-shape", path: "stories", message: "lesson needs a stories array" });
+  if (rec.status !== undefined && !isContentStatus(rec.status))
+    top.push({ code: "invalid-shape", path: "status", message: "lesson status must be draft, validated, or approved" });
   if (top.length > 0) return { ok: false, issues: top };
   const issues: Issue[] = [];
   const stories: StoryData[] = [];
@@ -35,7 +37,9 @@ export function loadLesson(json: unknown): LoadLessonResult {
     stories.push(parsed.data);
   }
   if (issues.length > 0) return { ok: false, issues };
-  return { ok: true, lesson: { id: rec.id as string, standard: rec.standard as string, stories } };
+  const lesson: LessonFile = { id: rec.id as string, standard: rec.standard as string, stories };
+  if (isContentStatus(rec.status)) lesson.status = rec.status;
+  return { ok: true, lesson };
 }
 
 const SOURCE = { url: "PLAN.md U12", licence: "CC BY-SA 4.0", changes: "Original story written for this app." };
