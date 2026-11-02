@@ -31,6 +31,10 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 
 23. **Full app builds on `poteto/web-only-cut` until Anantha signs off.** (Anantha, Nov 2, 2026). The full app builds on the branch `poteto/web-only-cut`. The branch merges to `main` only when Anantha is satisfied with the outcome. Pull requests to `main` stay closed or unopened until then. Unit work continues as commits on this branch. This entry supersedes the stacked-PR landing reading in PLAN.md and docs/STACK.md section 7 for the hackathon build.
 
+## Nov 2, 2026. Web-only branch scope (Anantha, approved)
+
+24. **Web app only on this branch.** (Anantha, Nov 2, 2026). Anantha decided to exclude all iPad related clarifications from this branch entirely to avoid confusion. The branch builds the web app only. Native brainstorming restarts fresh when the right time comes. Earlier entries 21 and 23 stay in the log as history. Entry 24 governs this branch from now on.
+
 ## Proposed, needs Anantha approval at landing
 
 Drafted as 12–15 before entries 12–16 above landed via PR3/PR4. Renumbered 17–20 to avoid collision. Content unchanged.
@@ -41,6 +45,6 @@ Drafted as 12–15 before entries 12–16 above landed via PR3/PR4. Renumbered 1
 22. Equation input cut for the hackathon (Anantha, Nov 2, 2026): the choose-equation widget (U7/U12) is not built. Predict, count, and explain cover its learning goal; the iPad gate takes the remaining time. Revisit after the hackathon.
 
 ## Discussed, not decided
-- Progress storage options: PROGRESS-STORAGE.md (recommended default: IndexedDB with export file, teacher dashboard page from exports, SwiftData on iPad).
+- Progress storage options. PROGRESS-STORAGE.md (recommended default. IndexedDB with export file, teacher dashboard page from exports).
 - Competitor research: COMPETITOR-SYNTHESIS.md, COMPETITOR-LANDSCAPE.md. Vision: VISION.md.
 - Demo built: /workspace/socratic-math-demo/ (preview.mp4).

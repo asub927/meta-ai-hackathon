@@ -1,6 +1,6 @@
 # Socratic math story plan
 
-Anantha wants children to work out the answer in the math story themselves. In v3, Pip tells them. Pip should ask, the child should act, and the story should react. The goal is a real web application. A native SwiftUI iPad app is deferred to a later phase (not a wrapper when it comes). The same story data also produces teacher preview videos, and the curriculum grows one NCDPI section at a time. This plan covers the build only. Nothing gets built until Anantha says go.
+Anantha wants children to work out the answer in the math story themselves. In v3, Pip tells them. Pip should ask, the child should act, and the story should react. The goal is a real web application. The same story data also produces teacher preview videos, and the curriculum grows one NCDPI section at a time. This plan covers the build only. Nothing gets built until Anantha says go.
 
 Files: this plan and [STACK.md](docs/STACK.md) live in `/workspace/socratic-math-plan/` and are mirrored to `/home/box/socratic-math/`. Pre-decision copies: `PLAN.pre-decisions.md`, `STACK.pre-decisions.md`. Product vision: [VISION.md](docs/VISION.md). Decisions log (kept by the Scribe): [DECISIONS-LOG.md](docs/DECISIONS-LOG.md).
 
@@ -10,15 +10,15 @@ Every unit below follows these. None is open.
 
 | # | Decision | What it means for the build |
 |---|---|---|
-| 1 | **Code: MIT** | `LICENSE` (MIT) at the repo root. Shipped dependencies must be MIT-compatible ([STACK.md](docs/STACK.md) §10). GSAP is not MIT, so WAAPI is the default (U1, U6) |
+| 1 | **Code: MIT** | `LICENSE` (MIT) at the repo root. Shipped dependencies must be MIT-compatible ([STACK.md](docs/STACK.md) §9). GSAP is not MIT, so WAAPI is the default (U1, U6) |
 | 2 | **Content: CC BY-SA 4.0** | Lessons, stories, Pip's scripts and content packs. Third-party CC BY content can be adapted in; NC-licensed sources cannot be included (validator check, U4) |
 | 3 | **Mascot art: CC0 1.0, names generic and trademark-free** | `assets/mascots/LICENSE` is CC0. No mark is registered or claimed. Forks may reuse the art without attribution (accepted). `FORKS.md` asks forks to use their own app name |
 | 4 | **Backend deferred until after the hackathon** | For the hackathon the app is on-device only: no server, no accounts, no personal data, nothing leaves the device (COPPA's spirit, not a legal-compliance claim). Progress is an on-device event log, options in [`PROGRESS-STORAGE.md`](docs/PROGRESS-STORAGE.md). If sync is needed later, study Kolibri's offline-first design with optional school-server sync before designing a custom backend |
-| 5 | **Governance: BDFL (Anantha) until M5**, then revisit | Anantha approves lessons and lands every PR |
-| 6 | **Legal home: deferred** | Hackathon entry with intent to continue. No fiscal sponsor or entity now; revisit around M5 |
+| 5 | **Governance: BDFL (Anantha) until M4**, then revisit | Anantha approves lessons and lands every PR |
+| 6 | **Legal home: deferred** | Hackathon entry with intent to continue. No fiscal sponsor or entity now; revisit around M4 |
 | 7 | **Standards: NC Standard Course of Study (NCDPI), grade 2, math first** | Built one section at a time in NCDPI's grade 2 order, starting with NC.2.OA.1. Store standard IDs plus our own paraphrase, never NCDPI text |
 | 8 | **Read-aloud in M1** | On-device voices only (Web Speech `localService` voices). Unit U12a |
-| 9 | **Subject order: math, science, English language arts** | Math is M1 to M5. Science, then ELA, come after M5 (roadmap below) |
+| 9 | **Subject order: math, science, English language arts** | Math is M1 to M4. Science, then ELA, come after M4 (roadmap below) |
 | 10 | **English only** | Spanish deferred, no timeline, no reviewer. Strings stay in a locale table only because that was already planned |
 
 **Process (Anantha, no exceptions).** The build uses pstack, the process skills and playbooks the engineering team follows. All communication about this project goes through the Delivery Lead bot, with no direct side channels. The Scribe notes every decision and discussion, including voice calls, in `docs/DECISIONS-LOG.md`. This is a process rule, not a stack change. Detail in **Process** below.
@@ -50,13 +50,13 @@ These hold in every lesson, in the web app. The validator (U4) and the reducer p
   - One badge per NCDPI section when that section is mastered.
   - Chests tied to the lesson just finished (story items, mascot outfits).
   - Never: leaderboards, purchasable rewards, currencies, ads, or any score that drops after a mistake.
-  - Enforced by pure reward functions with no-dark-patterns property tests (U27).
+  - Enforced by pure reward functions with no-dark-patterns property tests (U19).
 
 ## Mastery and review
 
-- **Source.** Mastery and review are computed from the append-only `LocalEvent` log on the device (U11a, U21). Nothing about mastery is stored separately; it is always derived.
+- **Source.** Mastery and review are computed from the append-only `LocalEvent` log on the device (U11a). Nothing about mastery is stored separately; it is always derived.
 - **Mastery threshold (proposal, to tune in the Stage A and Stage B pilots).** A skill (one NCDPI standard, or a sub-skill within it) is mastered after **three clean answers in a row**. Clean means first try and no hint. Answers count across different problem templates, so three repeats of one template do not count as mastery (proposal: at least two distinct templates in the three).
-- **Mastery never drops within a session.** A mistake after mastery schedules extra review; it does not take the mastery or a badge away. Property test (U26).
+- **Mastery never drops within a session.** A mistake after mastery schedules extra review; it does not take the mastery or a badge away. Property test (U18).
 - **Spaced review (proposal).** After mastery, review problems come back at **1, 3, 7 and 21 days**. A clean review moves the skill to the next interval; a missed review repeats the current interval (it does not reset to day 1). Review problems use fresh instances, not the ones the child already solved.
 - **Code.** Pure functions `mastery(log)` and `review(log, now)` in the shared TypeScript core, with conformance vectors and property tests (replayed random logs; mastery monotonic within a session; review dates deterministic for a given log and `now`).
 
@@ -77,7 +77,7 @@ Per NCDPI standard, content varies along four axes:
 - at least **150 distinct valid instances** reachable from the templates,
 - enough for **at least 3 weeks of daily 15-minute sessions** per standard without repeating an instance (estimate, labelled as one).
 
-**Content-coverage check in CI.** `npm run coverage:content` reads the approved lessons and templates, counts templates, contexts, ladder steps and distinct instances per NCDPI ID, and fails the build for any standard listed as shipped that is below target (U25). The report goes to `evidence/<unit>/coverage.md`.
+**Content-coverage check in CI.** `npm run coverage:content` reads the approved lessons and templates, counts templates, contexts, ladder steps and distinct instances per NCDPI ID, and fails the build for any standard listed as shipped that is below target (U17). The report goes to `evidence/<unit>/coverage.md`.
 
 ## Progress storage
 
@@ -85,9 +85,8 @@ Full research and tradeoffs: [PROGRESS-STORAGE.md](docs/PROGRESS-STORAGE.md).
 
 - **Web: IndexedDB via `idb`.** One append-only event log keyed by profile (U11a). Call `navigator.storage.persist()` and show the result. Precache the app with the service worker so it works offline. localStorage is not used (about 5 MiB cap).
 - **iPad Safari note.** Safari can delete a site's data after 7 days of Safari use with no tap on the site, unless the app is **added to the Home Screen**. The app shows an "Add to Home Screen" prompt and a warning when storage is not persistent.
-- **Native iPad (deferred to a later phase with M3):** a SwiftData event log in the same event format would land with the native app; the hackathon build uses IndexedDB on web only.
 - **Kid profiles: nickname and avatar only**, no real names, birthdays, photos or free text. Profiles are created and managed behind the parent gate (a grown-up task, not a secret).
-- **Export and import.** Versioned NDJSON event log per profile with a SHA-256 checksum (integrity, not authenticity). Same file on web and iPad. Malformed or mismatched files are rejected at the boundary with issue codes.
+- **Export and import.** Versioned NDJSON event log per profile with a SHA-256 checksum (integrity, not authenticity). Export and import use the same file format. Malformed or mismatched files are rejected at the boundary with issue codes.
 - **Teacher and parent tools, behind the gate:** export, import, reset one profile, wipe all (with an "export first?" offer), and a visible "last backup" date.
 - **Nothing leaves the device** unless an adult exports a file. No server, sync or analytics (decision 4).
 
@@ -96,7 +95,7 @@ Full research and tradeoffs: [PROGRESS-STORAGE.md](docs/PROGRESS-STORAGE.md).
 - **pstack is the process layer.** Every unit is briefed in the pstack template, run under `/poteto-mode` and the pstack playbooks (Orchestrate, Prototype, Feature, `figure-it-out`), and verified with evidence against its ACCEPTANCE criteria (unit, live and perf checks, saved under `evidence/<unit>/`). pstack is process, not a tech-stack choice.
 - **All project communication goes through Delivery Lead.** Workers, reviewers and the Scribe report to Delivery Lead; Delivery Lead batches questions to Anantha. No direct side channels.
 - **The Scribe logs everything** (decisions, discussion, voice calls, open items) in `docs/DECISIONS-LOG.md`, so it is available for future reference.
-- **Gates.** Nothing is built until Anantha says go. Anantha (BDFL until M5) approves lessons and lands every PR. Outbound drafts such as `DL-MESSAGE.md` wait for his approval.
+- **Gates.** Nothing is built until Anantha says go. Anantha (BDFL until M4) approves lessons and lands every PR. Outbound drafts such as `DL-MESSAGE.md` wait for his approval.
 
 The rule the program enforces is simple. Every number on screen, in Pip's lines, and in a video comes from code, not from a model or a hand-typed string. A wrong answer is never marked wrong. The story shows what that answer would mean.
 
@@ -108,7 +107,7 @@ Built with pstack. `poteto-mode` set the bar. `architect` shaped the types and t
 - Two fields are the same for every unit, so they are written out once here.
   - **STANDING.** `/home/box/eng-team/preferences.md` pasted verbatim. Add the animation rule: Emil Kowalski's `animate` first, then `animation-performance`, then `review-animations` before hand-back.
   - **FORBIDDEN (base).** Editing `/workspace/kids-math-story-v3/`. Local git clones (repo work goes through cloud agents). Merging, deploying, or publishing anything without Anantha's yes. Any LLM call outside the Anthropic/OpenAI gateway. Any SaaS dependency. Any employer data or names. Sending child data off the device. Any server, account or network path in the app. A shipped dependency that is not MIT-compatible. Copying NCDPI standards text or NC-licensed material into content. Project communication outside Delivery Lead.
-- Execution runs under pstack's Orchestrate playbook (two platforms, many stacked PRs; see [STACK.md](docs/STACK.md) §7). Delivery Lead coordinates. Workers build and verify. Anantha merges.
+- Execution runs under pstack's Orchestrate playbook (many stacked PRs; see [STACK.md](docs/STACK.md) §6). Delivery Lead coordinates. Workers build and verify. Anantha merges.
 - Tests alone are not sufficient verification. A unit is verified only when its unit, live, and perf checks all pass. "Live" means a Playwright run of the real page in WebKit with the iPad descriptor, plus a screenshot or video saved to `evidence/<unit>/`. A unit that changes an interaction also waits for Anantha's review of the screenshots and video.
 
 ## 1. Problem and non-goals
@@ -116,17 +115,16 @@ Built with pstack. `poteto-mode` set the bar. `architect` shaped the types and t
 **Problem.** v3 is a 41-second film. The child watches and learns nothing they had to work out. We need these four things:
 1. **Socratic mode.** Pip asks. The child drags, taps a count, or picks an equation. A wrong answer plays out on screen, and Pip asks a smaller question. A right answer gets "how did you know?" Hints climb a ladder (question, visual cue, worked example explainer on the same question) and never start with the answer.
 2. **Data in, story out.** A problem plus a learning goal becomes validated `StoryData`. Code checks the math. A model may write the questions and reactions, but code checks every number before anything renders.
-3. **Web app only for the hackathon build (native SwiftUI iPad deferred to a later phase).** Touch, pointer events, landscape and portrait, audio unlock, safe areas, offline, read-aloud.
+3. **Web app only for the hackathon build.** Touch, pointer events, landscape and portrait, audio unlock, safe areas, offline, read-aloud.
 4. **A curriculum, one NCDPI section at a time.** NC grade 2 math sections go in, approved CC BY-SA lessons come out. Progress, rewards and the parent view are computed from the on-device event log. Child data never leaves the device unless an adult exports a file.
 
-**Non-goals (M1 to M5, the hackathon build).**
+**Non-goals (M1 to M4, the hackathon build).**
 - No runtime LLM on the child's device. All generation happens offline and gets reviewed. This keeps COPPA scope small and lessons stable.
 - No voice input. "How did you know?" uses tap choices. Recording a child's voice brings in COPPA consent and storage problems.
-- No accounts, logins, server or sync. The parent view (M4) runs on the device behind an adult gate.
-- M1 covers NC.2.OA.1 only (add and subtract word problems within 100). Later NC grade 2 sections come in NCDPI order in M4. No science or ELA before M5.
-- **Pip** (barn owl) narrator plus **Momo** and **Kiwi** as story cast for M1 (real species, `role` field; art CC0 once human-redrawn). Six more story animals at **M4** (see [DESIGN-PLAN.md](docs/DESIGN-PLAN.md)). Pip never acts as a countable object in the problem.
+- No accounts, logins, server or sync. The parent view (M3) runs on the device behind an adult gate.
+- M1 covers NC.2.OA.1 only (add and subtract word problems within 100). Later NC grade 2 sections come in NCDPI order in M3. No science or ELA in M1 to M4.
+- **Pip** (barn owl) narrator plus **Momo** and **Kiwi** as story cast for M1 (real species, `role` field; art CC0 once human-redrawn). Six more story animals at **M3** (see [DESIGN-PLAN.md](docs/DESIGN-PLAN.md)). Pip never acts as a countable object in the problem.
 - English only.
-- No App Store or TestFlight release in the hackathon build. Native packaging is deferred with M3 and waits for Anantha's Apple Developer account when it returns.
 
 ## 2. Domain model
 
@@ -146,7 +144,7 @@ type MascotRole = "narrator" | "story";
 type MascotSpecies = "barn-owl" | "lop-eared-rabbit" | "kiwi-bird" | "toucan" | "fox" | "elephant" | "turtle" | "hedgehog" | "macaw";
 type Mascot = { id: MascotId; name: string; species: MascotSpecies; role: MascotRole;
   pronouns: { they: string; them: string; their: string } | null; colors: Palette };
-// M1 cast: pip (narrator), momo, kiwi (story). Remaining story species ship in M4 (U24).
+// M1 cast: pip (narrator), momo, kiwi (story). Remaining story species ship in M3 (U16).
 
 // A story step. One variant per verb, never op + how strings.
 type Step =
@@ -292,7 +290,7 @@ Note the `smaller-from-larger` line, "Can we take {n} from the 4 ones?" It conta
 Each module owns one body of domain knowledge (**Model the Domain**, not load, validate, render phases). Arrows are imports. Validation lives only at the two boundaries, which are JSON coming in (`schema/parse`) and model output coming in (`gen/llm`). Everything inside trusts the types (**Boundary Discipline**).
 
 ```
-gen/ (offline, Node)                    apps/web (React); apps/ios deferred with M3
+gen/ (offline, Node)                    apps/web (React)
   spec -> llm (gateway boundary)          shell (lessons, progress, PWA, adult gate)
        -> math/solve                        -> socratic (reducer, pure)
        -> lesson/validate  ---------->      -> story (scene, beats, camera)
@@ -321,7 +319,7 @@ render/ (offline, Node + Chrome)           -> interact (pointer, drag, count, eq
 | `render/` | `render(sd, path: ChildPath, out): mp4` that seeks the timeline frame by frame in headless Chrome and muxes audio from the cue sheet | CLI | Node |
 | `gen/` | `ProblemSpec -> StoryData` draft, with the LLM writing `LineTemplate`s through the gateway | CLI | Node |
 
-**Subject modules.** `math/` is the first `SubjectModule` (solver, misconception registry, interactions, validator rules). `socratic/`, `narrator/` and `progress/` stay subject-neutral so science (predict, observe, explain) and ELA (multiple choice, ordering) plug in after M5 without core rewrites.
+**Subject modules.** `math/` is the first `SubjectModule` (solver, misconception registry, interactions, validator rules). `socratic/`, `narrator/` and `progress/` stay subject-neutral so science (predict, observe, explain) and ELA (multiple choice, ordering) plug in after M4 without core rewrites.
 
 **The motion boundary is the GSAP decision point.** `story/` never imports GSAP. It only sees `motion/Timeline`. Swapping GSAP for WAAPI or Motion is then one adapter file plus a parity run. Today, v3 calls `gsap.*` about 200 times across `part5.js` and `part6.js`.
 
@@ -348,7 +346,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 
 **U0. Verification skill and baseline.**
 - GOAL: Any agent can launch, drive, and capture evidence from the story page in WebKit iPad emulation and in Chromium.
-- SCOPE: New repo `kids-math-socratic` (name pending D5) at `.cursor/skills/verify-kids-math/` with `features/`, `tools/evidence.ts`, and a copy of v3 as `baseline/` (read-only reference).
+- SCOPE: New repo `kids-math-socratic` (name pending D4) at `.cursor/skills/verify-kids-math/` with `features/`, `tools/evidence.ts`, and a copy of v3 as `baseline/` (read-only reference).
 - CONTEXT: `create-verification-skill` sections (Launch, Doctor, Drive, Evidence, Cleanup, Helpers). v3 `tests/test_shots.py` reads numbers from the DOM through `window.__story`.
 - ACCEPTANCE: `npm run verify:doctor` reports the server, build hash, and both browsers. `npm run verify:beats -- --problem 1` writes `evidence/U0/beats.json` with totals `[24,15,20]` and 5 PNGs per device (iPad Pro 11 landscape, iPad Mini portrait, Desktop Chrome).
 - STATUS: Device matrix corrected. Only iPad Pro 11 and Desktop Chrome projects exist. Beats.json holds 3 PNGs and notes the shortfall. The skill path reads `.cursor/skills/verify-kids-math/`. The tree uses `.claude/skills/verify-kids-math-web/`.
@@ -378,16 +376,6 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - FORBIDDEN: base.
 - REPORT: videos, measured target sizes, Anantha's pick.
 
-**U2b. JavaScriptCore bridge spike (Prototype playbook).**
-- GOAL: Decide JSC versus a Swift port of the device functions from measurements ([STACK.md](docs/STACK.md) §1 fallback trigger).
-- SCOPE: Throwaway `proto/jsc/`: `core.ios.js` IIFE bundle, a minimal `CoreBridge.swift`, 1,000 `step` + `fill` round trips.
-- ACCEPTANCE: p95 latency over 3 runs on an iPad simulator and a real iPad, spread under 20 percent; keep JSC if p95 is under 4 ms, else Swift port with the same vectors. Threshold written before the run.
-- VERIFY: `.xcresult` and a bench table in `evidence/U2b/` from the macOS runner. TIMEBOX: 1 day (Mac-gated). FORBIDDEN: base. REPORT: table, decision row.
-- STATUS: Retired unbuilt per DECISIONS-LOG entry 17. Never run. Mac-gated.
-
-**U2c. quicktype unions spike.** GOAL: Know whether quicktype emits usable Swift enums for `Step`, `Interaction`, `Answer`, `Effect`. ACCEPTANCE: generated code round-trips the fixture JSON byte-equal, or a decision to hand-write the ~12 union types. VERIFY: `swift test` in the `swift:6.4` Docker image. TIMEBOX: 2 hours. REPORT: generated file, decision.
-- STATUS: Retired unbuilt per DECISIONS-LOG entry 17.
-
 ### M1. One Socratic lesson of 5 problems, web app, with read-aloud
 
 **U3. Subtract and scaffold.**
@@ -404,7 +392,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - GOAL: A bad lesson cannot get past `npm run validate` (**Build the Lever**, **Type System Discipline**).
 - SCOPE: `schema/` (Zod 4, `z.toJSONSchema`), `math/solve.ts`, `math/misconceptions.ts`, `lesson/validate.ts`, CLI, and `fixtures/{good,bad}/*.json`. Also: the `SubjectModule` interface with math as its first module; `Problem` extended with unknown position and compare shapes (NC.2.OA.1); the `BeatScript` type (tracks, keyframes, sampled springs, cues on the 1280×720 stage); a `source` record on every lesson (URL, licence, changes) and NCDPI standard IDs with our own paraphrase.
 - ACCEPTANCE:
-  - The good fixtures are stickers, balloons, and 3 more from D4, and they validate clean.
+  - The good fixtures are stickers, balloons, and 3 more from D3, and they validate clean.
   - Each bad fixture fails with its specific `Issue.code`. The bad fixtures cover these cases: totals hand-edited, a digit in a template (the `{ones}` example above), a count above capacity, a negative result, a hint ladder out of order (fails to parse), a worked explainer with an empty step text or wrong derived answer, "try again" in a line, a 46-character bubble, a gendered word, an unknown misconception, an NC- or ND-licensed source, a lesson without an NCDPI ID, and pasted NCDPI standards text.
   - `solve` agrees with an independent brute-force oracle on 10,000 random problems.
 - VERIFY: `npm test -- lesson math` and `npm run validate fixtures/bad/*` (expect one non-zero exit per file and the expected code). Tests assert the issue codes callers branch on, not message text (**Test Behavior, Not Implementation**).
@@ -414,7 +402,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 
 **U5. Socratic reducer, `choreograph` and conformance vectors.**
 - GOAL: The whole ask, react, hint, explain flow is a pure, tested, subject-neutral state machine (**Model the Domain**), and every beat is data.
-- SCOPE: `socratic/step.ts`, `choreograph(scene, solved, beat | reaction): BeatScript`, a table-driven test, and `packages/conformance` (vectors for `step`, `detect`, `fill`, `choreograph`; run in Node and WebKit now; the JSC leg waits for deferred U16).
+- SCOPE: `socratic/step.ts`, `choreograph(scene, solved, beat | reaction): BeatScript`, a table-driven test, and `packages/conformance` (vectors for `step`, `detect`, `fill`, `choreograph`; run in Node and WebKit).
 - ACCEPTANCE:
   - Right answer: `asking` → `explaining` → `done`.
   - Each detected misconception: `asking` → `reacting` → `asking` on the smaller question.
@@ -519,64 +507,43 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 
 **U15a. Authoring tool v1.** GOAL: A teacher turns an NC grade 2 problem into a draft lesson without an engineer. SCOPE: a browser page, offline, no account: pick the NCDPI ID, enter the problem, the solver fills numbers, pick misconceptions, live preview, output a CC BY-SA lesson file. ACCEPTANCE: one non-engineer authors a lesson that passes `validate`. VERIFY: Playwright drive plus the authored file. TIMEBOX: 2 days. REPORT: file, the author's notes.
 
-### M3. Native SwiftUI iPad app (deferred to a later phase)
+### M3. NC grade 2 math, section by section (outline; detail each section with `figure-it-out` at M2 end)
 
-Native packaging is out of the hackathon build. The web app is the only ship vehicle: Safari hardening and the Add to Home Screen path in U10/U11 cover iPad use. When native returns, it follows [STACK.md](docs/STACK.md) §5 with one unit per subsystem, and every unit's VERIFY runs in the macOS CI job (self-hosted runner on Anantha's Mac, `macos-26` fallback) attaching `.xcresult`, snapshot diffs and simulator videos.
+- **U16. NCDPI section pipeline.** One NCDPI grade 2 section at a time, in order: NC.2.OA.1 to OA.4, then NC.2.NBT.1 to NBT.8, then NC.2.MD.1 to MD.10, then NC.2.G.1 and G.3. Each section is a PR of lessons with IDs, our own paraphrase, and the 2026-edition ID from NCDPI's crosswalk once verified. New interaction kinds (arrays, number line, clocks, money, shapes) land as module code with tests before content.
+- **U17. Content commons and approval.** `draft → validated → approved` in the lesson JSON and git history; builds ship only `approved`; CI fails on an unapproved reference, an NC or ND source, missing licence records, or a shipped standard below the **Content depth** target (`npm run coverage:content`). `LICENSE` files: MIT root, CC BY-SA 4.0 `content/`, CC0 `assets/mascots/`. `FORKS.md` naming norm.
+- **U18. Mastery and spaced review.** Pure `mastery(log)` and `review(log, now)` per **Mastery and review** (three clean in a row, 1/3/7/21-day review, both proposals tuned at Stage A). A property test checks that mastery never drops within a session after a mistake.
+- **U19. Rewards.** The reward rules live in **Tutor rules (hard)**. Chests stay tied to the lesson just finished (story items, mascot outfits), one gentle streak across subjects with rest days and no loss shaming, a small mascot celebration, one badge per NCDPI section, no leaderboards, nothing bought, no score that drops after a mistake. Pure functions with no-dark-patterns property tests. Chest animations use Emil's `animate`, `animation-performance` and `review-animations`.
+- **U20. Parent view.** One app, behind the adult gate. It shows what was mastered, which misconceptions came up and were repaired, and a weekly report exported as a file. Computed on the device from the log. No teacher roster or class aggregate in the hackathon build.
+- **U21. Suggested-question chips** ("Why fewer?", "Show me", "A smaller one") as reducer events.
+- **U22. Stage A usability.** 5 to 10 children with an adult present, paper notes only, findings fixed.
 
-**U16. CoreBridge and vectors in JSC (deferred).** `CoreBridge.swift` owning one `JSContext` running the bundled `core.ios.js` (or the Swift port, per retired U2b). ACCEPTANCE: every conformance vector, including derived views, matches Node byte for byte. TIMEBOX: 1.5 days.
+### M4. Open ecosystem and pilot (outline)
 
-**U17. Generated types (deferred).** Swift Codable types from `schema/*.json` (quicktype or hand-written per retired U2c), with branded `Count`. ACCEPTANCE: good fixtures round-trip byte-equal, bad shapes are rejected. TIMEBOX: 1 day.
+- **U23. Open content spec 1.0** (published JSON Schema plus conformance vectors) and forkable content packs loaded by file import.
+- **U24. Authoring tool release** and contributor tiers (community, reviewed, piloted).
+- **U25. Stage B pilot** with a comparison group, de-identified log exports under consent, offline analysis.
+- **U26. Revisit points.** Governance (BDFL to M4), legal home, and whether any sync is needed (if so, a Kolibri study first). Re-plan science and ELA with `figure-it-out`.
 
-**U18. BeatPlayer, stage and mascots (deferred).** `BeatPlayer` evaluating `BeatScript` at `t` inside `TimelineView`; `tools/mascots` generating SwiftUI `Shape`s from the CC0 SVG rigs. ACCEPTANCE: values match the TS evaluator within 0.01 px and 0.001 opacity; snapshots at each beat end in both orientations, reduced motion on and off; 60 fps on Anantha's iPad in Instruments. Emil's skills apply. TIMEBOX: 3 days.
-
-**U19. Interaction widgets (deferred).** Predict, count, drag-to-tray, equation, explain, with VoiceOver labels, Switch Control alternatives and 64 pt targets. ACCEPTANCE: XCUITest drives each widget and the reducer receives the right `Answer`. TIMEBOX: 2 days.
-
-**U20. Audio and read-aloud (deferred).** AVAudioEngine cues from the beat clock, `.ambient` session; AVSpeechSynthesizer with an on-device English voice, word highlighting, music ducking. ACCEPTANCE: cue offsets within one frame; every line speaks; no network. TIMEBOX: 1.5 days.
-
-**U21. Event log on iPad (deferred).** SwiftData `LocalEvent` log, progress derived not stored; export and import via `fileExporter` and `fileImporter` using the same JSON file as the web app. ACCEPTANCE: a web export imports on iPad and gives identical derived progress, and the reverse. TIMEBOX: 1.5 days.
-
-**U22. Lesson shell and adult gate (deferred).** Lesson list, 5-story run, resume, settings, an adult gate in front of settings and export. ACCEPTANCE: the three scripted child paths complete lesson 1 in XCUITest with videos. TIMEBOX: 1.5 days.
-
-**U23. TestFlight readiness (deferred).** Kids Category rules, privacy manifest, privacy label "Data Not Collected", privacy policy, review notes. ACCEPTANCE: an archive uploads to TestFlight on Anantha's yes; he approves on a real iPad. TIMEBOX: 1 day.
-
-### M4. NC grade 2 math, section by section (outline; detail each section with `figure-it-out` at M3 end)
-
-- **U24. NCDPI section pipeline.** One NCDPI grade 2 section at a time, in order: NC.2.OA.1–4, then NC.2.NBT.1–8, then NC.2.MD.1–10, then NC.2.G.1 and G.3. Each section is a PR of lessons with IDs, our own paraphrase, and the 2026-edition ID from NCDPI's crosswalk once verified. New interaction kinds (arrays, number line, clocks, money, shapes) land as module code with tests before content.
-- **U25. Content commons and approval.** `draft → validated → approved` in the lesson JSON and git history; builds ship only `approved`; CI fails on an unapproved reference, an NC or ND source, missing licence records, or a shipped standard below the **Content depth** target (`npm run coverage:content`). `LICENSE` files: MIT root, CC BY-SA 4.0 `content/`, CC0 `assets/mascots/`. `FORKS.md` naming norm.
-- **U26. Mastery and spaced review.** Pure `mastery(log)` and `review(log, now)` per **Mastery and review** (three clean in a row, 1/3/7/21-day review, both proposals tuned at Stage A). Property test: mastery never drops within a session after a mistake.
-- **U27. Rewards.** Per **Tutor rules (hard)**: chests tied to the lesson just finished (story items, mascot outfits), one gentle streak across subjects with rest days and no loss shaming, a small mascot celebration, one badge per NCDPI section, no leaderboards, nothing bought, no score that drops after a mistake. Pure functions with no-dark-patterns property tests. Chest animations use Emil's `animate`, `animation-performance` and `review-animations`.
-- **U28. Parent view.** One app, behind the adult gate: what was mastered, which misconceptions came up and were repaired, a weekly report exported as a file. Computed on the device from the log. No teacher roster or class aggregate in the hackathon build.
-- **U29. Suggested-question chips** ("Why fewer?", "Show me", "A smaller one") as reducer events.
-- **U30. Stage A usability.** 5 to 10 children with an adult present, paper notes only, findings fixed.
-
-### M5. Open ecosystem and pilot (outline)
-
-- **U31. Open content spec 1.0** (published JSON Schema plus conformance vectors) and forkable content packs loaded by file import.
-- **U32. Authoring tool release** and contributor tiers (community, reviewed, piloted).
-- **U33. Stage B pilot** with a comparison group, de-identified log exports under consent, offline analysis.
-- **U34. Revisit points.** Governance (BDFL to M5), legal home, and whether any sync is needed (if so, a Kolibri study first). Re-plan science and ELA with `figure-it-out`.
-
-### After M5 (roadmap, not planned in units)
-- **M6 Science:** NC grade 2 science (2023 SCOS), section by section, with predict, observe and explain steps and its own CC0 mascot.
-- **M7 English language arts:** NC grade 2 ELA (2026 SCOS), mostly multiple choice and ordering, read-aloud carrying the text.
+### After M4 (roadmap, not planned in units)
+- **M5. Science.** NC grade 2 science (2023 SCOS), section by section, with predict, observe and explain steps and its own CC0 mascot.
+- **M6. English language arts.** NC grade 2 ELA (2026 SCOS), mostly multiple choice and ordering, read-aloud carrying the text.
 - Spanish stays deferred. A backend stays deferred.
 
 ## 5. Milestones
 
 | Milestone | Units | Exit criteria | Rough effort |
 |---|---|---|---|
-| M0 Harness and spikes | U0 to U2c | Verification skill works end to end; motion bakeoff table (WAAPI default); count widget picked; JSC and quicktype decided; MIT `LICENSE` and dependency licence check in CI | 4 days (U2b Mac-gated) |
+| M0 Harness and spikes | U0 to U2 | Verification skill works end to end; motion bakeoff table (WAAPI default); count widget picked; MIT `LICENSE` and dependency licence check in CI | 4 days |
 | M1 One Socratic lesson, web app, read-aloud | U3 to U12a | NC.2.OA.1 lesson 1 completes in WebKit on three child paths with zero console errors and zero network calls; read-aloud on every line from on-device voices; event log exports and re-imports; vectors green; GSAP gone; Anantha approves on a real iPad's browser | 3 weeks |
 | M2 Generator, video, authoring | U13 to U15a | A spec becomes a validated lesson and a deterministic MP4 (two equal hashes); generator eval table; one non-engineer authors a lesson | 1.5 weeks |
-| M3 Native SwiftUI iPad (deferred to a later phase) | U16 to U23 (all deferred) | Native returns after the hackathon build: lesson 1 runs in the SwiftUI app on three paths; vectors agree in JSC; snapshots pass; web and iPad exports interchange; TestFlight build approved by Anantha on a real iPad | 2.5 weeks when reactivated (Mac-gated) |
-| M4 NC grade 2 math | U24 to U30 | Every NC grade 2 math standard has reviewed lessons meeting the **Content depth** target (coverage check green), built section by section in NCDPI order; mastery and reward property tests green; parent view and report export work offline; Stage A findings fixed | re-plan at M3 end |
-| M5 Open ecosystem and pilot | U31 to U34 | Spec 1.0 and authoring tool published; external lessons merge through the validator; Stage B pilot report; governance, legal home and sync revisited and logged | re-plan at M4 end |
+| M3 NC grade 2 math | U16 to U22 | Every NC grade 2 math standard has reviewed lessons meeting the **Content depth** target (coverage check green), built section by section in NCDPI order; mastery and reward property tests green; parent view and report export work offline; Stage A findings fixed | re-plan at M2 end |
+| M4 Open ecosystem and pilot | U23 to U26 | Spec 1.0 and authoring tool published; external lessons merge through the validator; Stage B pilot report; governance, legal home and sync revisited and logged | re-plan at M3 end |
 
-Science (M6) and English language arts (M7) follow M5. See the roadmap after U34.
+Science (M5) and English language arts (M6) follow M4. See the roadmap after U26.
 
 Throughput checkpoint (Feature playbook step 3):
 - **Blocking first steps.** U0, U1, U3, and U4 gate everything.
-- **Independent workstreams.** U1, U2, and U2c could run in parallel (U1/U2/U2b/U2c all retired unbuilt per DECISIONS-LOG entry 17). U5 (pure) can run alongside U6. U11a and U12a can run alongside U7 to U9. U13 can start once U6 lands. M3 units U16 to U23 stay deferred and start only when native returns.
+- **Independent workstreams.** U1 and U2 could run in parallel (U1 and U2 both retired unbuilt per DECISIONS-LOG entry 17). U5 (pure) can run alongside U6. U11a and U12a can run alongside U7 to U9. U13 can start once U6 lands.
 - **Shared mutable state.** `story/` is touched by U6, U8, and U9, so those run serially, one writer per branch.
 - **Smallest safe decomposition.** One owner per unit. The verifier uses a different model family from the worker where available (preferences line 6); otherwise verdicts are labelled same-family.
 
@@ -590,17 +557,16 @@ Throughput checkpoint (Feature playbook step 3):
 | Model text smuggles in numbers or shaming words | medium | No digits allowed, placeholders only, never-wrong lint, recorded-cache tests, human approval |
 | Misconception detection misfires (a guess gets read as a misconception) | medium | Unknown answers fall back to `count-together`. The registry is small and tested against hand-labelled answers |
 | Portrait layout crowds Pip, the counter, and the input | medium | U7 overlap check per orientation |
-| COPPA or district rules | medium | Follow COPPA's spirit by design: no accounts, no ids, no voice input, no network, nothing leaves the device unless an adult exports a file. Not a legal-compliance claim; written review before the M5 pilot |
+| COPPA or district rules | medium | Follow COPPA's spirit by design: no accounts, no ids, no voice input, no network, nothing leaves the device unless an adult exports a file. Not a legal-compliance claim; written review before the M4 pilot |
 | GSAP licence (not MIT) stays in by accident | low | U6 removes it; CI licence allow-list fails on it |
-| No on-device English voice on some browsers | medium | Hide read-aloud rather than use a remote voice; checked at U12a and U20 |
+| No on-device English voice on some browsers | medium | Hide read-aloud rather than use a remote voice; checked at U12a |
 | NCDPI terms or edition change (2026 math SCOS effective fall 2028) | medium | IDs plus our own paraphrase only; tag both editions via NCDPI's crosswalk; 2026 grade 2 IDs not yet verified |
 | Look-alike forks of the CC0 mascots | medium | `FORKS.md` naming norm, published official builds; accepted by decision |
-| Real-iPad Safari testing depends on Anantha | certain | Batch the review gates (U7 to U9, U12, U12a) into a few sessions; U23 TestFlight gate deferred with M3 |
+| Real-iPad Safari testing depends on Anantha | certain | Batch the review gates (U7 to U9, U12, U12a) into a few sessions |
 
 ## 7. Decision detail
 
 - **GSAP licence (decided by decision 1).** GSAP's standard licence is no-charge but not MIT, so it cannot ship in the MIT app. WAAPI is the default; Motion (MIT) is the fallback if U1 shows WAAPI loses; GSAP stays only until U6 removes it.
-- **Native app (deferred with M3).** Native SwiftUI comes in a later phase, not a WKWebView or Capacitor wrapper (Anantha's direction). When it returns, the shared TypeScript core runs in JavaScriptCore, with a Swift port as the fallback (U2b retired unbuilt; the spike threshold stands).
 - **LLM boundary validation.** Structured output against a JSON schema, then `lesson/validate`, then one retry, then a human slot. Recorded responses in CI. The model id lives in config. Team preferences line 5 says "Gemini default" for demo apps, while the standing rule says Anthropic/OpenAI gateway only. This plan follows the gateway rule. Authoring time only, never on the child's device.
 - **Misconception authoring.** The kinds live in code (registry plus detectors). Reactions come from the 3 generic stagings. Lines per misconception are drafted by the model or by hand, validated, then approved. New kinds need a code change and a test, not content.
 - **Standards text.** NCDPI's site allows non-commercial reuse only without written permission (https://www.dpi.nc.gov/about-dpi). CC BY-SA content allows commercial reuse, so lessons carry IDs plus our own paraphrase and a link. Not legal advice.
@@ -608,7 +574,7 @@ Throughput checkpoint (Feature playbook step 3):
 ## 8. What to cut
 
 - Voice answers, a runtime LLM, accounts, any server or sync (backend deferred until after the hackathon), teacher class rosters and aggregates.
-- Story cast beyond Pip, Momo, and Kiwi before M4 (full eight story animals at M4 per DESIGN-PLAN), and per-problem custom reaction animations. Use the 3 generic stagings.
+- Story cast beyond Pip, Momo, and Kiwi before M3 (full eight story animals at M3 per DESIGN-PLAN), and per-problem custom reaction animations. Use the 3 generic stagings.
 - The duplicate `index-problem2.html`, the `build.sh` concatenation, and the 2.8 MB base64 audio (cut in U3). GSAP (cut in U6).
 - Real-time screencast previews (replaced by U13).
 - Any NC grade 2 section out of NCDPI order, and science or ELA before M5. Any language other than English.
@@ -619,6 +585,5 @@ Every product decision is recorded at the top and none is open. These are engine
 
 1. **D1 motion engine.** WAAPI by default (decision 1 rules out GSAP); Motion only if U1 shows WAAPI loses.
 2. **D2 count input.** Which count widget, from the U2 videos (U2 retired unbuilt; the shipped widgets carry U7-era coverage).
-3. **D3 Mac and Apple account (deferred with M3).** No Mac runner or Developer account needed for the hackathon build. When native returns: who provides the Mac for the self-hosted runner and the Apple Developer account. Default: Anantha's Mac. Also iPadOS 17 minimum, iPad only, Kids Category, `.ambient` audio (defaults yes).
-4. **D4 lesson 1 problems.** The five NC.2.OA.1 problems proposed in U12 and [VISION.md](docs/VISION.md) §9, as fixed scripts Anantha reviews. Default: use the proposal.
-5. **D5 repo and model.** Repo `asub927/kids-math-socratic` (built through cloud agents, not local clones), made public by M5 at the latest. The LLM path is the Anthropic/OpenAI gateway, which overrides "Gemini default". Default yes.
+3. **D3 lesson 1 problems.** The five NC.2.OA.1 problems proposed in U12 and [VISION.md](docs/VISION.md) §9, as fixed scripts Anantha reviews. The default is to use the proposal.
+4. **D4 repo and model.** Repo `asub927/kids-math-socratic` (built through cloud agents, not local clones), made public by M4 at the latest. The LLM path is the Anthropic/OpenAI gateway, which overrides "Gemini default". Default yes.

@@ -51,18 +51,16 @@ So on iPad: **add it to the Home Screen** and **export a backup now and then**.
 | 1 | **IndexedDB (via `idb`) + `navigator.storage.persist()`** | Clear: no. Update: yes [A]. Safari 7-day rule unless Home Screen | Profiles live in one site store; anyone using that browser sees them (gate needed) | Good: nothing leaves device | Good on 1:1 or class-set iPads; risky on browsers wiped nightly | Low | Yes |
 | 2 | **OPFS + SQLite-WASM** (`opfs-sahpool`, no COOP/COEP needed) | Same as 1 (same eviction rules) | Same as 1; single tab at a time with sahpool | Same | Same | Medium (Worker, WASM ~1 MB [A]) | Yes |
 | 3 | **localStorage** | Same as 1 | Same | Same | Fills up within a year per class | Low but wrong | Yes |
-| 4 | **Native SwiftData/SQLite** (iPad app) | Clear-site-data n/a. Survives OS updates [A]; lost if app deleted | One app container per iPad, or per Managed Apple Account on Shared iPad | Good. Default file class is "protected until first unlock"; `NSFileProtectionComplete` locks it ~10 s after device lock ([Apple](https://support.apple.com/guide/security/data-protection-classes-secb010e978a/web)) | Good | Medium (M3) | Yes |
-| 4b | **+ CloudKit private DB** (opt-in) | Yes; restores on new device | Shared iPad expects cloud sync; local data of the oldest user is removed when space runs out ([Apple](https://support.apple.com/guide/deployment/prepare-shared-ipad-dep6fa9dd532/web), [TN2428](https://developer.apple.com/library/archive/technotes/tn2428/_index.html)) | Data sits in the family's/school's iCloud; private DB records are "not visible to the application developer" ([Apple docs mirror](https://apple-docs.everest.mt/docs/cloudkit/ckdatabase/scope/private/), [Apple](https://developer.apple.com/icloud/cloudkit/designing/)) | Fits Shared iPad | Medium | Yes (Apple's server, user's account, we can't read it) |
-| 5 | **Export/import file** (NDJSON event log + SHA-256 checksum) | Yes, it's a file outside the app | Per profile | Good if the file holds only nickname + events | Core: backup, device change, teacher collection | Low | Yes |
-| 6 | **Teacher dashboard page** (static, runs in browser, reads dropped files) | Teacher keeps the files | n/a | Data stays on teacher's device; becomes a school record [A] | Good with no IT | Low–medium | Yes |
-| 7 | **Self-hosted sync / WebRTC peer sync** — *future, not a plan* | Yes | Yes | Depends on who runs it | Needs a school or IT person | High | Only if the school runs it, not us |
+| 4 | **Export/import file** (NDJSON event log + SHA-256 checksum) | Yes, it's a file outside the app | Per profile | Good if the file holds only nickname + events | Core: backup, device change, teacher collection | Low | Yes |
+| 5 | **Teacher dashboard page** (static, runs in browser, reads dropped files) | Teacher keeps the files | n/a | Data stays on teacher's device; becomes a school record [A] | Good with no IT | Low to medium | Yes |
+| 6 | **Self-hosted sync / WebRTC peer sync.** *Future, not a plan* | Yes | Yes | Depends on who runs it | Needs a school or IT person | High | Only if the school runs it, not us |
 
 Notes:
 - **Checksum vs signature.** A SHA-256 checksum (Web Crypto) catches damaged files. It does not prove who made a file; any real signature needs keys a child app can't keep secret **[A]**. Call it integrity, not authenticity.
 - **QR** fits only summaries: a QR code holds at most 2,953 bytes ([Denso Wave](https://www.qrcode.com/en/about/version.html)). Use QR for a "today's results" card, files for full logs.
 - **Shared school browsers** (Chromebook guest mode, profiles wiped at logout) erase options 1–3 every session **[A, varies by school setup]**. There, the export file at end of session is the only thing that keeps progress.
 
-## Shared-device handling (option 8)
+## Shared-device handling (option 7)
 
 - Several **kid profiles** per device: nickname + picked avatar + colour. **No real names, birthdays, photos or voice.** Profile ID is a random UUID made on the device.
 - **Switching:** tap your avatar. No passwords for kids **[A: optional 4-picture code for classrooms]**.
@@ -76,9 +74,7 @@ Notes:
 |---|---|
 | **M1** (one lesson, web) | IndexedDB via `idb`; append-only event log keyed by profile; call `persist()` and show the result; "Add to Home Screen" prompt on iPad; profiles + parent gate; export/import NDJSON with checksum; reset profile / wipe all |
 | **M2** (authoring) | Versioned event schema + migration tests; static **teacher dashboard** that reads dropped export files, held in memory, nothing saved unless the teacher exports |
-| **M3** (native iPad) | SwiftData or SQLite with the **same event schema**; `NSFileProtectionComplete`; export via share sheet (Files, AirDrop); import the web export |
-| **M4** (full grade) | Optional, opt-in **CloudKit private DB** sync for families and Shared iPad; test with Managed Apple Accounts |
-| **M5** (pilot) | Classroom pilot of the file-collection flow; privacy notice written for schools; review with counsel |
+| **M4** (pilot) | Classroom pilot of the file-collection flow; privacy notice written for schools; review with counsel |
 
 **Defer:** OPFS/SQLite-WASM (only if queries outgrow IndexedDB), any sync server, WebRTC peer sync, accounts, analytics.
 
@@ -87,19 +83,16 @@ Notes:
 - **COPPA** applies to operators of child-directed services that collect personal information from under-13s; it lists a persistent identifier among personal information ([FTC FAQ](https://www.ftc.gov/business-guidance/resources/complying-coppa-frequently-asked-questions)). The amended rule took effect June 23, 2025, with compliance by April 22, 2026 ([Federal Register](https://www.federalregister.gov/documents/2025/04/22/2025-05904/childrens-online-privacy-protection-rule)). **[A]** If nothing ever reaches us, we arguably collect nothing, but no static hosting logs, no analytics, and no third-party scripts must be true too.
 - **FERPA** covers education records kept by schools; exported files a teacher collects likely become school records, the school's responsibility **[A]** ([studentprivacy.ed.gov](https://studentprivacy.ed.gov/)). State student-privacy laws vary; not researched here.
 
-## Five risks
+## Three risks
 
 1. **Silent loss in Safari** if the app isn't on the Home Screen and isn't opened for 7 days of Safari use.
 2. **Clear-website-data or a wiped school browser** erases everything; families won't expect it.
-3. **Shared iPad** removes local data of the least recent user when space is short; local-only native storage can lose a child's year.
-4. **Export files are a privacy leak** if shared widely (email, shared drives). Keep them to nickname + events.
-5. **Schema drift** between web and native breaks import; one versioned schema is needed from M1.
+3. **Export files are a privacy leak** if shared widely (email, shared drives). Keep them to nickname + events.
 
 ## Not verified
 
 - That browser or iPadOS updates never clear site data (no source found either way).
 - Exactly how Safari decides to grant `persist()` beyond "heuristics like Home Screen install."
-- CloudKit private DB behaviour with **Managed Apple Accounts** on Shared iPad, and whether schools allow it.
 - Chromebook/managed-browser wipe policies in NC schools.
 - Whether any COPPA/FERPA/NC law reading treats on-device-only data as "collected." Needs counsel.
 - WASM bundle size for SQLite (estimate only).

@@ -88,7 +88,7 @@ Not part of this doc PR; listed for the build:
 ## Known gaps
 
 - The playable prototype was tested in **Chromium only**, not Safari, a real iPad, touch hardware, or VoiceOver.
-- Canvas-drawn buttons are **not accessible**. The shipping app needs native controls with proper labels.
+- Canvas-drawn buttons are **not accessible**. The shipping app needs real controls with proper labels.
 - Concept art was **AI-generated** and may not be copyrightable (Thaler v. Perlmutter; US Copyright Office AI Part 2, Jan 2025). A named owner must redraw each character as original layered SVG (CC0) before release. Owner: TBD (Anantha to assign).
 - **Mascots and art are not part of this PR.**
 - **No study supports random rotation of story characters** between problems; that choice is design reasoning, not evidence (see [research/mascots.md](research/mascots.md)).
