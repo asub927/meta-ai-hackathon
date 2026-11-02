@@ -12,7 +12,7 @@ execSync("pnpm --filter @kids-math/core exec tsc -p tsconfig.cli.json", { cwd: R
 
 const core = await import("../packages/core/.validate-dist/index.js");
 const { loadSpec, problemFromSpec, skeletonFor } = await import("./spec.mjs");
-const { generateDraft, shapeIssues, mergeRepair, validateModel } = await import("./draft.mjs");
+const { generateDraft, shapeIssues, mergeRepair, validateModel, bannedPlaceholders } = await import("./draft.mjs");
 const { completeWithCache } = await import("./llm.mjs");
 
 const SPEC = JSON.parse(readFileSync(new URL("./examples/stickers-31-12.spec.json", import.meta.url), "utf8"));
@@ -246,5 +246,129 @@ describe("shapeIssues", () => {
     const issues = shapeIssues({ lines: {}, reactions: {} }, [{ id: "q", step: "final", interaction: "count" }]);
     assert.ok(issues.some((i) => i.code === "missing-line"));
     assert.ok(issues.some((i) => i.code === "missing-reaction"));
+  });
+});
+
+const startUnknownSpec = (id) => loadSpec({
+  id, standard: "NC.2.OA.1", hero: "Kiwi", friend: "Momo", item: "marble", source,
+  problem: { unknown: "start", result: 14, steps: [{ kind: "give", n: 9, to: "Momo" }] },
+});
+
+const changeUnknownSpec = (id) => loadSpec({
+  id, standard: "NC.2.OA.1", hero: "Momo", friend: "Kiwi", item: "kite", source,
+  problem: { start: 14, unknown: "change", result: 23, steps: [{ kind: "receive", n: 0, from: "Kiwi" }] },
+});
+
+const solvedFor = (spec) => core.solve(problemFromSpec(loadSpec(spec)));
+
+const withAsk = (skeleton, ask) => {
+  const m = cleanLines(skeleton);
+  m.lines[skeleton[0].id].ask = ask;
+  return m;
+};
+
+describe("bannedPlaceholders", () => {
+  it("result-unknown bans answer, missing and result but not start", () => {
+    const banned = bannedPlaceholders(problemFromSpec(loadSpec(SPEC)), solvedFor(SPEC));
+    assert.deepEqual([...banned.keys()].sort(), ["answer", "missing", "result"]);
+    assert.equal(banned.get("result"), 19);
+  });
+
+  it("start-unknown bans start and allows the known result", () => {
+    const spec = startUnknownSpec("take-start");
+    const banned = bannedPlaceholders(problemFromSpec(spec), solvedFor(spec));
+    assert.deepEqual([...banned.keys()].sort(), ["answer", "missing", "start"]);
+    assert.equal(banned.get("start"), 23);
+  });
+
+  it("change-unknown allows the known result", () => {
+    const spec = changeUnknownSpec("add-change");
+    const banned = bannedPlaceholders(problemFromSpec(spec), solvedFor(spec));
+    assert.deepEqual([...banned.keys()].sort(), ["answer", "missing"]);
+  });
+});
+
+describe("banned-placeholder enforcement", () => {
+  it("fires for {answer} and names what it resolves to", () => {
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    const result = validateModel(core, spec, withAsk(skeleton, "Is it {answer} now?"));
+    assert.equal(result.status, "needs-human");
+    assert.ok(result.issues.some((i) => i.code === "banned-placeholder"
+      && i.path === `lines.${skeleton[0].id}.ask` && /\{answer\}.*19/.test(i.message)));
+  });
+
+  it("fires for {missing}, {result} on result-unknown, and {shown} in questions", () => {
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    for (const [ask, name] of [["Are there {missing} now?", "missing"], ["Are there {result} now?", "result"], ["Look at {shown} now?", "shown"]]) {
+      const result = validateModel(core, spec, withAsk(skeleton, ask));
+      assert.equal(result.status, "needs-human");
+      assert.ok(result.issues.some((i) => i.code === "banned-placeholder" && i.message.includes(`{${name}}`)), ask);
+    }
+  });
+
+  it("fires for {start} on a start-unknown story", () => {
+    const spec = startUnknownSpec("take-start");
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    const result = validateModel(core, spec, withAsk(skeleton, "Did {hero} start with {start}?"));
+    assert.equal(result.status, "needs-human");
+    assert.ok(result.issues.some((i) => i.code === "banned-placeholder" && /\{start\}.*23/.test(i.message)));
+  });
+
+  it("allows {result} on change-unknown and {start} on result-unknown", () => {
+    const change = changeUnknownSpec("add-change");
+    const changeSkel = skeletonFor(core.solve(problemFromSpec(change)), change.id);
+    assert.equal(validateModel(core, change, withAsk(changeSkel, "Did {result} arrive then?")).status, "validated");
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    assert.equal(validateModel(core, spec, withAsk(skeleton, "Did {hero} start with {start}?")).status, "validated");
+  });
+
+  it("allows {shown} in reactions", () => {
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    const model = cleanLines(skeleton);
+    model.reactions.unknown = "Count with me to {shown}.";
+    assert.equal(validateModel(core, spec, model).status, "validated");
+  });
+
+  it("lists only givens in the system prompt", async () => {
+    const seen = [];
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    await generateDraft(core, spec, async ({ system }) => { seen.push(system); return JSON.stringify(cleanLines(skeleton)); });
+    assert.match(seen[0], /\{hero\} \{item\} \{start\}/);
+    assert.doesNotMatch(seen[0], /\{result\}/);
+    assert.doesNotMatch(seen[0], /\{answer\}/);
+    assert.doesNotMatch(seen[0], /\{missing\}/);
+    const start = startUnknownSpec("take-start");
+    const startSkel = skeletonFor(core.solve(problemFromSpec(start)), start.id);
+    await generateDraft(core, start, async ({ system }) => { seen.push(system); return JSON.stringify(cleanLines(startSkel)); });
+    assert.doesNotMatch(seen[1], /\{start\}/);
+    assert.match(seen[1], /\{result\}/);
+    const change = changeUnknownSpec("add-change");
+    const changeSkel = skeletonFor(core.solve(problemFromSpec(change)), change.id);
+    await generateDraft(core, change, async ({ system }) => { seen.push(system); return JSON.stringify(cleanLines(changeSkel)); });
+    assert.match(seen[2], /\{hero\} \{item\} \{start\} \{result\}/);
+  });
+
+  it("lists reactions-only placeholders in the repair prompt", async () => {
+    const spec = loadSpec(SPEC);
+    const skeleton = skeletonFor(core.solve(problemFromSpec(spec)), spec.id);
+    const full = cleanLines(skeleton);
+    const { ["unknown"]: _drop, ...keptReactions } = full.reactions;
+    const tailed = JSON.stringify({ ...full, reactions: keptReactions });
+    const repair = JSON.stringify({ reactions: { unknown: full.reactions.unknown } });
+    const users = [];
+    await generateDraft(core, spec, async ({ user, key }) => {
+      if (key.endsWith(".repair1")) users.push(user);
+      return key.endsWith(".repair1") ? repair : tailed;
+    });
+    assert.match(users[0], /\{shown\}/);
+    assert.match(users[0], /\{start\}/);
+    assert.doesNotMatch(users[0], /\{answer\}/);
+    assert.doesNotMatch(users[0], /\{missing\}/);
+    assert.doesNotMatch(users[0], /\{result\}/);
   });
 });

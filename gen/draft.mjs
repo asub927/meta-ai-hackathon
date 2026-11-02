@@ -5,7 +5,6 @@
 
 import { REACTION_IDS, problemFromSpec, skeletonFor } from "./spec.mjs";
 
-const PLACEHOLDERS = "{hero} {item} {start} {answer} {result} {missing}";
 const MAX_LINE = 30;
 
 function stepWords(solved, q) {
@@ -23,13 +22,14 @@ function stepWords(solved, q) {
 }
 
 function systemPrompt(solved) {
+  const allowed = showPlaceholders(allowedPlaceholders(solved.problem, solved));
   return [
     "You write story lines for a Socratic math tutor. The tutor never states the answer.",
     "It asks one short question, the child acts, the story reacts. A wrong answer is",
     "never marked wrong: no red X, no wrong, no incorrect, no try again, no saying no.",
     "",
     "RULES FOR EVERY LINE YOU WRITE:",
-    `- Placeholders only, from this list: ${PLACEHOLDERS}. Reactions may also use {shown}.`,
+    `- Placeholders only, from this list: ${allowed}. Reactions may also use {shown}.`,
     "- Never write a digit 0-9 in any line.",
     "- Never write a number word (one, two, three, ... twenty).",
     `- Keep every line under ${MAX_LINE} characters; the app rejects bubbles over 45 after filling.`,
@@ -81,13 +81,16 @@ function retryPrompt(previous, issues) {
  *  draft that drops trailing ids is under output-budget pressure; re-asking
  *  for the full JSON reproduces the same pressure and fails the same way.
  *  A pips-only object is a few lines and has no tail to drop. */
-function repairPrompt(missingIds) {
+function repairPrompt(missingIds, solved) {
+  const banned = bannedPlaceholders(solved.problem, solved);
+  const allowed = showPlaceholders(
+    ["hero", "item", "shown"].concat(["start", "result"].filter((n) => !banned.has(n))));
   return [
     "Some reaction lines are missing from the story draft. Write ONLY these reaction ids:",
     ...missingIds.map((id) => `- ${id}`),
     "",
     "RULES FOR EVERY LINE YOU WRITE:",
-    `- Placeholders only, from this list: ${PLACEHOLDERS}. You may also use {shown}.`,
+    `- Placeholders only, from this list: ${allowed}.`,
     "- Never write a digit 0-9 in any line.",
     "- Never write a number word (one, two, three, ... twenty).",
     "- Refer to the child-facing characters only with {hero} or they/them/their.",
@@ -114,10 +117,41 @@ export function mergeRepair(model, missingIds, text) {
   return { ...model, reactions };
 }
 
+/** Flag model lines using a placeholder that resolves to the answer.
+ *  Runs after the shape check (so every scanned line is a string) and before
+ *  assembly, so a leak fails closed without a derived story. */
+function placeholderIssues(solved, skeleton, model) {
+  const banned = bannedPlaceholders(solved.problem, solved);
+  const issues = [];
+  const scan = (template, path, isQuestion) => {
+    for (const [name, value] of banned) {
+      if (template.includes(`{${name}}`)) issues.push({
+        code: "banned-placeholder", path,
+        message: `{${name}} resolves to ${value}, the answer; restate without it`,
+      });
+    }
+    if (isQuestion && template.includes("{shown}")) issues.push({
+      code: "banned-placeholder", path,
+      message: "{shown} is a runtime slot for reactions only; restate without it",
+    });
+  };
+  for (const q of skeleton) {
+    const l = model.lines[q.id];
+    scan(l.ask, `lines.${q.id}.ask`, true);
+    scan(l.hints[0], `lines.${q.id}.hints.0`, true);
+    scan(l.hints[1], `lines.${q.id}.hints.1`, true);
+    l.explainChoices.forEach((c, i) => scan(c, `lines.${q.id}.explainChoices.${i}`, true));
+  }
+  for (const id of REACTION_IDS) scan(model.reactions[id], `reactions.${id}`, false);
+  return issues;
+}
+
 /** Shape-check one parsed model object, then assemble and validate it. */
 function evaluate(core, spec, solved, skeleton, model) {
   const shaped = shapeIssues(model, skeleton);
   if (shaped.length) return { ok: false, story: null, issues: shaped };
+  const leaked = placeholderIssues(solved, skeleton, model);
+  if (leaked.length) return { ok: false, story: null, issues: leaked };
   const { story, issues } = assembleStory(core, spec, solved, skeleton, model);
   if (!issues.length && story) return { ok: true, story, issues: [] };
   return { ok: false, story: null, issues };
@@ -135,6 +169,32 @@ export function validateModel(core, spec, model) {
     slots: evaluated.issues.map(toSlot), issues: evaluated.issues,
   };
 }
+
+/** Placeholders that state the answer for a (problem, solved) pair, mapped
+ *  to the value each resolves to under fill(). `{answer}` and `{missing}`
+ *  always resolve to the answer. `{start}` is the derived start, so it leaks
+ *  only on start-unknown stories. `{result}` falls back to the answer when
+ *  the problem has no known final total, so it leaks unless the known result
+ *  differs from the answer. Question lines must also never use `{shown}`:
+ *  a runtime slot for reaction pips only. */
+export function bannedPlaceholders(problem, solved) {
+  const banned = new Map([
+    ["answer", solved.answer],
+    ["missing", solved.answer],
+  ]);
+  if ((problem.unknown ?? "result") === "start") banned.set("start", solved.totals[0]);
+  if (!(problem.result !== undefined && problem.result !== solved.answer))
+    banned.set("result", problem.result ?? solved.answer);
+  return banned;
+}
+
+/** Question-line placeholders the model may use: givens only, never leaks. */
+function allowedPlaceholders(problem, solved) {
+  const banned = bannedPlaceholders(problem, solved);
+  return ["hero", "item", "start", "result"].filter((n) => !banned.has(n));
+}
+
+const showPlaceholders = (names) => names.map((n) => `{${n}}`).join(" ");
 
 /** Words-kind phase 1: the model parses a word problem into Problem params.
  *  Code re-derives and re-validates everything after; model numbers are input,
@@ -325,7 +385,7 @@ export async function generateDraft(core, spec, client) {
 async function tryRepair(core, spec, solved, skeleton, system, client, model, issues, round) {
   if (model === null || issues.length === 0 || !issues.every((i) => i.code === "missing-reaction")) return null;
   const missingIds = [...new Set(issues.map((i) => i.path.replace(/^reactions\./, "")))];
-  const repairText = await client({ system, user: repairPrompt(missingIds), key: `${spec.id}.repair${round}` });
+  const repairText = await client({ system, user: repairPrompt(missingIds, solved), key: `${spec.id}.repair${round}` });
   const merged = mergeRepair(model, missingIds, repairText);
   if (merged === null) return null;
   return evaluate(core, spec, solved, skeleton, merged);
