@@ -1,6 +1,6 @@
 # meta-ai-hackathon
 
-This repository holds planning for an iPad-first, open-source Socratic math app for kids: mascots act out answers on screen, wrong answers play out as story consequences instead of “wrong,” hints climb from questions to visual cues to worked examples, and progress stays on the device with no backend. The build order is a real web app first, then a native SwiftUI iPad app (not a wrapper). The first curriculum slice is North Carolina grade 2 math (NCDPI), one section at a time. **Nothing is built yet**—only planning documents are in this repo.
+This repository holds planning and the web app for an iPad-first and open-source Socratic math app for kids. Mascots act out answers on screen. Wrong answers play out as story consequences instead of being marked wrong. Hints climb from questions to visual cues to worked examples. Progress stays on the device with no backend. The web app is the hackathon build. A native iPad app is deferred to a later phase. It will not be a wrapper when it comes. The first curriculum slice is North Carolina grade 2 math (NCDPI), one section at a time. The web app lives in apps/web.
 
 ## Start here
 

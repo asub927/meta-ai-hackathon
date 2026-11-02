@@ -59,3 +59,7 @@ contract; the other twelve replayed clean. Specs: 20.
 - [ ] eval-nbt-add-regroup: evidence/U15/drafts/eval-nbt-add-regroup.draft.json
 - [ ] eval-nbt-add-start: evidence/U15/drafts/eval-nbt-add-start.draft.json
 - [ ] eval-nbt-sub-change: evidence/U15/drafts/eval-nbt-sub-change.draft.json
+- [ ] eval-nbt-sub-regroup: evidence/U15/drafts/eval-nbt-sub-regroup.draft.json
+- [ ] eval-nbt-sub-start: evidence/U15/drafts/eval-nbt-sub-start.draft.json
+- [ ] eval-nbt-twostep-b: evidence/U15/drafts/eval-nbt-twostep-b.draft.json
+- [ ] eval-oa-add-result: evidence/U15/drafts/eval-oa-add-result.draft.json

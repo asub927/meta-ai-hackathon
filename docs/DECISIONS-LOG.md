@@ -23,9 +23,11 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 15. **Pedagogy research on file:** [research/brilliant-pedagogy.md](research/brilliant-pedagogy.md) — borrow try-first and fading scaffolds; avoid leagues and streak pressure for young children. *No independent Brilliant efficacy study exists.*
 16. **Worked example explainer (rung 3):** [WORKED-EXAMPLE-EXPLAINER.md](WORKED-EXAMPLE-EXPLAINER.md) — when still stuck, the third hint is its own calm explainer that walks through the **same question** and derives the answer step by step (Next / Back, no timers). Light theme, dots or ten-frame, question pinned at top; mascots and story cards stay in the main flow and wrong-answer consequences, not here. Explanations are templated data (ordered steps plus text per step). Pip as a small text voice on each step is undecided (default none).
 
-## Proposed, needs Anantha approval at landing
+## Nov 2, 2026. Web-only hackathon build (Anantha, approved)
 
-21. **Web-only hackathon build; native iPad deferred to a later phase.** M3 (U16–U23), the STACK.md §5 native design, the JSC/CoreBridge/Swift-types legs, and the macOS CI job are deferred, not built. iPad use is covered by Safari hardening and Add to Home Screen (PLAN.md U10/U11). No Mac runner or Apple Developer account needed for the hackathon build. PLAN.md, STACK.md, and VISION.md reworded to match; native design kept on file, not deleted. Defaults needing Anantha's yes: no wrapper of any kind when native returns, and no Apple account action now.
+21. **Web-only hackathon build; native iPad deferred to a later phase.** (Anantha, Nov 2, 2026). M3 (U16 to U23), the STACK.md §5 native design, the JSC and CoreBridge and Swift-types legs, and the macOS CI job are deferred and not built. iPad use is covered by Safari hardening and Add to Home Screen (PLAN.md U10 and U11). No Mac runner or Apple Developer account is needed for the hackathon build. PLAN.md, STACK.md, and VISION.md are reworded to match. The native design stays on file and is not deleted. No wrapper of any kind comes when native returns. No Apple account action happens now.
+
+## Proposed, needs Anantha approval at landing
 
 Drafted as 12–15 before entries 12–16 above landed via PR3/PR4. Renumbered 17–20 to avoid collision. Content unchanged.
 17. Spikes retired unbuilt: U1 bakeoff, U2 feel variants, U2b JSC/CoreBridge, U2c quicktype. No bakeoff table, proto dir, or evidence was ever produced. WAAPI stands as the animation surface. Native bridges defer with the backend (entry 4).
