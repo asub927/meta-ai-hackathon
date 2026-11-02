@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseStoryData, validateStory, type StoryData } from "./index.js";
+import { parseStoryData, solve, validateStory, type StoryData } from "./index.js";
 import { stickerStory } from "./fixture.js";
 
 const clone = (): StoryData => JSON.parse(JSON.stringify(stickerStory)) as StoryData;
@@ -81,5 +81,37 @@ describe("validateStory (rule contract, codes not messages)", () => {
     expect(codes(src as StoryData)).toContain("missing-source");
     const nc = clone(); nc.source!.licence = "CC BY-NC 4.0";
     expect(codes(nc)).toContain("forbidden-source-licence");
+  });
+});
+
+describe("answer-in-line backstop (filled lines, not templates)", () => {
+  it("rung-3 literal numbers and {shown} pips pass", () => {
+    expect(codes(clone())).not.toContain("answer-in-line");
+  });
+  it("a given passes: {start} on a result-unknown story", () => {
+    const s = clone();
+    (s.questions[0] as { ask: string }).ask = "Did {hero} start with {start}?";
+    expect(validateStory(s)).toEqual([]);
+  });
+  it("{result} on a result-unknown story states the answer", () => {
+    const s = clone();
+    (s.questions[0] as { ask: string }).ask = "Are there {result} now?";
+    expect(codes(s)).toContain("answer-in-line");
+  });
+  it("{start} on a start-unknown story states the answer", () => {
+    const s = clone();
+    s.solved = solve({
+      id: "take-start", standard: "NC.2.OA.1", hero: "Momo", friend: "Kiwi",
+      item: "sticker", start: 0, unknown: "start", result: 15,
+      steps: [{ kind: "give", n: 9, to: "Kiwi" }],
+    });
+    (s.questions[0] as { ask: string }).ask = "Did {hero} start with {start}?";
+    expect(s.solved.answer).toBe(24);
+    expect(codes(s)).toContain("answer-in-line");
+  });
+  it("{missing} anywhere states the answer", () => {
+    const s = clone();
+    (s.questions[0] as { ask: string }).ask = "Are there {missing} now?";
+    expect(codes(s)).toContain("answer-in-line");
   });
 });

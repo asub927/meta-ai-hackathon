@@ -6,6 +6,10 @@ const NUMBER_WORD = /\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|el
 const NEVER_WRONG = /\b(wrong|incorrect)\b|try again/i;
 const GENDERED = /\b(he|she|him|her|his|hers|himself|herself)\b/i;
 const MAX_BUBBLE = 45;
+// Probe fill for the answer-in-line backstop: {shown} is a runtime slot
+// filled with the child's own number, so a letters-only sentinel keeps a
+// stray {shown} from false-positiving the digit scan below.
+const SHOWN_SENTINEL = "Shown";
 
 /** Rule contract (PLAN.md U4): a bad lesson cannot get past validate.
  *  Tests and callers branch on `Issue.code`, never on message text. */
@@ -45,6 +49,21 @@ export function validateStory(story: StoryData): Issue[] {
     try {
       if (fill(template, story.solved, extra).length > MAX_BUBBLE) add("bubble-too-long", path, "bubble over 45 characters after filling");
     } catch { add("unknown-placeholder", path, "placeholder is not derived by the solver"); }
+    // Answer-in-line backstop: the template checks above see placeholders,
+    // never numbers, so a placeholder resolving to the answer ({answer} and
+    // {missing} always; {start} on start-unknown, {result} on result-unknown
+    // stories) would slip through. Fill with solver numbers and flag a line
+    // stating the answer. Rung-3 explainer steps are exempt by construction
+    // (hints[2] never enters checkLine; literal numbers by design), as are
+    // reaction pips ({shown} is a runtime slot with the child's own number).
+    if (!path.startsWith("reactions.")) {
+      try {
+        const filled = fill(template.replace(/\{shown\}/g, SHOWN_SENTINEL), story.solved, extra);
+        const stated = filled.match(/(?<!\d)\d+(?!\d)/g) ?? [];
+        if (stated.some((n) => Number(n) === story.solved.answer))
+          add("answer-in-line", path, "line states the answer after filling");
+      } catch { /* unknown placeholder already reported above */ }
+    }
   };
 
   story.questions.forEach((q, qi) => {
