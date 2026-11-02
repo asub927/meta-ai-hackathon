@@ -27,6 +27,10 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 
 21. **Web-only hackathon build; native iPad deferred to a later phase.** (Anantha, Nov 2, 2026). M3 (U16 to U23), the STACK.md §5 native design, the JSC and CoreBridge and Swift-types legs, and the macOS CI job are deferred and not built. iPad use is covered by Safari hardening and Add to Home Screen (PLAN.md U10 and U11). No Mac runner or Apple Developer account is needed for the hackathon build. PLAN.md, STACK.md, and VISION.md are reworded to match. The native design stays on file and is not deleted. No wrapper of any kind comes when native returns. No Apple account action happens now.
 
+## Nov 2, 2026. Full app build branch (Anantha, approved)
+
+23. **Full app builds on `poteto/web-only-cut` until Anantha signs off.** (Anantha, Nov 2, 2026). The full app builds on the branch `poteto/web-only-cut`. The branch merges to `main` only when Anantha is satisfied with the outcome. Pull requests to `main` stay closed or unopened until then. Unit work continues as commits on this branch. This entry supersedes the stacked-PR landing reading in PLAN.md and docs/STACK.md section 7 for the hackathon build.
+
 ## Proposed, needs Anantha approval at landing
 
 Drafted as 12–15 before entries 12–16 above landed via PR3/PR4. Renumbered 17–20 to avoid collision. Content unchanged.
