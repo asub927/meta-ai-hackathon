@@ -25,6 +25,8 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 
 ## Proposed, needs Anantha approval at landing
 
+21. **Web-only hackathon build; native iPad deferred to a later phase.** M3 (U16–U23), the STACK.md §5 native design, the JSC/CoreBridge/Swift-types legs, and the macOS CI job are deferred, not built. iPad use is covered by Safari hardening and Add to Home Screen (PLAN.md U10/U11). No Mac runner or Apple Developer account needed for the hackathon build. PLAN.md, STACK.md, and VISION.md reworded to match; native design kept on file, not deleted. Defaults needing Anantha's yes: no wrapper of any kind when native returns, and no Apple account action now.
+
 Drafted as 12–15 before entries 12–16 above landed via PR3/PR4. Renumbered 17–20 to avoid collision. Content unchanged.
 17. Spikes retired unbuilt: U1 bakeoff, U2 feel variants, U2b JSC/CoreBridge, U2c quicktype. No bakeoff table, proto dir, or evidence was ever produced. WAAPI stands as the animation surface. Native bridges defer with the backend (entry 4).
 18. Storage: web persists in IndexedDB via idb, the PROGRESS-STORAGE.md recommended default. navigator.storage.persist() result shown in settings, Add to Home Screen prompt with non-persistent warning. Mount performs a one-time import of kids-math-progress, kids-math-log-v1, and kids-math-sound from localStorage, copies only missing values into IndexedDB, then removes migrated legacy keys. No other src use remains.

@@ -14,7 +14,7 @@ Status: decision document, Oct 28, 2026, revised the same evening with Anantha's
 9. **Subject order: math, science, English language arts.**
 10. **English only.** Spanish deferred, no timeline.
 
-**Goal.** Anantha wants a child to work out a math story problem with Pip asking, not telling. He has set the order. First a real web application, then a native SwiftUI iPad app, later a curriculum at scale. **The problem this document solves.** Two native UIs must show the same numbers, the same Socratic flow and the same timing, without two teams drifting apart. **The smallest stack that meets it** is one TypeScript domain core, data contracts that both apps parse, and two thin native renderers.
+**Goal.** Anantha wants a child to work out a math story problem with Pip asking, not telling. He has set the order. For the hackathon build the app ships as a real web application only; a native SwiftUI iPad app is deferred to a later phase. Later, a curriculum at scale. **The problem this document solves.** One web UI must show the same numbers, the same Socratic flow and the same timing the data promises, without a second platform drifting. **The smallest stack that meets it** is one TypeScript domain core, data contracts the app parses, and one thin renderer, with the iOS bridge design kept on file for M3.
 
 Built with pstack. `poteto-mode` set the style and the playbook mapping. `architect` shaped the module boundaries (sketch only, no arena run yet, see section 9). Principles that changed a decision are named where they did.
 
@@ -22,20 +22,20 @@ Built with pstack. `poteto-mode` set the style and the playbook mapping. `archit
 
 | Layer | Recommendation | Runner-up (why not) |
 |---|---|---|
-| Shared core | One subject-neutral TypeScript core (`step`, `detect`, `fill`, `choreograph`) with pluggable subject modules (math first, then science, then ELA). Rewards, mastery, review and the parent report are pure functions over the on-device event log. Zod 4 schema is the source of truth, exported to JSON Schema. iOS runs the same core bundle in JavaScriptCore behind a typed Swift facade. Conformance vectors prove Node, WebKit and iOS agree. | Swift port of the runtime core plus the same vectors. Every rule change becomes two PRs. Kept as the fallback if the JSC spike fails |
+| Shared core | One subject-neutral TypeScript core (`step`, `detect`, `fill`, `choreograph`) with pluggable subject modules (math first, then science, then ELA). Rewards, mastery, review and the parent report are pure functions over the on-device event log. Zod 4 schema is the source of truth, exported to JSON Schema. The iOS JavaScriptCore bridge design is kept on file for M3 and not built. Conformance vectors prove Node and WebKit agree (iOS joins when native returns). | Swift port of the runtime core plus the same vectors. Every rule change becomes two PRs. Kept as the fallback if the JSC spike runs when native returns |
 | Content format | `StoryData` JSON, Zod 4 parse at the boundary, `z.toJSONSchema` for the LLM and for Swift types | Hand-written JSON Schema with Ajv. Two sources of truth for one shape |
-| Motion | `BeatScript` data (tracks, keyframes, sampled springs, cues) on a fixed 1280×720 logical stage. Web plays it with WAAPI. iOS plays it with a Swift evaluator driven by `TimelineView` | Motion 14 (MIT) on web. Good, but adds a runtime and does nothing for iOS parity |
+| Motion | `BeatScript` data (tracks, keyframes, sampled springs, cues) on a fixed 1280×720 logical stage. Web plays it with WAAPI. The Swift evaluator is deferred with M3. | Motion 14 (MIT) on web. Good, but does nothing for a future iOS parity. Kept only if WAAPI loses a future bakeoff |
 | Web app | React 19, TypeScript 7, Vite 8, react-router 8 (declarative mode), pure reducer (no XState), WebAudio, vite-plugin-pwa, idb | Svelte 5. Smaller runtime, but the stage is imperative either way and agents are most fluent in React |
 | Web tests | Vitest 5, Testing Library, Playwright 1.64 (Chromium and WebKit, iPad descriptors), axe via `@axe-core/playwright` (test-only) | Cypress. No WebKit |
 | Generator | Node CLI. Structured output against the Zod-derived JSON Schema through the Anthropic/OpenAI gateway, then `lesson/validate`, one retry, then a human slot. Recorded cache in CI | Runtime generation. Off the table for children (COPPA, stability) |
 | Offline video | Playwright seeks the web player frame by frame, ffmpeg encodes, audio rendered from the cue sheet | Real-time screencast (v3). Not repeatable |
 | Backend | **None for the hackathon; deferred (decided).** Static files for the web app (Caddy in Docker if self-hosted). Lessons ship inside each app build or as content-pack files | Any server now, including the earlier M4 Hono, Postgres and Keycloak plan. Deferred; post-hackathon design starts from a Kolibri study |
-| Learner data | Append-only `LocalEvent` log on the device (IndexedDB on web, SwiftData on iPad). Export and import as a file. Storage options are compared in `PROGRESS-STORAGE.md` | Any sync. Future option only |
-| Read-aloud | On-device speech: Web Speech filtered to `localService` voices, AVSpeechSynthesizer on iPad. English only | Recorded or cloud voices. Remote voices send text off the device |
-| iPad app | iPadOS 17 minimum, built with Xcode 26. SwiftUI with `@Observable` store, no TCA. AVAudioEngine. SwiftData for the event log | TCA (MIT). A second reducer layer around a reducer that already exists in the core |
-| Mascot assets | One SVG per mascot with named rig groups, art under CC0 1.0. Web inlines it. A small in-repo script generates SwiftUI `Shape` code per part | Rive. The runtime is MIT, but the editor is hosted SaaS and the v3 art is SVG |
+| Learner data | Append-only `LocalEvent` log on the device (IndexedDB on web). Export and import as a file. Storage options are compared in `PROGRESS-STORAGE.md` | Any sync. Future option only |
+| Read-aloud | On-device speech: Web Speech filtered to voices with `localService` set. English only | Recorded or cloud voices. Remote voices send text off the device |
+| iPad app | Deferred with M3 to a later phase: iPadOS 17 minimum, SwiftUI with `@Observable` store, SwiftData event log, AVSpeechSynthesizer read-aloud, log export and import. Not built in the hackathon. | n/a |
+| Mascot assets | One SVG per mascot with named rig groups, art under CC0 1.0. Web inlines it. (Deferred with M3: a small in-repo script generating SwiftUI `Shape` code per part) | Rive. The runtime is MIT, but the editor is hosted SaaS and the v3 art is SVG |
 | iOS tests | Swift Testing and XCTest, swift-snapshot-testing (MIT) at fixed timeline times, XCUITest for child paths | Manual simulator checks. Not rerunnable |
-| Repo and CI | One pnpm monorepo. GitHub Actions. Linux jobs for everything except Xcode. macOS job on a self-hosted runner on Anantha's Mac (actions/runner is MIT), GitHub-hosted `macos-26` as fallback | Two repos. The contracts would cross a repo boundary on every change |
+| Repo and CI | One pnpm monorepo. GitHub Actions. Linux jobs for everything (the hackathon build needs nothing else). The macOS/Xcode job returns with M3. | Two repos. The contracts would cross a repo boundary on every change |
 | Licences | MIT code, CC BY-SA 4.0 content, CC0 mascot art. CI checks dependency licences against an allow-list (section 10) and content source licences (no NC, no ND) | Apache-2.0 for code. Decided against |
 | Process | pstack throughout (the process skills and playbooks the engineering team follows). Delivery Lead runs `/poteto-mode` and the Orchestrate playbook, units go through Feature, Prototype, Visual parity, Eval, Hillclimb, Bug fix and Trace forensics. All communication about this project goes through the Delivery Lead bot, with no direct side channels. The Scribe notes every decision and discussion (including voice calls) in `DECISIONS-LOG.md`. A process rule, not a stack choice | None. Anantha said no exceptions |
 
@@ -62,16 +62,12 @@ Moving derivations to authoring time is also **Subtract Before You Add**. The de
 
 | Option | One implementation? | Cloud-agent friendly (Linux) | Licence | Verdict |
 |---|---|---|---|---|
-| TS core, run on iOS in JavaScriptCore | yes | yes (Node tests) | built into iOS | **Recommended** |
+| TS core, run on iOS in JavaScriptCore | yes | yes (Node tests) | built into iOS | **Deferred design for M3** |
 | Duplicate in Swift, conformance vectors | no | yes (`swift test` in the `swift:6.4` Docker image) | n/a | Runner-up, fallback |
 | Rust core via UniFFI, wasm on web | yes | partly | UniFFI is MPL-2.0 | Rejected. Adds Rust, wasm and FFI builds for about 600 lines of logic |
 | Kotlin Multiplatform | yes | partly | Apache-2.0 | Rejected. Gradle plus Kotlin/Native for Swift, heavy for the size, no web DOM fit |
 
-**How the recommended core works.**
-- `packages/core` is TypeScript strict, no DOM, no Node APIs. It builds two artefacts: an ES module for the web app and a single IIFE bundle (`core.ios.js`) that ships inside the iOS app bundle. It is never downloaded, which keeps App Review guideline 2.5.2 satisfied (no downloaded code).
-- `CoreBridge.swift` owns one `JSContext`. Each call passes JSON in and gets JSON out. The Swift side decodes results into Codable types at that boundary and trusts them after (**Boundary Discipline**). Calls happen per child event and per beat, never per frame. The derived-view functions run when a screen opens, not per frame.
-- Swift types come from the same Zod schema. `z.toJSONSchema` writes `schema/story.schema.json` and quicktype (Apache-2.0) generates Swift Codable types. Unverified: whether quicktype emits Swift enums with associated values for our discriminated unions (`Step`, `Interaction`, `Answer`, `Effect`). A one-hour spike decides it. If not, the ~12 union types are hand-written Codable enums, and the round-trip vectors below catch any drift.
-- Branded numbers survive the boundary. `Count` is a Swift struct with an internal initializer that only `CoreBridge` decoding can call, mirroring the TS brand (**Type System Discipline**).
+**How the core runs (web-only build).** `packages/core` is TypeScript strict, no DOM, no Node APIs. It builds the ES module the web app runs. The iOS bundle (`core.ios.js`), `CoreBridge.swift`, and the JSC conformance leg below are deferred with M3; the design is kept, not built.
 
 **Conformance vectors (how we prove both platforms agree).**
 1. `pnpm vectors` writes `packages/conformance/vectors/*.json` from the TS core. Each vector holds an input and its expected canonical JSON output (sorted keys, integers only).
@@ -81,11 +77,11 @@ Moving derivations to authoring time is also **Subtract Before You Add**. The de
    - `BeatScript` outputs for every beat and reaction of every fixture, rounded to 0.01 px.
    - Derived views: `mastery`, `rewards`, `streak` and `parentReport` over seeded random event logs.
    - Schema round trips: every good fixture must decode and re-encode byte-equal, and every bad-shape fixture must be rejected.
-2. The same vectors run in three hosts. Node (Vitest), WebKit (Playwright loads the ES module in a blank page) and iOS JavaScriptCore through `CoreBridge` (XCTest). All three must match byte for byte.
-3. The evaluators that turn a `BeatScript` into values at time `t` exist twice, in TS (WAAPI adapter and renderer) and Swift (`BeatPlayer`). Each is about 150 lines. Vectors sample 30 times per beat and require agreement within 0.01 px and 0.001 opacity.
+2. The same vectors run in two hosts. Node (Vitest) and WebKit (Playwright loads the ES module in a blank page). Both must match byte for byte. The iOS JavaScriptCore leg through `CoreBridge` (XCTest) returns with M3.
+3. The evaluator that turns a `BeatScript` into values at time `t` exists in TS (WAAPI adapter and renderer). The Swift `BeatPlayer` twin is deferred with M3; when it lands, vectors sample 30 times per beat and require agreement within 0.01 px and 0.001 opacity.
 4. CI fails if `vectors/` is stale (regenerate, then `git diff --exit-code`).
 
-**Fallback trigger.** The JSC spike (Prototype playbook, M0) measures `step` plus `fill` round-trip latency on an iPad simulator and on a real iPad. Decision written before the run: keep JSC if p95 is under 4 ms across 3 runs of 1,000 calls with a spread under 20 percent. Otherwise port the four functions to Swift and keep the vectors as the contract. Unmeasured today; no latency claim is made here (**Explain the Number**).
+**Fallback trigger (deferred with M3).** The JSC spike (Prototype playbook, M0) measures `step` plus `fill` round-trip latency on an iPad simulator and on a real iPad. Decision written before the run: keep JSC if p95 is under 4 ms across 3 runs of 1,000 calls with a spread under 20 percent. Otherwise port the four functions to Swift and keep the vectors as the contract. Unmeasured today; no latency claim is made here (**Explain the Number**).
 
 ## 2. Web application
 
@@ -103,7 +99,7 @@ Moving derivations to authoring time is also **Subtract Before You Add**. The de
 | Read-aloud | Web Speech `speechSynthesis`, only voices with `localService === true`; if none, read-aloud is hidden rather than using a remote voice. Word highlighting from boundary events | browser built-in |
 | Fonts | Fredoka and Nunito, self-hosted | SIL OFL 1.1 |
 
-**State machine: no library.** **Model the Domain** is satisfied by the reducer PLAN.md already defines. XState 5 (5.33.3, MIT) would add hierarchical and actor semantics that the Swift side would then have to reproduce. A plain `step` function is what crosses to iOS through JSC, so a library on the web side only would fork the semantics. The pstack `statechart` skill can model-check the flow in TLA+ instead (every path reaches `done`, no `say` contains the answer before the child gives it).
+**State machine: no library.** **Model the Domain** is satisfied by the reducer PLAN.md already defines. XState 5 (5.33.3, MIT) would add hierarchical and actor semantics that the Swift side would then have to reproduce. A plain `step` function is what would cross to iOS through JSC when native returns, so a library on the web side only would fork the semantics then. The pstack `statechart` skill can model-check the flow in TLA+ instead (every path reaches `done`, no `say` contains the answer before the child gives it).
 
 **Animation engine.** Recommend WAAPI. GSAP's standard licence (https://gsap.com/standard-license) is no-charge, commercial use allowed, but it is not MIT, forbids use in visual animation builders that compete with Webflow, and lets Webflow terminate the licence in its discretion. Motion 14.7.1 is MIT and has seekable sequences (https://motion.dev/docs/animate), so it stays the runner-up if WAAPI loses the U1 bakeoff. With `BeatScript` as data, the engine is an adapter of about 200 lines, so the choice stays reversible. Springs are sampled once in `choreograph` and played as WAAPI `linear()` easing, so web and iOS use identical numbers. Emil Kowalski's rules apply unchanged (strong ease-out `cubic-bezier(0.23, 1, 0.32, 1)`, no `scale(0)`, transform and opacity plus sanctioned `clip-path`, reduced motion keeps state and drops movement), with `animate`, `animation-performance` and `review-animations` on every motion PR.
 
@@ -145,7 +141,9 @@ For the hackathon there is no server. The backend is **deferred** to a future im
 
 Product analytics SaaS and third-party SDKs are out. Apple guideline 1.3 bars third-party analytics in Kids Category apps except in narrow cases (https://developer.apple.com/app-store/review/guidelines/). CI asserts zero network requests during a lesson.
 
-## 5. Native iPad app (SwiftUI)
+## 5. Native iPad app (SwiftUI) — deferred with M3
+
+Not built in the hackathon. iPad use is covered by Safari hardening and the Add to Home Screen path (PLAN.md U10/U11). The design below is kept on file and returns as one unit per subsystem when native reactivates. Every unit's VERIFY then runs in the macOS CI job (self-hosted runner on Anantha's Mac, `macos-26` fallback) and attaches `.xcresult`, snapshot diffs and simulator videos.
 
 **Targets.** Minimum iPadOS 17, the release that brought Observation, SwiftData, `PhaseAnimator`, `keyframeAnimator` and `Spring` (availability read from Apple's documentation JSON for each symbol). App Store uploads must be built with Xcode 26 and the iOS 26 SDK since April 28, 2026, and the floor for uploads is iOS 13 (https://developer.apple.com/news/upcoming-requirements/). Unverified: which school iPad models still sit on iPadOS 17. That decides whether 17 is too low or too high. iPad only at first, landscape and portrait. No iPhone layout and no Mac Catalyst.
 
@@ -198,7 +196,7 @@ kids-math-socratic/
     modules/math/  first subject module (science, then ELA, later)
   apps/
     web/           React + Vite app: stage, motion (WAAPI adapter), interact, audio, shell
-    ios/           Xcode project: SwiftUI app, CoreBridge, BeatPlayer, generated types
+    ios/           (deferred with M3) Xcode project: SwiftUI app, CoreBridge, BeatPlayer, generated types
   tools/           gen/ (LLM CLI), render/ (video), audio/ (gen_sounds.py), mascots/ (SVG to Swift)
   content/lessons/ approved and draft lesson JSON (CC BY-SA 4.0, LICENSE file in the folder)
   assets/          mascots/*.svg and rig.json (CC0 1.0, LICENSE file), audio/*.wav, fonts/ (OFL)
@@ -212,7 +210,7 @@ pnpm workspaces (MIT), plain package scripts, no Turborepo or Nx (**Subtract Bef
 
 **CI (GitHub Actions).**
 - Linux, every PR: typecheck, lint, dependency licence allow-list (section 10), content source licence check, zero-network assertion, Vitest, `validate content/**`, vectors fresh, vectors in Node and WebKit, Playwright Chromium and WebKit (iPad descriptors), axe, bundle size, never-wrong lint, a 3-second render determinism check.
-- macOS, PRs touching `apps/ios`, `packages/core` or `packages/conformance`: `xcodebuild test` on an iPad simulator, vectors in JSC, snapshots, XCUITest paths, artefacts uploaded.
+- macOS, deferred with M3 (PRs touching `apps/ios`, `packages/core` or `packages/conformance` when native returns): `xcodebuild test` on an iPad simulator, vectors in JSC, snapshots, XCUITest paths, artefacts uploaded.
 - Nightly: full lesson render plus hash, generator eval on the recorded cache.
 - GitHub itself is hosted. The repo already lives there (`asub927`), so the stack keeps build compute self-hostable through the runner and keeps every tool self-hostable. Forgejo with Forgejo Actions is the self-hosted escape hatch if needed. Note: Forgejo v9 and later are GPL-3.0-or-later, not MIT (https://forgejo.org/2024-08-gpl/); it is an external tool, not a dependency, but it conflicts with the MIT or Apache-2.0 tooling rule, so Gitea (MIT, not checked today) would be the rule-compliant alternative.
 
@@ -224,13 +222,13 @@ Delivery Lead coordinates in its own chat and runs `/poteto-mode` on every reque
 
 | Stage | Playbook | Skills | Evidence that closes it |
 |---|---|---|---|
-| M0 harness | Feature | `create-verification-skill` (web: Playwright WebKit; iOS: xcodebuild and simctl on the Mac runner) | doctor output, one driven feature, evidence surviving cleanup |
-| M0 empirical forks: JSC vs Swift port, WAAPI vs Motion vs GSAP, count widget, quicktype enums | Prototype | `arena`, `benchmark-checklist`, Emil's skills | bench table with runs, spread and limiter; side-by-side videos; decision row |
-| Contracts: schema, `BeatScript`, `CoreBridge` | Feature | `architect` (full arena run), `interrogate` on the contracts | sketch plus rationale; schema and vector files |
+| M0 harness | Feature | `create-verification-skill` (web: Playwright WebKit; iOS leg deferred with M3: xcodebuild and simctl on the Mac runner) | doctor output, one driven feature, evidence surviving cleanup |
+| M0 empirical forks: JSC vs Swift port, WAAPI vs Motion vs GSAP, count widget, quicktype enums | Prototype (JSC and quicktype legs deferred with M3; all retired unbuilt) | `arena`, `benchmark-checklist`, Emil's skills | bench table with runs, spread and limiter; side-by-side videos; decision row |
+| Contracts: schema, `BeatScript`, `CoreBridge` (CoreBridge deferred with M3) | Feature | `architect` (full arena run), `interrogate` on the contracts | sketch plus rationale; schema and vector files |
 | Core: reducer, detect, fill, choreograph | Feature | `tdd`, `statechart` (TLA+ check of the flow), `principle-test-behavior-not-implementation` | vectors green in Node and WebKit; model check report |
 | v3 port to the web app | Visual parity, then Feature | `review-animations` | image diffs against `baseline/v3` at each beat end; same DOM numbers and 58 cues |
 | Web features: interaction, reactions, hints, audio, offline | Feature (one PR each) | `create-verification-skill` drive steps, Emil's skills | Playwright WebKit runs, screenshots, videos, Anantha's review gates |
-| iOS app | Feature (one PR per screen or subsystem) | verification skill for iOS, `swarm` for the verifier | `.xcresult`, snapshot diffs, XCUITest videos, vectors in JSC |
+| iOS app (deferred with M3) | Feature (one PR per screen or subsystem, when native returns) | verification skill for iOS, `swarm` for the verifier | `.xcresult`, snapshot diffs, XCUITest videos, vectors in JSC |
 | Generator quality | Eval, then Hillclimb on first-pass validation rate | `swarm` | eval table over 20 specs; `decision.tsv`, one row per attempt |
 | Performance on real iPads | Perf issue or Hillclimb | `benchmark-checklist`, `principle-explain-the-number` | before and after with run count, spread, limiter |
 | Captured traces (Chrome performance, Instruments) | Trace forensics | | written diagnosis tied to source |
@@ -241,7 +239,7 @@ Delivery Lead coordinates in its own chat and runs `/poteto-mode` on every reque
 - **M0.** Both verification skills work end to end, and the four forks have tables and a decision.
 - **M1 web.** Lesson 1 completes in WebKit on three child paths with zero console errors, vectors green, Anantha approves on a real iPad's browser through a LAN URL.
 - **M2.** A spec becomes a validated lesson and a deterministic MP4 (two equal hashes).
-- **M3 native.** The same lesson runs in the SwiftUI app on the simulator on three paths, vectors agree in JSC, snapshots pass, Anantha approves on a real iPad via TestFlight.
+- **M3 native (deferred).** The same lesson runs in the SwiftUI app on the simulator on three paths, vectors agree in JSC, snapshots pass, Anantha approves on a real iPad via TestFlight.
 - **M4.** Every NC grade 2 math section has reviewed lessons; derived-view property tests (no dark patterns) green; Stage A usability findings fixed.
 - **M5.** Content spec 1.0 published with conformance vectors; external authors merge lessons through the validator. Re-plan science (M6) and ELA (M7) with `figure-it-out` here.
 
@@ -251,11 +249,11 @@ Known gap. Preferences ask for a verifier from a different model family. Only on
 
 | Risk | Likelihood | Mitigation |
 |---|---|---|
-| JSC bridge is slow or awkward to debug on device | medium | M0 spike with a written threshold; Swift port fallback with the same vectors |
+| JSC bridge is slow or awkward to debug on device | medium | M0 spike with a written threshold when native returns; Swift port fallback with the same vectors. Deferred with M3 |
 | Rewriting v3 beats as `choreograph` data costs more than a port | high | Visual parity first against v3, one beat per PR, GSAP stays behind the adapter until parity holds |
-| Mac dependency blocks every iOS PR | high | Self-hosted runner on Anantha's Mac; hosted `macos-26` fallback; Linux-testable core keeps most work unblocked |
-| SwiftUI hitches with many layered views | medium | `Canvas` for particles, one transform per layer, Instruments on a real iPad |
-| quicktype output unusable for unions | medium | hand-written enums, round-trip vectors |
+| Mac dependency blocks every iOS PR | high | Deferred with M3. When native returns: self-hosted runner on Anantha's Mac; hosted `macos-26` fallback; Linux-testable core keeps most work unblocked |
+| SwiftUI hitches with many layered views | medium | Deferred with M3. When native returns: `Canvas` for particles, one transform per layer, Instruments on a real iPad |
+| quicktype output unusable for unions | medium | hand-written enums, round-trip vectors. Deferred with M3 |
 | Kids Category review rejection | medium | parental gate, no third-party SDKs, privacy manifest, review notes |
 | GSAP licence terminable at Webflow's discretion | low | WAAPI default, adapter keeps it swappable |
 | No on-device English voice on a given browser or device | medium | Hide read-aloud rather than fall back to a remote voice; WebKit and iPad checks in M1 and M3 |
@@ -270,7 +268,7 @@ Known gap. Preferences ask for a verifier from a different model family. Only on
 All product decisions are recorded at the top of this document. What remains are engineering defaults for Delivery Lead to confirm with Anantha at one checkpoint; each has a default and none blocks M0.
 
 1. **Motion engine.** Leave GSAP for WAAPI if U1 shows parity. Default yes (GSAP's licence is not MIT; see section 10).
-2. **Mac, Apple account and CI.** Provide a Mac for a self-hosted runner and an Apple Developer account before M3. Default your Mac as the runner, GitHub-hosted `macos-26` only if it is unavailable.
+2. **Mac, Apple account and CI (deferred with M3).** No Mac runner or Developer account needed for the hackathon build. When native returns: provide a Mac for a self-hosted runner and an Apple Developer account. Default your Mac as the runner, GitHub-hosted `macos-26` only if it is unavailable.
 3. **iPad target and store path.** iPadOS 17 minimum, iPad only, designed to Kids Category rules, `.ambient` audio that respects the silent switch. Default yes to all four.
 4. **Lesson 1 problems.** Five NC.2.OA.1 problems proposed in VISION.md section 9, fixed Pip scripts Anantha reviews. Default: use the proposal.
 5. **Repo and model.** One monorepo `asub927/kids-math-socratic` (public at M5 at the latest, since the project is open source), Anthropic/OpenAI gateway only (overrides "Gemini default"). Default yes.
@@ -295,7 +293,8 @@ Rule: anything shipped inside the app must be MIT-compatible permissive (MIT, Ap
 | Forgejo (escape hatch only) | GPL-3.0-or-later since v9 | no | **Flag:** conflicts with the tooling rule; not a dependency |
 | **GSAP 3.12.5** (v3 demo today) | GSAP standard licence, no-charge, **not MIT** (https://gsap.com/standard-license) | yes, in the current demo | **Flag:** must not ship in the MIT app. **Recommend WAAPI as the default** (browser built-in, no licence), Motion (MIT) as fallback; GSAP stays only behind the adapter until U6 removes it |
 | PostgreSQL, Keycloak, Hono, PocketBase | various | removed | Out with the deferred backend |
-| Web Speech, WAAPI, WebAudio, IndexedDB, JavaScriptCore, SwiftUI, SwiftData, AVFoundation | platform built-ins | yes | OK, no licence to carry |
+| Web Speech, WAAPI, WebAudio, IndexedDB | platform built-ins | yes | OK, no licence to carry |
+| JavaScriptCore, SwiftUI, SwiftData, AVFoundation | platform built-ins | no (deferred with M3) | OK, no licence to carry; not shipped in the web-only build |
 
 Content and art are separate from code: lessons CC BY-SA 4.0, mascot art CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/legalcode.en). Still unverified, carried over: pnpm and PostgreSQL licence pages (PostgreSQL no longer matters), Gitea's current licence.
 
