@@ -441,7 +441,7 @@ Units run in order. A unit starts only when the one before it is verified (**Seq
 - SCOPE: `interact/` (the D2 count widget, drag-to-tray, choose-equation, predict). Also `shell/` layout covering landscape and portrait, `env(safe-area-inset-*)`, `touch-action`, no double-tap zoom, and `pointercancel` handling.
 - ACCEPTANCE: Each widget emits the right `Answer` via real pointer events. Drag cancels cleanly when a second finger touches. Targets are 64 px or larger. Tap feedback appears in under 100 ms. VoiceOver labels exist on every control. The portrait layout keeps the counter, Pip's bubble, and the input visible without overlap.
 - VERIFY: `npm run verify:interact` in WebKit for iPad Pro 11 and iPad Mini, both orientations. A bounding-box overlap check like v3's `overlap.py` covers the bubble, input, counter, and safe areas. Screenshots go to `evidence/U7/`. Review gate.
-- STATUS: Run matrix corrected. Only iPad Pro 11 ran, plus chromium. No screenshots or video were saved. The equation branch has no implementation and no test.
+- STATUS: Run matrix corrected. Only iPad Pro 11 ran, plus chromium. No screenshots or video were saved. The equation branch has no implementation and no test. Cut for the hackathon per DECISIONS-LOG entry 22.
 - TIMEBOX: 2 days.
 - FORBIDDEN: base.
 - REPORT: screenshot grid, overlap minimum gaps, video.
