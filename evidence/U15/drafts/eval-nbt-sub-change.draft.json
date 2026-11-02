@@ -109,7 +109,7 @@
         ],
         "explainChoices": [
           "What shows {result}?",
-          "What hides {missing}?"
+          "What hides for {hero}?"
         ]
       }
     ],

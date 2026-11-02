@@ -73,7 +73,7 @@
         "ask": "How many {item} for {hero}?",
         "interaction": "count",
         "hints": [
-          "What is {result} now?",
+          "What joins {item} now?",
           "Can you watch {hero} count?",
           {
             "type": "take-away",
@@ -106,8 +106,8 @@
           }
         ],
         "explainChoices": [
-          "How did you get {result}?",
-          "What shows {result}?"
+          "How did {hero} get {item}?",
+          "What shows {item} now?"
         ]
       }
     ],

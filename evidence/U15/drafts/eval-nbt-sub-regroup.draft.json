@@ -70,10 +70,10 @@
       {
         "id": "eval-nbt-sub-regroup-qfinal-count",
         "step": "final",
-        "ask": "What is {result} now?",
+        "ask": "What is left for {hero}?",
         "interaction": "count",
         "hints": [
-          "What is {missing}?",
+          "What stays with {hero}?",
           "Make tens with {item}?",
           {
             "type": "take-away",

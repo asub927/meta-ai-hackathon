@@ -106,8 +106,8 @@
           }
         ],
         "explainChoices": [
-          "{answer} fits all here?",
-          "{missing} fits all here?"
+          "Big pile fits {item}?",
+          "Small pile fits {item}?"
         ]
       }
     ],

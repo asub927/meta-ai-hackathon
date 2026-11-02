@@ -70,7 +70,7 @@
       {
         "id": "eval-nbt-add-regroup-qfinal-count",
         "step": "final",
-        "ask": "What is {result} now?",
+        "ask": "What does {hero} hold?",
         "interaction": "count",
         "hints": [
           "What did they have?",

@@ -109,7 +109,7 @@
         ],
         "explainChoices": [
           "Which pile to count?",
-          "What comes after {start}?"
+          "Which {item} comes next?"
         ]
       }
     ],

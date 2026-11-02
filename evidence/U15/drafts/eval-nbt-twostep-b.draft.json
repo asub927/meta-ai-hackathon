@@ -155,8 +155,8 @@
           }
         ],
         "explainChoices": [
-          "Is {result} left?",
-          "Is {missing} left?"
+          "Keep means less?",
+          "Stay with {hero}?"
         ]
       }
     ],
