@@ -1,6 +1,6 @@
 # Interaction design plan
 
-Status: approved, Oct 30, 2026. Plain-language plan for how a child moves through one sticker story. Research backing lives in [research/mascots.md](research/mascots.md) and [research/brilliant-pedagogy.md](research/brilliant-pedagogy.md). Nothing here is built yet.
+Status: approved, Oct 30, 2026. Plain-language plan for how a child moves through one sticker story. Research backing lives in [research/mascots.md](research/mascots.md) and [research/brilliant-pedagogy.md](research/brilliant-pedagogy.md). A playable web prototype exists; the shipping app is under construction. Amendments since approval are dated inline.
 
 ## Principles
 
@@ -39,7 +39,7 @@ flowchart TD
 
 ## Lessons
 
-Six lessons on a free-choice strip. Each shows green ticks and **x/6** progress. No points.
+Six lessons on a free-choice strip. Each shows green ticks and **x/6 lessons** progress. No points. Each lesson holds two stories, twelve stories total.
 
 | Lesson | Two stories each |
 |--------|------------------|
@@ -65,6 +65,7 @@ A parent toggle (parent gate in the real app; exposed in the prototype for testi
 - **Properties:** transform and opacity only.
 - **Easing:** `cubic-bezier(0.23, 1, 0.32, 1)`. No ease-in. No `transition: all`.
 - **Waiting for input:** only Pip’s slow blink.
+- **Reference beat (added Nov 1, 2026).** One sticker handoff is the motion reference: peel, arc flight with trail, landing squash, odometer roll, payoff sentence held 2 s, then an exit that clears everything the beat added. Beats overlap, groups stagger, the payoff holds, and the loop ends where it began. A filmed A/B of this beat decided against a camera push-in on the count beat. The push cropped the story card at the count moment and added motion without information. The no-push variant is the reference. Scratch demo and contact sheets: `.agents/skills/stageshow/examples/give-beat/`.
 
 ## What we borrow (and how we differ)
 
@@ -88,7 +89,7 @@ Not part of this doc PR; listed for the build:
 
 - The playable prototype was tested in **Chromium only**, not Safari, a real iPad, touch hardware, or VoiceOver.
 - Canvas-drawn buttons are **not accessible**. The shipping app needs native controls with proper labels.
-- Concept art was **AI-generated** and may not be copyrightable (Thaler v. Perlmutter; US Copyright Office AI Part 2, Jan 2025). A person must redraw each character as original layered SVG (CC0) before release.
+- Concept art was **AI-generated** and may not be copyrightable (Thaler v. Perlmutter; US Copyright Office AI Part 2, Jan 2025). A named owner must redraw each character as original layered SVG (CC0) before release. Owner: TBD (Anantha to assign).
 - **Mascots and art are not part of this PR.**
 - **No study supports random rotation of story characters** between problems; that choice is design reasoning, not evidence (see [research/mascots.md](research/mascots.md)).
 
