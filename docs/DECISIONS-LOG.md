@@ -26,6 +26,7 @@ Source: Anantha, Oct 28, 2026, chat and voice calls. Kept for the Scribe. Not ye
 ## Nov 2, 2026. Web-only hackathon build (Anantha, approved)
 
 21. **Web-only hackathon build; native iPad deferred to a later phase.** (Anantha, Nov 2, 2026). M3 (U16 to U23), the STACK.md §5 native design, the JSC and CoreBridge and Swift-types legs, and the macOS CI job are deferred and not built. iPad use is covered by Safari hardening and Add to Home Screen (PLAN.md U10 and U11). No Mac runner or Apple Developer account is needed for the hackathon build. PLAN.md, STACK.md, and VISION.md are reworded to match. The native design stays on file and is not deleted. No wrapper of any kind comes when native returns. No Apple account action happens now.
+Note. Entry 24 governs this branch.
 
 ## Nov 2, 2026. Full app build branch (Anantha, approved)
 
